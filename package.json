@@ -1,6 +1,6 @@
 {
-  "name": "rhizome",
-  "version": "1.0.0",
+  "name": "praxis-core",
+  "version": "0.0.1",
   "scripts": {
     "start": "ts-node --project ./tsconfig.src.json src/main.ts",
     "start:dev": "nodemon --config ./nodemon.json",
