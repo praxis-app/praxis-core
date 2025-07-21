@@ -1,16 +1,14 @@
-# Rhizome
+# Praxis - Chat-Based CDM
 
-Rhizome represents a new approach for Praxis, emphasizing seamless integration with existing systems while laying the groundwork for an autonomous, self-sustaining platform. The project aims to strike a balance between versatile utility and a standalone platform, with chat as the primary medium for collaborative decision-making (CDM) functionality.
+Praxis is a chat-based collaborative decision-making (CDM) app that seamlessly blends informal discussion with structured decision-making processes. This tool allows groups to transition smoothly from informal conversation to structured decision-making without breaking flow.
 
-By embracing both integration and the autonomy of a standalone platform, Rhizome opens the door to greater user adoption without compromising the security and reliability of it's core platform.
+Designed for organizations, teams, and communities that need robust group decision-making capabilities, it combines the familiarity of messaging apps with powerful decision-making features like inline proposals, multiple voting models, and forum-style organization when needed.
 
-## Project goals
+## Work in progress
 
-- **Rhizomatic design**: A more rhizomatic approach to the design of both features and architecture.
-- **Hybrid platform/utility**: Strike a balance between versatile utility and a standalone platform.
-- **Chat as the primary medium**: Use chat as the primary medium for CDM features & functionality.
-- **REST and OpenAPI**: Simple REST API with OpenAPI so other systems can integrate with Praxis.
-- **Vite and Express**: Embraces flexible, modular, unopinionated architecture.
+You are entering a construction yard. Things are going to change and break regularly as the project is still getting off the ground. Please bear in mind that Praxis is not yet intended for serious use outside of testing or research purposes. Your feedback is highly welcome.
+
+Please note that this is also an experimental approach within the Praxis project. The main repository is located at https://github.com/praxis-app/praxis.
 
 ## Installation and setup
 
