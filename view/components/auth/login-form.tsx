@@ -11,16 +11,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NavigationPaths } from '@/constants/shared.constants';
-import { useAppStore } from '@/store/app.store';
-import { AuthType, ClientEvent, createClient, SyncState } from 'matrix-js-sdk';
 import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuLoaderCircle } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {
-  const { setMatrixClient } = useAppStore();
-
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,38 +31,7 @@ export const LoginForm = () => {
     setError('');
 
     try {
-      const baseClient = createClient({
-        baseUrl: import.meta.env.VITE_SERVER_BASE_URL,
-      });
-
-      const { user_id, access_token, device_id } =
-        await baseClient.loginRequest({
-          user: email,
-          password: password,
-          type: AuthType.Password,
-        });
-
-      localStorage.setItem('user_id', user_id);
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('device_id', device_id);
-
-      const authenticatedClient = createClient({
-        baseUrl: import.meta.env.VITE_SERVER_BASE_URL,
-        accessToken: access_token,
-        userId: user_id,
-        deviceId: device_id,
-      });
-
-      await authenticatedClient.startClient({
-        initialSyncLimit: 10,
-      });
-
-      // Make client available once it's ready
-      authenticatedClient.once(ClientEvent.Sync, (state) => {
-        if (state === SyncState.Prepared) {
-          setMatrixClient(authenticatedClient);
-        }
-      });
+      console.log('TODO: Implement login');
 
       navigate(NavigationPaths.Home);
     } catch (error) {

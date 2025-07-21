@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react';
 import * as dotenv from 'dotenv';
+import path from 'path';
 import { defineConfig } from 'vite';
 
 dotenv.config();
@@ -15,6 +16,11 @@ export default defineConfig({
         rewrite: (path: string) => path.replace(/^\/api/, ''),
         changeOrigin: true,
       },
+    },
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
   },
   define: {
