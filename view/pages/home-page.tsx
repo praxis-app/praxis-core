@@ -1,26 +1,14 @@
-import { Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import { api } from '../client/api-client';
-import ChannelSkeleton from '../components/channels/channel-skeleton';
-import ChannelView from '../components/channels/channel-view';
-import { GENERAL_CHANNEL_NAME } from '../constants/channel.constants';
+import { RoomSkeleton } from '@/components/rooms/room-skeleton';
+import { RoomView } from '@/components/rooms/room-view';
+import { useJoinedRooms } from '@/hooks/use-joined-rooms';
 
 export const HomePage = () => {
-  const { t } = useTranslation();
+  const joinedRooms = useJoinedRooms();
+  const room = joinedRooms[0];
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['channels', GENERAL_CHANNEL_NAME],
-    queryFn: () => api.getGeneralChannel(),
-  });
-
-  if (isLoading) {
-    return <ChannelSkeleton />;
+  if (!room) {
+    return <RoomSkeleton />;
   }
 
-  if (!data || error) {
-    return <Typography>{t('errors.somethingWentWrong')}</Typography>;
-  }
-
-  return <ChannelView channel={data.channel} isGeneralChannel />;
+  return <RoomView room={room} />;
 };

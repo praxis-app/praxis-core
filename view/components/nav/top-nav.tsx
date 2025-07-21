@@ -1,55 +1,43 @@
-import { ArrowBack, Search } from '@mui/icons-material';
-import { Box, IconButton, SxProps, Typography } from '@mui/material';
-import { ReactNode, useCallback, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import {
   BrowserEvents,
   KeyCodes,
   NavigationPaths,
-} from '../../constants/shared.constants';
-import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
-import { useAppStore } from '../../store/app.store';
-import { GRAY } from '../../styles/theme';
+} from '@/constants/shared.constants';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LuArrowLeft } from 'react-icons/lu';
+import { MdSearch } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { NavSheet } from '../nav/nav-sheet';
+import { Button } from '../ui/button';
 
-export interface TopNavProps {
+interface Props {
   header?: string;
   onBackClick?: () => void;
   backBtnIcon?: ReactNode;
 }
 
-const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
-  const { setIsNavDrawerOpen, setToast } = useAppStore((state) => state);
+export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
+  const [navSheetOpen, setNavSheetOpen] = useState(false);
 
   const { t } = useTranslation();
-  const isDarkMode = useIsDarkMode();
-  const isAboveMd = useAboveBreakpoint('md');
+  const isDesktop = useIsDesktop();
   const navigate = useNavigate();
-
-  const headerSx: SxProps = {
-    color: isDarkMode ? 'white' : 'black',
-    cursor: header ? 'default' : 'pointer',
-    fontSize: header ? '17px' : '18px',
-    fontWeight: header ? 600 : 700,
-    paddingLeft: 0.5,
-  };
-  const buttonSx: SxProps = {
-    width: 38,
-    height: 38,
-  };
 
   const handleBackClick = useCallback(() => {
     if (onBackClick) {
       onBackClick();
       return;
     }
-    if (isAboveMd) {
+    if (isDesktop) {
       navigate(NavigationPaths.Home);
       return;
     }
     // Show nav drawer as default behavior
-    setIsNavDrawerOpen(true);
-  }, [isAboveMd, navigate, onBackClick, setIsNavDrawerOpen]);
+    setNavSheetOpen(true);
+  }, [isDesktop, navigate, onBackClick, setNavSheetOpen]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -63,53 +51,37 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
     };
   }, [handleBackClick]);
 
-  const handleHeaderClick = () => {
-    if (!header) {
-      navigate('/');
-    }
-  };
+  const renderBackBtn = () => (
+    <Button variant="ghost" size="icon" onClick={handleBackClick}>
+      {backBtnIcon || <LuArrowLeft className="size-6" />}
+    </Button>
+  );
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      borderBottom={`1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}`}
-      bgcolor="background.paper"
-      paddingRight={2.4}
-      paddingLeft={2.5}
-      height="55px"
-      position="fixed"
-      width="100%"
-      zIndex={1}
-      top={0}
-      left={0}
-    >
-      <Box display="flex" alignItems="center">
-        <IconButton
-          onClick={handleBackClick}
-          sx={{ ...buttonSx, marginRight: 0.5 }}
-          edge="start"
-        >
-          {backBtnIcon || <ArrowBack />}
-        </IconButton>
+    <header className="flex h-[55px] items-center justify-between border-b border-[--color-border] px-2">
+      <div className="mr-1 flex flex-1 items-center gap-2.5">
+        {isDesktop ? (
+          renderBackBtn()
+        ) : (
+          <NavSheet
+            trigger={renderBackBtn()}
+            setOpen={setNavSheetOpen}
+            open={navSheetOpen}
+          />
+        )}
 
-        <Typography variant="h1" sx={headerSx} onClick={handleHeaderClick}>
-          {header || t('brand')}
-        </Typography>
-      </Box>
+        <div className="flex flex-1 items-center text-[1.05rem] font-medium select-none">
+          {header}
+        </div>
+      </div>
 
-      <IconButton
-        sx={buttonSx}
-        aria-label={t('labels.menu')}
-        onClick={() => setToast({ status: 'info', title: t('prompts.inDev') })}
-        size="large"
-        edge="end"
+      <Button
+        onClick={() => toast(t('prompts.inDev'))}
+        variant="ghost"
+        size="icon"
       >
-        <Search />
-      </IconButton>
-    </Box>
+        <MdSearch className="size-6" />
+      </Button>
+    </header>
   );
 };
-
-export default TopNav;

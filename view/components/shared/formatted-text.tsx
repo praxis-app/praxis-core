@@ -1,21 +1,22 @@
-import { Typography, TypographyProps } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { TruncationSizes } from '../../constants/shared.constants';
-import { useAboveBreakpoint } from '../../hooks/shared.hooks';
+import { TruncationSizes } from '@/constants/shared.constants';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { cn } from '@/lib/shared.utils';
 import {
   convertBoldToSpan,
   parseMarkdownText,
   urlifyText,
-} from '../../utils/text.utils';
+} from '@/lib/text.utils';
+import { useEffect, useState } from 'react';
 
-interface Props extends TypographyProps {
+interface Props {
   text?: string | null;
   urlTrimSize?: number;
+  className?: string;
 }
 
-const FormattedText = ({ text, urlTrimSize, ...typographyProps }: Props) => {
+const FormattedText = ({ text, urlTrimSize, className }: Props) => {
   const [formattedText, setFormattedText] = useState<string>();
-  const isLarge = useAboveBreakpoint('md');
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     if (!text) {
@@ -23,24 +24,25 @@ const FormattedText = ({ text, urlTrimSize, ...typographyProps }: Props) => {
     }
     const formatText = async () => {
       const urlSize =
-        urlTrimSize || isLarge ? TruncationSizes.Large : TruncationSizes.Medium;
+        urlTrimSize || isDesktop
+          ? TruncationSizes.Large
+          : TruncationSizes.Medium;
       const urlified = urlifyText(text, urlSize);
       const markdown = await parseMarkdownText(urlified);
       const formatted = convertBoldToSpan(markdown);
       setFormattedText(formatted);
     };
     formatText();
-  }, [text, isLarge, urlTrimSize]);
+  }, [text, isDesktop, urlTrimSize]);
 
   if (!formattedText) {
     return null;
   }
 
   return (
-    <Typography
+    <div
       dangerouslySetInnerHTML={{ __html: formattedText }}
-      whiteSpace="pre-wrap"
-      {...typographyProps}
+      className={cn('whitespace-pre-wrap', className)}
     />
   );
 };

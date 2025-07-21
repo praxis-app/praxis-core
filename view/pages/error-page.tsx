@@ -1,37 +1,20 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import errorGif from '../assets/images/error.gif';
-import LazyLoadImage from '../components/images/lazy-load-image';
-import { useAboveBreakpoint } from '../hooks/shared.hooks';
-import { Layout } from '../components/app/layout';
+import { useNavigate } from 'react-router-dom';
 
-const ErrorPageContent = () => {
-  const isLarge = useAboveBreakpoint('md');
+export const ErrorPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-    >
-      <LazyLoadImage
+    <div className="flex h-full w-full items-center justify-center pt-20">
+      <img
         src={errorGif}
         alt={t('errors.somethingWentWrong')}
-        width={isLarge ? '40%' : '80%'}
-        marginBottom={isLarge ? 0 : 15}
-        borderRadius="9999px"
-        alignSelf="center"
-        display="block"
+        className="w-8/12 max-w-xl cursor-pointer rounded-full"
+        onClick={() => navigate(0)}
+        title={t('actions.refresh')}
       />
-    </Box>
+    </div>
   );
 };
-
-export const ErrorPage = () => (
-  <Layout>
-    <ErrorPageContent />
-  </Layout>
-);

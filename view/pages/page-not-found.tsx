@@ -1,26 +1,21 @@
+import { NavigationPaths } from '@/constants/shared.constants';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import pageNotFoundGif from '../assets/images/404.gif';
-import { Box } from '@mui/material';
-import LazyLoadImage from '../components/images/lazy-load-image';
-import { useAboveBreakpoint } from '../hooks/shared.hooks';
 
 export const PageNotFound = () => {
-  const isLarge = useAboveBreakpoint('md');
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      marginTop={isLarge ? 0 : '100px'}
-    >
-      <LazyLoadImage
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      <img
         src={pageNotFoundGif}
         alt={t('errors.pageNotFound')}
-        width="55%"
-        display="block"
-        margin="0 auto"
+        className="w-8/12 max-w-xl cursor-pointer"
+        onClick={() => navigate(NavigationPaths.Home)}
+        title={t('actions.goToHome')}
       />
-    </Box>
+    </div>
   );
 };
