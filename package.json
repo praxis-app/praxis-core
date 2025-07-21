@@ -14,10 +14,6 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",
-    "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
-    "@mui/icons-material": "^6.1.9",
-    "@mui/material": "^6.1.9",
     "@tanstack/react-query": "^5.62.11",
     "axios": "^1.7.8",
     "bcrypt": "^5.1.1",
@@ -39,7 +35,6 @@
     "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.54.0",
     "react-i18next": "^11.15.3",
     "react-router-dom": "^7.0.1",
     "react-use-websocket": "^4.10.0",
