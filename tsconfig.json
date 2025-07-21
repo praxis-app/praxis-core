@@ -1,0 +1,15 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.src.json"
+    },
+    {
+      "path": "./tsconfig.view.json"
+    }
+  ],
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "exclude": ["node_modules"]
+}

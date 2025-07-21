@@ -1,0 +1,36 @@
+@import './fonts.css';
+
+:root {
+  scrollbar-color: #6b6b6b #2c2c2c;
+  transition: scrollbar-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: pan-x pan-y;
+  height: 100%;
+
+  @media (prefers-color-scheme: light) {
+    scrollbar-color: #d1d1d1 #f0f0f0;
+  }
+}
+
+body,
+html {
+  overscroll-behavior: none;
+  -webkit-touch-callout: none;
+  margin: 0;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: inherit;
+}
+
+::selection {
+  background-color: #5868cb;
+  color: white;
+}
+
+::-moz-selection {
+  background: #5868cb;
+  color: white;
+}
