@@ -1,0 +1,30 @@
+# App files
+node_modules
+dist
+dist-ssr
+dev-dist
+*.local
+.husky
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor / OS files
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Uploaded content
+/content/*
+!/content/README.md
