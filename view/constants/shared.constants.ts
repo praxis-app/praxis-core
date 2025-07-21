@@ -35,3 +35,9 @@ export enum TruncationSizes {
   Large = 65,
   ExtraLarge = 175,
 }
+
+export enum LocalStorageKeys {
+  AccessToken = 'access_token',
+  InviteToken = 'invite-token',
+  HideWelcomeMessage = 'hide-welcome-message',
+}

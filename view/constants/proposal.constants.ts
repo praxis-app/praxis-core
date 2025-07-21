@@ -1,8 +1,5 @@
 import { t } from '@/lib/shared.utils';
 
-export const PROPOSAL_KIND = 'com.praxis-app.proposal.kind';
-export const ANSWER_POSITION = 'com.praxis-app.proposal.answer.position';
-
 export enum ProposalAnswerPosition {
   Agree = 'agree',
   Disagree = 'disagree',

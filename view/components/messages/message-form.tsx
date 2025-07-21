@@ -1,10 +1,8 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
 import { KeyCodes } from '@/constants/shared.constants';
-import { useMatrixClient } from '@/hooks/use-matrix-client';
 import { cn, t } from '@/lib/shared.utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MsgType } from 'matrix-js-sdk';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -13,16 +11,11 @@ import { MdAdd, MdImage, MdPoll } from 'react-icons/md';
 import { TbMicrophoneFilled } from 'react-icons/tb';
 import { toast } from 'sonner';
 import * as zod from 'zod';
-import {
-  CreateProposalForm,
-  ProposalFormSubmitButton,
-} from '../proposals/create-proposal-form';
 import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -48,16 +41,11 @@ const formSchema = zod.object({
     .nonempty(),
 });
 
-interface Props {
-  roomId: string;
-}
-
-export const MessageForm = ({ roomId }: Props) => {
+export const MessageForm = () => {
   const [showProposalForm, setShowProposalForm] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const matrixClient = useMatrixClient();
   const { t } = useTranslation();
 
   const form = useForm<zod.infer<typeof formSchema>>({
@@ -95,14 +83,11 @@ export const MessageForm = ({ roomId }: Props) => {
   }, []);
 
   const onSubmit = async (values: zod.infer<typeof formSchema>) => {
-    if (!matrixClient || !values.body.trim()) {
+    if (!values.body.trim()) {
       return;
     }
     try {
-      await matrixClient.sendMessage(roomId, {
-        body: values.body,
-        msgtype: MsgType.Text,
-      });
+      console.log('TODO: Implement message sending');
     } catch {
       toast(t('messages.errors.errorSendingMessage'), {
         description: t('prompts.tryAgain'),
@@ -161,15 +146,6 @@ export const MessageForm = ({ roomId }: Props) => {
             <DialogDescription>
               {t('proposals.descriptions.create')}
             </DialogDescription>
-            <CreateProposalForm
-              roomId={roomId}
-              onSuccess={() => setShowProposalForm(false)}
-              submitButton={(props) => (
-                <DialogFooter>
-                  <ProposalFormSubmitButton {...props} />
-                </DialogFooter>
-              )}
-            />
           </DialogContent>
         </Dialog>
 
