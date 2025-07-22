@@ -7,10 +7,14 @@
     "start:client": "vite --host",
     "build": "tsc -b && eslint src --ext ts && tsc --project ./tsconfig.src.json",
     "build:client": "tsc -b && eslint view --ext ts,tsx && vite build --emptyOutDir true",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "typeorm": "ts-node --project ./tsconfig.src.json ./node_modules/typeorm/cli.js",
     "typeorm:gen": "npm run typeorm migration:generate -- -p -d ./src/database/data-source.ts",
-    "typeorm:run": "npm run typeorm migration:run -- -d ./src/database/data-source.ts"
+    "typeorm:run": "npm run typeorm migration:run -- -d ./src/database/data-source.ts",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "types": "tsc -b",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",
