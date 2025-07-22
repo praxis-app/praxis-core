@@ -29,23 +29,32 @@
 
   "auth": {
     "labels": {
-      "email": "Email",
-      "password": "Password"
+      "email": "Email Address",
+      "password": "Password",
+      "username": "Username",
+      "confirmPassword": "Confirm Password"
     },
     "placeholders": {
-      "email": "name@example.com"
+      "email": "name@example.com",
+      "username": "Choose a username",
+      "confirmPassword": "Confirm your password"
     },
     "prompts": {
       "alreadyLoggedIn": "You're already signed in.",
       "alreadyRegistered": "You have already created an account.",
+      "alreadyHaveAccount": "Already have an account?",
       "authenticated": "You are authenticated.",
       "enterCredentials": "Enter your email and password to access your account",
-      "logOut": "Are you sure you want to log out?"
+      "enterDetails": "Enter your details to create your new account",
+      "logOut": "Are you sure you want to log out?",
+      "createPassword": "Create a strong password"
     },
     "actions": {
       "logIn": "Log in",
       "logOut": "Log out",
-      "signUp": "Sign up"
+      "signUp": "Sign up",
+      "signIn": "Sign in",
+      "createAccount": "Create Account"
     },
     "descriptions": {
       "confirmLogOut": "Use this dialog to log out of your account."
@@ -79,9 +88,6 @@
       "create": "Create Proposal",
       "disagree": "Disagree"
     },
-    "prompts": {
-      "creatingProposal": "Creating..."
-    },
     "descriptions": {
       "create": "Submit a proposal for this room to discuss and vote on.",
       "body": "Enter your proposal"
@@ -95,70 +101,6 @@
   "votes": {
     "prompts": {
       "voteCast": "Vote cast successfully"
-    }
-  },
-
-  "rooms": {
-    "labels": {
-      "access": "Access",
-      "discoverability": "Discoverability",
-      "name": "Room name",
-      "settings": "Room Settings",
-      "topic": "Room topic",
-      "visibility": "Room visibility",
-      "guestAccess": "Guest access"
-    },
-    "placeholders": {
-      "name": "Enter room name",
-      "topic": "Enter room topic (optional)",
-      "visibility": "Select room visibility",
-      "access": "Select room access",
-      "guestAccess": "Select guest access"
-    },
-    "headers": {
-      "leaveRoom": "Leave room"
-    },
-    "actions": {
-      "create": "Create Room",
-      "leaveRoom": "Leave Room",
-      "leave": "Leave"
-    },
-    "options": {
-      "anyoneCanJoin": "Public (anyone can join)",
-      "inviteOnly": "Private (invite only)",
-      "private": "Private",
-      "public": "Public"
-    },
-    "descriptions": {
-      "guestAccess": "People with supported clients will be able to join the room without having a registered account.",
-      "roomAccess": "Controls who can join. Public allows anyone to join, while private requires members to be invited.",
-      "discoverability": "Determines whether this room appears in the public room directory.",
-      "roomName": "This is the name that will be displayed for your chat room.",
-      "settings": "Manage the settings for your chat room.",
-      "visibility": "Public rooms can be found in the room directory. Private rooms require an invitation."
-    },
-    "prompts": {
-      "creatingRoom": "Creating...",
-      "roomTopic": "Provide a brief description of the room's purpose.",
-      "startConversation": "Start a conversation with your friends or colleagues.",
-      "createRoom": "Create a New Chat Room",
-      "leaveRoom": "Are you sure you want to leave the room '{{roomName}}'? You'll need to be re-invited if the room is private."
-    },
-    "toasts": {
-      "roomCreated": "Room created successfully",
-      "roomCreatedError": "Failed to create room",
-      "roomCreatedErrorDescription": "There was a problem creating your room. Please try again.",
-      "roomUpdated": "Room updated successfully",
-      "roomUpdatedError": "Failed to update room",
-      "roomUpdatedErrorDescription": "There was a problem updating your room. Please try again."
-    },
-    "errors": {
-      "roomAccess": "Please select room access.",
-      "roomGuestAccess": "Please select room guest access.",
-      "roomNameMax": "Room name must not exceed 50 characters.",
-      "roomNameMin": "Room name must be at least 3 characters.",
-      "roomTopicMax": "Description must not exceed 500 characters.",
-      "roomVisibility": "Please select room visibility."
     }
   },
 

@@ -25,7 +25,10 @@ export enum NavigationPaths {
   Home = '/',
   Login = '/auth/login',
   SignUp = '/auth/signup',
-  Rooms = '/rooms',
+  Channels = '/channels',
+  Invites = '/settings/invites',
+  Roles = '/settings/roles',
+  Settings = '/settings',
 }
 
 export enum TruncationSizes {
