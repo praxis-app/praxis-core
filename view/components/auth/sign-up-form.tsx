@@ -30,42 +30,47 @@ const NAME_MAX_LENGTH = 15;
 const PASSWORD_MIN_LENGTH = 8;
 const PASSWORD_MAX_LENGTH = 64;
 
-const signUpFormSchema = zod.object({
-  username: zod
-    .string()
-    .min(NAME_MIN_LENGTH, {
-      message: t('auth.errors.shortName'),
-    })
-    .max(NAME_MAX_LENGTH, {
-      message: t('auth.errors.longName'),
-    })
-    .regex(NAME_REGEX, {
-      message: t('auth.errors.invalidName'),
-    }),
-  email: zod
-    .email({
-      message: t('auth.errors.invalidEmail'),
-    })
-    .max(EMAIL_MAX_LENGTH, {
-      message: t('auth.errors.longEmail'),
-    }),
-  password: zod
-    .string()
-    .min(PASSWORD_MIN_LENGTH, {
-      message: t('auth.errors.passwordTooShort'),
-    })
-    .max(PASSWORD_MAX_LENGTH, {
-      message: t('auth.errors.passwordTooLong'),
-    }),
-  confirmPassword: zod
-    .string()
-    .min(PASSWORD_MIN_LENGTH, {
-      message: t('auth.errors.passwordTooShort'),
-    })
-    .max(PASSWORD_MAX_LENGTH, {
-      message: t('auth.errors.passwordTooLong'),
-    }),
-});
+const signUpFormSchema = zod
+  .object({
+    username: zod
+      .string()
+      .min(NAME_MIN_LENGTH, {
+        message: t('auth.errors.shortName'),
+      })
+      .max(NAME_MAX_LENGTH, {
+        message: t('auth.errors.longName'),
+      })
+      .regex(NAME_REGEX, {
+        message: t('auth.errors.invalidName'),
+      }),
+    email: zod
+      .email({
+        message: t('auth.errors.invalidEmail'),
+      })
+      .max(EMAIL_MAX_LENGTH, {
+        message: t('auth.errors.longEmail'),
+      }),
+    password: zod
+      .string()
+      .min(PASSWORD_MIN_LENGTH, {
+        message: t('auth.errors.passwordTooShort'),
+      })
+      .max(PASSWORD_MAX_LENGTH, {
+        message: t('auth.errors.passwordTooLong'),
+      }),
+    confirmPassword: zod
+      .string()
+      .min(PASSWORD_MIN_LENGTH, {
+        message: t('auth.errors.passwordTooShort'),
+      })
+      .max(PASSWORD_MAX_LENGTH, {
+        message: t('auth.errors.passwordTooLong'),
+      }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: t('auth.errors.passwordsDoNotMatch'),
+    path: ['confirmPassword'],
+  });
 
 export const SignUpForm = () => {
   const form = useForm<zod.infer<typeof signUpFormSchema>>({

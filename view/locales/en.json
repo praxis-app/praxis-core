@@ -69,7 +69,8 @@
       "longEmail": "Email cannot exceed 254 characters",
       "missingPassword": "Password cannot be empty",
       "passwordTooShort": "Password must be at least 8 characters long",
-      "passwordTooLong": "Password must be at most 64 characters long"
+      "passwordTooLong": "Password must be at most 64 characters long",
+      "passwordsDoNotMatch": "Passwords do not match"
     }
   },
 
