@@ -76,11 +76,16 @@ export const SignUpForm = () => {
   const form = useForm<zod.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
+      email: '',
       username: '',
       password: '',
       confirmPassword: '',
     },
   });
+
+  const onSubmit = (data: zod.infer<typeof signUpFormSchema>) => {
+    console.log(data);
+  };
 
   const { t } = useTranslation();
 
@@ -96,12 +101,7 @@ export const SignUpForm = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit((data) => {
-              console.log(data);
-            })}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="username"
