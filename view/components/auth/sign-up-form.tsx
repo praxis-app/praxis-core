@@ -1,7 +1,16 @@
+import { api } from '@/client/api-client';
+import {
+  LocalStorageKeys,
+  NavigationPaths,
+} from '@/constants/shared.constants';
 import { t } from '@/lib/shared.utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import * as zod from 'zod';
 import { Button } from '../ui/button';
 import {
@@ -83,11 +92,22 @@ export const SignUpForm = () => {
     },
   });
 
-  const onSubmit = (data: zod.infer<typeof signUpFormSchema>) => {
-    console.log(data);
-  };
-
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const { mutate: login, isPending: isLoginPending } = useMutation({
+    mutationFn: api.login,
+    onSuccess({ access_token }) {
+      localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
+      navigate(NavigationPaths.Home);
+    },
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
+      toast(errorMessage);
+    },
+  });
 
   return (
     <Card className="w-full max-w-md">
@@ -101,7 +121,10 @@ export const SignUpForm = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit((fv) => login(fv))}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="username"
@@ -178,7 +201,7 @@ export const SignUpForm = () => {
               )}
             />
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isLoginPending}>
               {t('auth.actions.createAccount')}
             </Button>
 
