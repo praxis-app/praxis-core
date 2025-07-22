@@ -95,8 +95,8 @@ export const SignUpForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { mutate: login, isPending: isLoginPending } = useMutation({
-    mutationFn: api.login,
+  const { mutate: signUp, isPending: isSignUpPending } = useMutation({
+    mutationFn: api.signUp,
     onSuccess({ access_token }) {
       localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       navigate(NavigationPaths.Home);
@@ -122,7 +122,7 @@ export const SignUpForm = () => {
       <CardContent>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((fv) => login(fv))}
+            onSubmit={form.handleSubmit((fv) => signUp(fv))}
             className="space-y-4"
           >
             <FormField
@@ -201,7 +201,7 @@ export const SignUpForm = () => {
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={isLoginPending}>
+            <Button type="submit" className="w-full" disabled={isSignUpPending}>
               {t('auth.actions.createAccount')}
             </Button>
 
