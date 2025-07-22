@@ -1,4 +1,7 @@
+import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
+import { useAppStore } from '@/store/app.store';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdExitToApp } from 'react-icons/md';
@@ -15,17 +18,22 @@ import {
 import { UserAvatar } from '../users/user-avatar';
 
 const LeftNavUserMenu = () => {
+  const { setIsLoggedIn } = useAppStore();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const handleLogout = async () => {
-    // TODO: Add remaining logout logic
-    localStorage.clear();
-    setShowLogoutDialog(false);
-    navigate(NavigationPaths.Home);
-  };
+  const { mutate: logOut, isPending: isLogoutPending } = useMutation({
+    mutationFn: api.logOut,
+    onSuccess: async () => {
+      await navigate(NavigationPaths.Home);
+      setShowLogoutDialog(false);
+      setIsLoggedIn(false);
+      queryClient.clear();
+    },
+  });
 
   return (
     <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
@@ -78,8 +86,9 @@ const LeftNavUserMenu = () => {
       </DropdownMenu>
 
       <LogOutDialogContent
+        handleLogout={logOut}
+        isPending={isLogoutPending}
         setShowLogoutDialog={setShowLogoutDialog}
-        handleLogout={handleLogout}
       />
     </Dialog>
   );

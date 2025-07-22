@@ -12,9 +12,14 @@ import {
 interface Props {
   setShowLogoutDialog: (show: boolean) => void;
   handleLogout: () => void;
+  isPending: boolean;
 }
 
-const LogOutDialogContent = ({ setShowLogoutDialog, handleLogout }: Props) => {
+const LogOutDialogContent = ({
+  setShowLogoutDialog,
+  handleLogout,
+  isPending,
+}: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -34,7 +39,11 @@ const LogOutDialogContent = ({ setShowLogoutDialog, handleLogout }: Props) => {
         <Button variant="outline" onClick={() => setShowLogoutDialog(false)}>
           {t('actions.cancel')}
         </Button>
-        <Button variant="destructive" onClick={handleLogout}>
+        <Button
+          variant="destructive"
+          onClick={handleLogout}
+          disabled={isPending}
+        >
           {t('auth.actions.logOut')}
         </Button>
       </DialogFooter>
