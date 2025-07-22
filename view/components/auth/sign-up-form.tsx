@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
 
 const EMAIL_MAX_LENGTH = 254;
 
@@ -117,43 +116,62 @@ export const SignUpForm = () => {
               )}
             />
 
-            <div className="space-y-2">
-              <Label htmlFor="email">{t('auth.labels.email')}</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder={t('auth.placeholders.email')}
-                autoComplete="email"
-                required
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('auth.labels.email')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder={t('auth.placeholders.email')}
+                      autoComplete="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="password">{t('auth.labels.password')}</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder={t('auth.prompts.createPassword')}
-                autoComplete="new-password"
-                required
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('auth.labels.password')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder={t('auth.prompts.createPassword')}
+                      autoComplete="new-password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">
-                {t('auth.labels.confirmPassword')}
-              </Label>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                placeholder={t('auth.placeholders.confirmPassword')}
-                autoComplete="new-password"
-                required
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('auth.labels.confirmPassword')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder={t('auth.placeholders.confirmPassword')}
+                      autoComplete="new-password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <Button type="submit" className="w-full">
               {t('auth.actions.createAccount')}
