@@ -6,28 +6,32 @@ import { defineConfig } from 'vite';
 dotenv.config();
 
 // https://vitejs.dev/config
-export default defineConfig({
-  root: 'view',
-  server: {
-    port: parseInt(process.env.CLIENT_PORT || '3000'),
-    proxy: {
-      '/api': {
-        target: `http://localhost:${process.env.SERVER_PORT}/api`,
-        rewrite: (path: string) => path.replace(/^\/api/, ''),
-        changeOrigin: true,
+export default defineConfig(async () => {
+  const tailwindcss = (await import('@tailwindcss/vite')).default;
+
+  return {
+    root: 'view',
+    server: {
+      port: parseInt(process.env.CLIENT_PORT || '3000'),
+      proxy: {
+        '/api': {
+          target: `http://localhost:${process.env.SERVER_PORT}/api`,
+          rewrite: (path: string) => path.replace(/^\/api/, ''),
+          changeOrigin: true,
+        },
       },
     },
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './view'),
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './view'),
+      },
     },
-  },
-  define: {
-    'process.env': process.env,
-  },
-  build: {
-    outDir: '../dist/view',
-  },
-  plugins: [react()],
+    define: {
+      'process.env': process.env,
+    },
+    build: {
+      outDir: '../dist/view',
+    },
+    plugins: [react(), tailwindcss()],
+  };
 });
