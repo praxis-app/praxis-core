@@ -131,6 +131,16 @@
     }
   },
 
+  "channels": {
+    "actions": {
+      "create": "Create Channel"
+    },
+    "prompts": {
+      "createChannel": "Create a new channel",
+      "startConversation": "Start a conversation around a topic or idea."
+    }
+  },
+
   "welcome": {
     "messages": {
       "projectDescription1": "Praxis is an open source messaging platform designed for collaborative decision making. Proposals take center stage, offering a diverse range of voting models, with consensus as the default.",
