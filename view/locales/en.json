@@ -40,14 +40,15 @@
       "confirmPassword": "Confirm your password"
     },
     "prompts": {
+      "alreadyHaveAccount": "Already have an account?",
       "alreadyLoggedIn": "You're already signed in.",
       "alreadyRegistered": "You have already created an account.",
-      "alreadyHaveAccount": "Already have an account?",
       "authenticated": "You are authenticated.",
+      "createPassword": "Create a strong password",
+      "dontHaveAccount": "Don't have an account?",
       "enterCredentials": "Enter your email and password to access your account",
       "enterDetails": "Enter your details to create your new account",
-      "logOut": "Are you sure you want to log out?",
-      "createPassword": "Create a strong password"
+      "logOut": "Are you sure you want to log out?"
     },
     "actions": {
       "logIn": "Log in",
@@ -61,16 +62,16 @@
     },
     "errors": {
       "invalidEmail": "Email is invalid.",
+      "invalidName": "Usernames cannot contain special characters",
+      "longEmail": "Email cannot exceed 254 characters",
+      "longName": "Username cannot exceed 15 characters",
       "missingEmail": "Email cannot be empty",
       "missingName": "Username cannot be empty",
-      "invalidName": "Usernames cannot contain special characters",
-      "shortName": "Username must be at least 2 characters",
-      "longName": "Username cannot exceed 15 characters",
-      "longEmail": "Email cannot exceed 254 characters",
       "missingPassword": "Password cannot be empty",
-      "passwordTooShort": "Password must be at least 8 characters long",
+      "passwordsDoNotMatch": "Passwords do not match",
       "passwordTooLong": "Password must be at most 64 characters long",
-      "passwordsDoNotMatch": "Passwords do not match"
+      "passwordTooShort": "Password must be at least 8 characters long",
+      "shortName": "Username must be at least 2 characters"
     }
   },
 
