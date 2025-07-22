@@ -58,6 +58,18 @@
     },
     "descriptions": {
       "confirmLogOut": "Use this dialog to log out of your account."
+    },
+    "errors": {
+      "invalidEmail": "Email is invalid.",
+      "missingEmail": "Email cannot be empty",
+      "missingName": "Username cannot be empty",
+      "invalidName": "Usernames cannot contain special characters",
+      "shortName": "Username must be at least 2 characters",
+      "longName": "Username cannot exceed 15 characters",
+      "longEmail": "Email cannot exceed 254 characters",
+      "missingPassword": "Password cannot be empty",
+      "passwordTooShort": "Password must be at least 8 characters long",
+      "passwordTooLong": "Password must be at most 64 characters long"
     }
   },
 
