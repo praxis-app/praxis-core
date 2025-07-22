@@ -1,106 +1,64 @@
-// TODO: Add remaining layout and functionality - below is a WIP
-
-import { Avatar, AvatarProps } from '@mui/material';
+import { cn } from '@/lib/shared.utils';
 import chroma from 'chroma-js';
 import ColorHash from 'color-hash';
-import { CSSProperties } from 'react';
-import { useTranslation } from 'react-i18next';
-import LazyLoadImage from '../images/lazy-load-image';
-import { Link } from '../shared/link';
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from '../ui/avatar';
 
-// TODO: Update to take `user` as a prop
-
-interface Props extends AvatarProps {
-  imageFile?: File;
+interface Props {
+  name: string;
+  userId?: string | null;
+  className?: string;
+  fallbackClassName?: string;
   imageSrc?: string;
-  userName?: string;
-  userId?: string;
-  linkStyles?: CSSProperties;
-  size?: number;
-  href?: string;
+  isOnline?: boolean;
+  showOnlineStatus?: boolean;
+  animateOnlineStatus?: boolean;
 }
 
-const UserAvatar = ({
-  imageFile,
-  imageSrc,
-  linkStyles,
+export const UserAvatar = ({
+  name,
   userId,
-  size,
-  userName,
-  sx,
-  href,
-  ...avatarProps
+  className,
+  imageSrc,
+  fallbackClassName,
+  isOnline,
+  showOnlineStatus,
+  animateOnlineStatus,
 }: Props) => {
-  const { t } = useTranslation();
-
-  const avatarSx: AvatarProps['sx'] = {
-    fontSize: '17px',
-    borderRadius: '50%',
-    backgroundColor: 'transparent',
-    width: 38,
-    height: 38,
-    ...sx,
-    ...(size ? { width: size, height: size } : {}),
-  };
-
-  const getImageFileSrc = () => {
-    if (imageSrc) {
-      return imageSrc;
-    }
-    if (imageFile) {
-      return URL.createObjectURL(imageFile);
-    }
-  };
-
-  const getNameAcronym = (name: string) => {
-    const [firstName, lastName] = name.split('-');
-    if (lastName) {
-      return `${firstName[0]}${lastName[0]}`.toUpperCase();
-    }
-    return `${firstName[0]}`.toUpperCase();
-  };
-
-  const getStringAvatarProps = (): AvatarProps => {
-    if (!userId || !userName) {
-      return { sx: avatarSx, children: null };
-    }
+  const getStringAvatarProps = () => {
     const colorHash = new ColorHash();
-    const baseColor = colorHash.hex(userId);
-    const color = chroma(baseColor).darken(1.25).hex();
-    const bgcolor = chroma(baseColor).brighten(2).hex();
+    const baseColor = colorHash.hex(userId ?? name);
+    const color = chroma(baseColor).brighten(1.5).hex();
+    const backgroundColor = chroma(baseColor).darken(1.35).hex();
 
     return {
-      sx: { ...avatarSx, color, bgcolor },
-      children: getNameAcronym(userName),
+      style: { color, backgroundColor },
     };
   };
 
-  const renderAvatar = () => {
-    if (!imageFile && !imageSrc) {
-      return <Avatar title={userName} {...getStringAvatarProps()} />;
-    }
-    return (
-      <Avatar title={userName} sx={avatarSx} {...avatarProps}>
-        <LazyLoadImage
-          alt={t('images.labels.profilePicture')}
-          src={getImageFileSrc()}
-          borderRadius="50%"
-          minWidth="100%"
-          minHeight="100%"
-        />
-      </Avatar>
-    );
-  };
+  return (
+    <Avatar className={cn(className)} title={name}>
+      <AvatarImage src={imageSrc} alt={name} />
 
-  if (href) {
-    return (
-      <Link to={href} sx={linkStyles}>
-        {renderAvatar()}
-      </Link>
-    );
-  }
+      <AvatarFallback
+        className={cn('text-lg font-light', fallbackClassName)}
+        {...getStringAvatarProps()}
+      >
+        {name[0].toUpperCase()}
+      </AvatarFallback>
 
-  return renderAvatar();
+      {showOnlineStatus && isOnline && (
+        <AvatarBadge
+          position="bottomRight"
+          className="border-card h-[15px] w-[15px] border-[2.5px]"
+        >
+          <span className="relative">
+            {animateOnlineStatus && (
+              <span className="absolute h-full w-full animate-ping rounded-full bg-(--online) opacity-75"></span>
+            )}
+            <span className="absolute h-full w-full rounded-full bg-(--online)"></span>
+          </span>
+        </AvatarBadge>
+      )}
+    </Avatar>
+  );
 };
-
-export default UserAvatar;
