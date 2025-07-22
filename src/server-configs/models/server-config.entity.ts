@@ -32,30 +32,6 @@ export class ServerConfig {
   @Column({ default: VotingTimeLimit.Unlimited })
   votingTimeLimit: number;
 
-  /**
-   * The base URL for the Discord bot's API endpoints
-   */
-  @Column({ type: 'varchar', nullable: true })
-  botApiUrl: string | null;
-
-  /**
-   * The client ID for the Discord bot
-   */
-  @Column({ type: 'varchar', nullable: true })
-  botClientId: string | null;
-
-  /**
-   * API key used by the bot to authenticate its calls to the Praxis instance (self)
-   */
-  @Column({ type: 'varchar', nullable: true })
-  botApiKey: string | null;
-
-  /**
-   * API key used by the Praxis instance (self) to authenticate its calls to the bot
-   */
-  @Column({ type: 'varchar', nullable: true })
-  apiKey: string | null;
-
   @CreateDateColumn()
   createdAt: Date;
 
