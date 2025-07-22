@@ -1,6 +1,7 @@
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { MessageForm } from '../messages/message-form';
 import { LeftNavDesktop } from '../nav/left-nav-desktop';
+import { ChannelFeed } from './channel-feed';
 import { ChannelTopNav } from './channel-top-nav';
 
 // interface Props {
@@ -17,8 +18,7 @@ export const ChannelView = () => {
       <div className="flex flex-1 flex-col">
         <ChannelTopNav />
 
-        {/* TODO: Add channel feed */}
-        {/* <ChannelFeed channel={channel} /> */}
+        <ChannelFeed />
 
         <MessageForm />
       </div>

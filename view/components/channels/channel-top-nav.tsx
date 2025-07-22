@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { LuArrowLeft } from 'react-icons/lu';
 import { MdSearch } from 'react-icons/md';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
@@ -13,6 +14,10 @@ export const ChannelTopNav = () => {
   return (
     <header className="flex h-[55px] items-center justify-between border-b border-[--color-border] px-2 md:pl-6">
       <div className="mr-1 flex flex-1 items-center gap-2.5">
+        <Button variant="ghost" size="icon">
+          <LuArrowLeft className="size-6" />
+        </Button>
+
         {/* {!isDesktop && (
           <NavSheet
             trigger={
