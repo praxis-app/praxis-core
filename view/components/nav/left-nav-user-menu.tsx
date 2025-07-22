@@ -1,0 +1,88 @@
+import { NavigationPaths } from '@/constants/shared.constants';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { MdExitToApp } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import LogOutDialogContent from '../auth/log-out-dialog-content';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { UserAvatar } from '../users/user-avatar';
+
+const LeftNavUserMenu = () => {
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    // TODO: Add remaining logout logic
+    localStorage.clear();
+    setShowLogoutDialog(false);
+    navigate(NavigationPaths.Home);
+  };
+
+  return (
+    <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 mr-1 flex h-11.5 w-full cursor-pointer items-center justify-start gap-2 rounded-[4px] px-2 text-left select-none focus:outline-none">
+          {/* TODO: Replace with actual user data */}
+          <UserAvatar
+            className="size-8"
+            fallbackClassName="text-sm"
+            name={'displayName'}
+            userId={'userId'}
+            isOnline={true}
+            showOnlineStatus
+          />
+          <div className="flex flex-col pt-[0.16rem]">
+            <div className="text-[0.81rem]/tight">{'displayName'}</div>
+            <div className="text-muted-foreground text-[0.7rem]/[0.9rem] font-light">
+              {t('users.presence.online')}
+            </div>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="w-52"
+          align="start"
+          alignOffset={10}
+          side="top"
+          sideOffset={18}
+        >
+          <DropdownMenuItem
+            className="text-md"
+            onClick={() => toast(t('prompts.inDev'))}
+          >
+            {/* TODO: Replace with actual user data */}
+            <UserAvatar
+              name={'displayName'}
+              userId={'userId'}
+              className="size-5"
+              fallbackClassName="text-[0.65rem]"
+              isOnline={true}
+            />
+            {'displayName'}
+          </DropdownMenuItem>
+          <DialogTrigger asChild>
+            <DropdownMenuItem className="text-md">
+              <MdExitToApp className="text-foreground size-5" />
+              {t('auth.actions.logOut')}
+            </DropdownMenuItem>
+          </DialogTrigger>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <LogOutDialogContent
+        setShowLogoutDialog={setShowLogoutDialog}
+        handleLogout={handleLogout}
+      />
+    </Dialog>
+  );
+};
+
+export default LeftNavUserMenu;

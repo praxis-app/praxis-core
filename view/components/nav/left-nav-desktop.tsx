@@ -18,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import LeftNavUserMenu from './left-nav-user-menu';
 
 export const LeftNavDesktop = () => {
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
@@ -46,7 +47,7 @@ export const LeftNavDesktop = () => {
             <DialogTrigger asChild>
               <DropdownMenuItem className="text-md">
                 <MdAddCircle className="text-foreground size-5" />
-                {t('rooms.actions.create')}
+                {t('channels.actions.create')}
               </DropdownMenuItem>
             </DialogTrigger>
           </DropdownMenuContent>
@@ -54,10 +55,10 @@ export const LeftNavDesktop = () => {
 
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('rooms.prompts.createRoom')}</DialogTitle>
+            <DialogTitle>{t('channels.prompts.createChannel')}</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            {t('rooms.prompts.startConversation')}
+            {t('channels.prompts.startConversation')}
           </DialogDescription>
           {/* TODO: Add create channel form */}
           {/* <CreateRoomForm
@@ -83,8 +84,7 @@ export const LeftNavDesktop = () => {
       </div>
 
       <div className="flex h-[60px] items-center justify-between border-t border-[--color-border] px-1.5">
-        {/* TODO: Add user menu */}
-        {/* <LeftNavUserMenu /> */}
+        <LeftNavUserMenu />
 
         <Button
           onClick={() => toast(t('prompts.inDev'))}
