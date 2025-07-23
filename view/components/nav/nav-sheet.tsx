@@ -1,3 +1,4 @@
+import { useAppStore } from '@/store/app.store';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,15 +18,14 @@ import { NavDropdown } from './nav-dropdown';
 
 interface Props {
   trigger: ReactNode;
-  open: boolean;
-  setOpen: (open: boolean) => void;
 }
 
-export const NavSheet = ({ trigger, open, setOpen }: Props) => {
+export const NavSheet = ({ trigger }: Props) => {
+  const { isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
   const { t } = useTranslation();
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={isNavSheetOpen} onOpenChange={setIsNavSheetOpen}>
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent
         side="left"

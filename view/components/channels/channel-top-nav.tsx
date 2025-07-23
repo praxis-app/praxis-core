@@ -1,5 +1,4 @@
 import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft } from 'react-icons/lu';
 import { MdSearch } from 'react-icons/md';
@@ -12,8 +11,6 @@ import { Button } from '../ui/button';
 // }
 
 export const ChannelTopNav = () => {
-  const [navSheetOpen, setNavSheetOpen] = useState(false);
-
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
 
@@ -27,8 +24,6 @@ export const ChannelTopNav = () => {
                 <LuArrowLeft className="size-6" />
               </Button>
             }
-            open={navSheetOpen}
-            setOpen={setNavSheetOpen}
           />
         )}
 

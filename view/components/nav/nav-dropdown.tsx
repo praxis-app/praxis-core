@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const NavDropdown = ({ trigger, displayName }: Props) => {
-  const { setIsLoggedIn } = useAppStore();
+  const { setIsLoggedIn, setIsNavSheetOpen } = useAppStore();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ export const NavDropdown = ({ trigger, displayName }: Props) => {
     onSuccess: async () => {
       await navigate(NavigationPaths.Home);
       setShowLogoutDialog(false);
+      setIsNavSheetOpen(false);
       setIsLoggedIn(false);
       queryClient.clear();
     },
