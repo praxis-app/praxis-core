@@ -5,14 +5,17 @@ interface AppState {
   isLoggedIn: boolean;
   isAppLoading: boolean;
   inviteToken: string | null;
+  isNavSheetOpen: boolean;
   setIsLoggedIn(isLoggedIn: boolean): void;
   setIsAppLoading(isAppLoading: boolean): void;
   setInviteToken(inviteToken: string | null): void;
+  setIsNavSheetOpen(isNavSheetOpen: boolean): void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
   isLoggedIn: false,
   isAppLoading: true,
+  isNavSheetOpen: false,
   inviteToken: localStorage.getItem(LocalStorageKeys.InviteToken),
 
   setIsAppLoading(isAppLoading) {
@@ -23,5 +26,8 @@ export const useAppStore = create<AppState>((set) => ({
   },
   setIsLoggedIn(isLoggedIn) {
     set({ isLoggedIn });
+  },
+  setIsNavSheetOpen(isNavSheetOpen) {
+    set({ isNavSheetOpen });
   },
 }));

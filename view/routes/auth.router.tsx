@@ -1,5 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 import { LoginPage } from '../pages/auth/login-page';
+import { SignUp } from '@/pages/auth/sign-up';
 
 export const authRouter: RouteObject = {
   path: '/auth',
@@ -7,6 +8,10 @@ export const authRouter: RouteObject = {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'signup',
+      element: <SignUp />,
     },
   ],
 };

@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/auth/login-form';
+import { SignUpForm } from '@/components/auth/sign-up-form';
 import { TopNav } from '@/components/nav/top-nav';
 import {
   Card,
@@ -11,32 +11,33 @@ import { NavigationPaths } from '@/constants/shared.constants';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export const LoginPage = () => {
+export const SignUp = () => {
   const { t } = useTranslation();
+
   return (
     <>
       <TopNav />
 
-      <div className="flex h-full flex-col items-center justify-center p-4 md:p-18">
+      <div className="flex h-full flex-col items-center justify-center p-3 pt-4 md:p-18">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">
-              {t('auth.actions.signIn')}
+              {t('auth.actions.createAccount')}
             </CardTitle>
             <CardDescription className="text-center">
-              {t('auth.prompts.enterCredentials')}
+              {t('auth.prompts.enterDetails')}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <LoginForm />
+            <SignUpForm />
 
             <div className="text-center text-sm text-muted-foreground">
-              {t('auth.prompts.dontHaveAccount')}{' '}
+              {t('auth.prompts.alreadyHaveAccount')}{' '}
               <Link
-                to={NavigationPaths.SignUp}
+                to={NavigationPaths.Login}
                 className="font-medium text-primary hover:underline"
               >
-                {t('auth.prompts.createAccount')}
+                {t('auth.actions.signIn')}
               </Link>
             </div>
           </CardContent>
