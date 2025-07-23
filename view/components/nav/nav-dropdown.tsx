@@ -61,7 +61,6 @@ export const NavDropdown = ({ trigger }: Props) => {
             className="text-md"
             onClick={() => toast(t('prompts.inDev'))}
           >
-            {/* TODO: Replace with actual user data */}
             <UserAvatar
               name={me.name}
               userId={me.id}
