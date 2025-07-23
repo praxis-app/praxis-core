@@ -1,5 +1,6 @@
 import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
+import { useMeQuery } from '@/hooks/use-me-query';
 import { useAppStore } from '@/store/app.store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
@@ -19,11 +20,10 @@ import { UserAvatar } from '../users/user-avatar';
 
 interface Props {
   trigger: ReactNode;
-  displayName: string;
 }
 
-export const NavDropdown = ({ trigger, displayName }: Props) => {
-  const { setIsLoggedIn, setIsNavSheetOpen } = useAppStore();
+export const NavDropdown = ({ trigger }: Props) => {
+  const { isLoggedIn, setIsLoggedIn, setIsNavSheetOpen } = useAppStore();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const navigate = useNavigate();
@@ -41,6 +41,14 @@ export const NavDropdown = ({ trigger, displayName }: Props) => {
     },
   });
 
+  const { data: meData } = useMeQuery({
+    enabled: isLoggedIn,
+  });
+  const me = meData?.user;
+  if (!me) {
+    return null;
+  }
+
   return (
     <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
       <DropdownMenu>
@@ -55,12 +63,12 @@ export const NavDropdown = ({ trigger, displayName }: Props) => {
           >
             {/* TODO: Replace with actual user data */}
             <UserAvatar
-              name={'displayName'}
-              userId={'userId'}
+              name={me.name}
+              userId={me.id}
               className="size-5"
               fallbackClassName="text-[0.7rem]"
             />
-            {displayName}
+            {me.name}
           </DropdownMenuItem>
 
           <DialogTrigger asChild>

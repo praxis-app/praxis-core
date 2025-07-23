@@ -1,5 +1,6 @@
 import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
+import { useMeQuery } from '@/hooks/use-me-query';
 import { useAppStore } from '@/store/app.store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -18,7 +19,7 @@ import {
 import { UserAvatar } from '../users/user-avatar';
 
 const LeftNavUserMenu = () => {
-  const { setIsLoggedIn } = useAppStore();
+  const { isLoggedIn, setIsLoggedIn } = useAppStore();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const { t } = useTranslation();
@@ -35,21 +36,29 @@ const LeftNavUserMenu = () => {
     },
   });
 
+  const { data: meData } = useMeQuery({
+    enabled: isLoggedIn,
+  });
+  const me = meData?.user;
+
+  if (!me) {
+    return null;
+  }
+
   return (
     <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
       <DropdownMenu>
         <DropdownMenuTrigger className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 mr-1 flex h-11.5 w-full cursor-pointer items-center justify-start gap-2 rounded-[4px] px-2 text-left select-none focus:outline-none">
-          {/* TODO: Replace with actual user data */}
           <UserAvatar
             className="size-8"
             fallbackClassName="text-sm"
-            name={'displayName'}
-            userId={'userId'}
+            name={me.name}
+            userId={me.id}
             isOnline={true}
             showOnlineStatus
           />
           <div className="flex flex-col pt-[0.16rem]">
-            <div className="text-[0.81rem]/tight">{'displayName'}</div>
+            <div className="text-[0.81rem]/tight">{me.name}</div>
             <div className="text-muted-foreground text-[0.7rem]/[0.9rem] font-light">
               {t('users.presence.online')}
             </div>
@@ -66,15 +75,14 @@ const LeftNavUserMenu = () => {
             className="text-md"
             onClick={() => toast(t('prompts.inDev'))}
           >
-            {/* TODO: Replace with actual user data */}
             <UserAvatar
-              name={'displayName'}
-              userId={'userId'}
+              name={me.name}
+              userId={me.id}
               className="size-5"
               fallbackClassName="text-[0.65rem]"
               isOnline={true}
             />
-            {'displayName'}
+            {me.name}
           </DropdownMenuItem>
           <DialogTrigger asChild>
             <DropdownMenuItem className="text-md">

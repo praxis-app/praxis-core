@@ -71,7 +71,6 @@ export const NavSheet = ({ trigger }: Props) => {
                     fallbackClassName="text-[1.05rem]"
                   />
                 }
-                displayName={me.name}
               />
             )}
           </SheetTitle>
