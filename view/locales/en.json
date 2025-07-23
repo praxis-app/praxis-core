@@ -48,7 +48,8 @@
       "dontHaveAccount": "Don't have an account?",
       "enterCredentials": "Enter your email and password to access your account",
       "enterDetails": "Enter your details to create your new account",
-      "logOut": "Are you sure you want to log out?"
+      "logOut": "Are you sure you want to log out?",
+      "createAccount": "Create an account"
     },
     "actions": {
       "logIn": "Log in",

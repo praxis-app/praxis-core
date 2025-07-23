@@ -10,17 +10,10 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as zod from 'zod';
 import { Button } from '../ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../ui/card';
 import {
   Form,
   FormControl,
@@ -79,75 +72,63 @@ export const LoginForm = () => {
   });
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((fv) => login(fv))}
+        className="space-y-4"
+      >
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('auth.labels.email')}</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder={t('auth.placeholders.email')}
+                  autoComplete="email"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('auth.labels.password')}</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder={t('auth.prompts.createPassword')}
+                  autoComplete="current-password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-full" disabled={isLoginPending}>
           {t('auth.actions.signIn')}
-        </CardTitle>
-        <CardDescription className="text-center">
-          {t('auth.prompts.enterCredentials')}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit((fv) => login(fv))}
-            className="space-y-4"
+        </Button>
+
+        <div className="text-center text-sm text-muted-foreground">
+          {t('auth.prompts.dontHaveAccount')}{' '}
+          <Link
+            to={NavigationPaths.SignUp}
+            className="font-medium text-primary hover:underline"
           >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('auth.labels.email')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder={t('auth.placeholders.email')}
-                      autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('auth.labels.password')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder={t('auth.prompts.createPassword')}
-                      autoComplete="current-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" className="w-full" disabled={isLoginPending}>
-              {t('auth.actions.signIn')}
-            </Button>
-
-            <div className="text-center text-sm text-muted-foreground">
-              {t('auth.prompts.dontHaveAccount')}{' '}
-              <a
-                href="/signup"
-                className="font-medium text-primary hover:underline"
-              >
-                {t('auth.actions.createAccount')}
-              </a>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+            {t('auth.prompts.createAccount')}
+          </Link>
+        </div>
+      </form>
+    </Form>
   );
 };
