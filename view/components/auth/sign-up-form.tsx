@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as zod from 'zod';
 import { Button } from '../ui/button';
@@ -106,7 +106,7 @@ export const SignUpForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((fv) => signUp(fv))}
-        className="space-y-4"
+        className="space-y-4 pb-4"
       >
         <FormField
           control={form.control}
@@ -187,16 +187,6 @@ export const SignUpForm = () => {
         <Button type="submit" className="w-full" disabled={isSignUpPending}>
           {t('auth.actions.createAccount')}
         </Button>
-
-        <div className="text-center text-sm text-muted-foreground">
-          {t('auth.prompts.alreadyHaveAccount')}{' '}
-          <Link
-            to={NavigationPaths.Login}
-            className="font-medium text-primary hover:underline"
-          >
-            {t('auth.actions.signIn')}
-          </Link>
-        </div>
       </form>
     </Form>
   );
