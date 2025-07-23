@@ -1,6 +1,9 @@
+import { NavigationPaths } from '@/constants/shared.constants';
+import { useAppStore } from '@/store/app.store';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdAddCircle, MdExpandMore, MdSettings } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import appIconImg from '../../assets/images/app-icon.png';
 import { Button } from '../ui/button';
@@ -21,6 +24,7 @@ import {
 import LeftNavUserMenu from './left-nav-user-menu';
 
 export const LeftNavDesktop = () => {
+  const { isLoggedIn } = useAppStore();
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
 
   const { t } = useTranslation();
@@ -86,13 +90,22 @@ export const LeftNavDesktop = () => {
       <div className="flex h-[60px] items-center justify-between border-t border-[--color-border] px-1.5">
         <LeftNavUserMenu />
 
-        <Button
-          onClick={() => toast(t('prompts.inDev'))}
-          variant="ghost"
-          size="icon"
-        >
-          <MdSettings className="text-muted-foreground size-6" />
-        </Button>
+        {isLoggedIn ? (
+          <Button
+            onClick={() => toast(t('prompts.inDev'))}
+            variant="ghost"
+            size="icon"
+          >
+            <MdSettings className="text-muted-foreground size-6" />
+          </Button>
+        ) : (
+          // TODO: Add sign up button after implementing invites
+          <Link to={NavigationPaths.Login} className="w-full">
+            <Button variant="ghost" className="w-full">
+              {t('auth.actions.logIn')}
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );
