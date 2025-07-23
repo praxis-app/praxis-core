@@ -1,4 +1,5 @@
 import { NavigationPaths } from '@/constants/shared.constants';
+import { cn } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +34,14 @@ export const LeftNavDesktop = () => {
     <div className="dark:bg-card bg-secondary flex h-full w-[240px] flex-col border-r border-[--color-border]">
       <Dialog open={showRoomFormDialog} onOpenChange={setShowRoomFormDialog}>
         <DropdownMenu>
-          <DropdownMenuTrigger className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 flex h-[55px] w-full cursor-pointer justify-between border-b border-[--color-border] pr-3 pl-4 select-none focus:outline-none">
+          <DropdownMenuTrigger
+            className={cn(
+              ' flex h-[55px] w-full  justify-between border-b border-[--color-border] pr-3 pl-4 select-none focus:outline-none',
+              isLoggedIn &&
+                'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 cursor-pointer',
+            )}
+            disabled={!isLoggedIn}
+          >
             <div className="flex items-center gap-2">
               <img
                 src={appIconImg}
@@ -45,7 +53,9 @@ export const LeftNavDesktop = () => {
               </div>
             </div>
 
-            <MdExpandMore className="size-[1.4rem] self-center" />
+            {isLoggedIn && (
+              <MdExpandMore className="size-[1.4rem] self-center" />
+            )}
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10} className="w-52">
             <DialogTrigger asChild>

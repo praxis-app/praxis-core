@@ -27,7 +27,7 @@ interface Props {
 }
 
 export const NavSheet = ({ trigger }: Props) => {
-  const { isNavSheetOpen, setIsNavSheetOpen, isLoggedIn } = useAppStore();
+  const { isLoggedIn, isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
 
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
@@ -57,7 +57,9 @@ export const NavSheet = ({ trigger }: Props) => {
                     className="size-9 self-center"
                   />
                   {t('brand')}
-                  <LuChevronRight className="mt-0.5 ml-0.5 size-4" />
+                  {isLoggedIn && (
+                    <LuChevronRight className="mt-0.5 ml-0.5 size-4" />
+                  )}
                 </div>
               }
             />

@@ -1,3 +1,4 @@
+import { useAppStore } from '@/store/app.store';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,13 +26,16 @@ interface Props {
 }
 
 export const NavDrawer = ({ trigger }: Props) => {
+  const { isLoggedIn } = useAppStore();
   const [showNavDrawer, setShowNavDrawer] = useState(false);
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
+
   const { t } = useTranslation();
 
   return (
     <Drawer open={showNavDrawer} onOpenChange={setShowNavDrawer}>
-      <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+      {isLoggedIn ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : trigger}
+
       <DrawerContent className="flex min-h-[calc(100%-68px)] flex-col items-start rounded-t-2xl border-0">
         <VisuallyHidden>
           <DrawerHeader>
