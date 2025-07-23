@@ -4,6 +4,7 @@ import {
   NavigationPaths,
 } from '@/constants/shared.constants';
 import { t } from '@/lib/shared.utils';
+import { useAppStore } from '@/store/app.store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -53,6 +54,8 @@ const loginFormSchema = zod.object({
 });
 
 export const LoginForm = () => {
+  const { setIsLoggedIn } = useAppStore();
+
   const form = useForm<zod.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -69,13 +72,10 @@ export const LoginForm = () => {
     onSuccess({ access_token }) {
       localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       navigate(NavigationPaths.Home);
+      setIsLoggedIn(true);
     },
-    onError(error: AxiosError) {
-      const errorMessage =
-        (error.response?.data as string) || t('errors.somethingWentWrong');
-
-      toast(errorMessage);
-    },
+    onError: (error: AxiosError) =>
+      toast((error.response?.data as string) || t('errors.somethingWentWrong')),
   });
 
   return (
