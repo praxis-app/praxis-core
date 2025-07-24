@@ -1,3 +1,6 @@
+// TODO: Add more skeletons and ensure this is used only where it makes
+// sense - is currently used anywhere a loading indicator is needed
+
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { Skeleton } from '../ui/skeleton';
 
