@@ -1,15 +1,8 @@
 import { api } from '@/client/api-client';
 import { InviteForm } from '@/components/invites/invite-form';
+import { InvitesTable } from '@/components/invites/invites-table';
 import { TopNav } from '@/components/nav/top-nav';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { NavigationPaths } from '@/constants/shared.constants';
 import { useAppStore } from '@/store/app.store';
 import { useQuery } from '@tanstack/react-query';
@@ -45,25 +38,7 @@ export const InvitesPage = () => {
           </CardContent>
         </Card>
 
-        <Card className="w-full max-w-md">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('invites.columnNames.code')}</TableHead>
-                <TableHead>{t('invites.columnNames.expires')}</TableHead>
-                <TableHead>{t('invites.columnNames.inviter')}</TableHead>
-                <TableHead>{t('invites.columnNames.uses')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={4} className="pt-8 text-center">
-                  {t('invites.prompts.noInvites')}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Card>
+        <InvitesTable />
       </div>
     </>
   );
