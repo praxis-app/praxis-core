@@ -142,6 +142,48 @@
     }
   },
 
+  "invites": {
+    "actions": {
+      "generateLink": "Generate a New Link"
+    },
+    "prompts": {
+      "alreadySignedUp": "You've already signed up.",
+      "copiedToClipboard": "Copied to clipboard",
+      "expiredOrInvalid": "Your invite link is either expired or invalid.",
+      "inviteRequired": "You need to be invited in order to sign up.",
+      "noInvites": "No invites have been created yet."
+    },
+    "headers": {
+      "serverInvites": "Invites"
+    },
+    "form": {
+      "expiresAtOptions": {
+        "never": "Never (default)",
+        "oneDay": "1 day",
+        "oneMonth": "1 month",
+        "sevenDays": "7 days"
+      },
+      "maxUsesOptions": {
+        "noLimit": "No limit (default)",
+        "xUses": "{{uses}} use",
+        "xUses_plural": "{{uses}} uses"
+      },
+      "labels": {
+        "expiresAt": "Expires after",
+        "maxUses": "Max number of uses"
+      }
+    },
+    "columnNames": {
+      "code": "CODE",
+      "expires": "EXPIRES",
+      "inviter": "INVITER",
+      "uses": "USES"
+    },
+    "labels": {
+      "usesWithColon": "Uses:"
+    }
+  },
+
   "welcome": {
     "messages": {
       "projectDescription1": "Praxis is an open source messaging platform designed for collaborative decision making. Proposals take center stage, offering a diverse range of voting models, with consensus as the default.",
@@ -167,19 +209,19 @@
 
   "time": {
     "days": "{{days}}d",
-    "daysFull_one": "{{count}} day",
-    "daysFull_other": "{{count}} days",
+    "daysFull": "{{count}} day",
+    "daysFull_plural": "{{count}} days",
     "hours": "{{hours}}h",
     "hr": "hr",
     "infinity": "∞",
     "min": "min",
     "minutes": "{{minutes}}m",
-    "minutesFull_one": "{{count}} minute",
-    "minutesFull_other": "{{count}} minutes",
+    "minutesFull": "{{count}} minute",
+    "minutesFull_plural": "{{count}} minutes",
     "never": "Never",
-    "weeks_one": "{{count}} week",
-    "weeks_other": "{{count}} weeks",
-    "hoursFull_one": "{{count}} hour",
-    "hoursFull_other": "{{count}} hours"
+    "weeks": "{{count}} week",
+    "weeks_plural": "{{count}} weeks",
+    "hoursFull": "{{count}} hour",
+    "hoursFull_plural": "{{count}} hours"
   }
 }
