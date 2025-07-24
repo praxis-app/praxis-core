@@ -64,6 +64,13 @@ export const LeftNavDesktop = () => {
                 {t('channels.actions.create')}
               </DropdownMenuItem>
             </DialogTrigger>
+
+            <Link to={NavigationPaths.Settings}>
+              <DropdownMenuItem className="text-md">
+                <MdSettings className="text-foreground size-5" />
+                {t('navigation.headers.serverSettings')}
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
 
