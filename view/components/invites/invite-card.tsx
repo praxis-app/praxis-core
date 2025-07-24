@@ -1,4 +1,12 @@
+import { useAbility } from '@/hooks/use-ability';
+import { useDeleteInviteMutation } from '@/hooks/use-delete-invite-mutation';
+import { copyInviteLink } from '@/lib/invite.utils';
+import { timeFromNow } from '@/lib/time.utils';
 import { Invite } from '@/types/invite.types';
+import { useTranslation } from 'react-i18next';
+import { MdAssignment } from 'react-icons/md';
+import { toast } from 'sonner';
+import ItemMenu from '../shared/item-menu';
 import {
   Card,
   CardAction,
@@ -6,25 +14,21 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { timeFromNow } from '@/lib/time.utils';
-import { useTranslation } from 'react-i18next';
-import { copyInviteLink } from '@/lib/invite.utils';
-import { toast } from 'sonner';
-import { UserAvatar } from '../users/user-avatar';
-import ItemMenu from '../shared/item-menu';
-import { MdAssignment } from 'react-icons/md';
-import { useAbility } from '@/hooks/use-ability';
 import { DropdownMenuItem } from '../ui/dropdown-menu';
+import { UserAvatar } from '../users/user-avatar';
 
 interface Props {
   invite: Invite;
 }
 
 export const InviteCard = ({
-  invite: { token, uses, maxUses, expiresAt, user },
+  invite: { id, token, uses, maxUses, expiresAt, user },
 }: Props) => {
   const { t } = useTranslation();
   const ability = useAbility();
+
+  const { mutate: deleteInvite, isPending: isDeletePending } =
+    useDeleteInviteMutation(id);
 
   const usesText = `${t('invites.labels.usesWithColon')} ${
     uses + (maxUses ? `/${maxUses}` : '')
@@ -53,6 +57,8 @@ export const InviteCard = ({
           <ItemMenu
             canDelete={ability.can('manage', 'Invite')}
             deletePrompt={deleteInvitePrompt}
+            deleteItem={deleteInvite}
+            loading={isDeletePending}
             variant="ghost"
             prependChildren
           >

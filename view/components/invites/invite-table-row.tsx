@@ -1,5 +1,6 @@
 import { NavigationPaths } from '@/constants/shared.constants';
 import { useAbility } from '@/hooks/use-ability';
+import { useDeleteInviteMutation } from '@/hooks/use-delete-invite-mutation';
 import { copyInviteLink } from '@/lib/invite.utils';
 import { truncate } from '@/lib/text.utils';
 import { timeFromNow } from '@/lib/time.utils';
@@ -18,10 +19,13 @@ interface Props {
 }
 
 export const InviteTableRow = ({
-  invite: { user, token, uses, maxUses, expiresAt },
+  invite: { id, user, token, uses, maxUses, expiresAt },
 }: Props) => {
   const { t } = useTranslation();
   const ability = useAbility();
+
+  const { mutate: deleteInvite, isPending: isDeletePending } =
+    useDeleteInviteMutation(id);
 
   const handleCopyLink = async () => {
     await copyInviteLink(token);
@@ -47,19 +51,17 @@ export const InviteTableRow = ({
           <div>{truncatedUsername}</div>
         </Link>
       </TableCell>
-
       <TableCell>{token}</TableCell>
-
       <TableCell>{uses + (maxUses ? `/${maxUses}` : '')}</TableCell>
-
       <TableCell>
         {expiresAt ? timeFromNow(expiresAt) : t('time.infinity')}
       </TableCell>
-
       <TableCell>
         <ItemMenu
           canDelete={ability.can('manage', 'Invite')}
           deletePrompt={deleteInvitePrompt}
+          deleteItem={deleteInvite}
+          loading={isDeletePending}
           prependChildren
         >
           <DropdownMenuItem onClick={handleCopyLink}>
