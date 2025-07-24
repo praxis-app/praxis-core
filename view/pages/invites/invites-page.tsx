@@ -4,6 +4,7 @@ import { InvitesTable } from '@/components/invites/invites-table';
 import { TopNav } from '@/components/nav/top-nav';
 import { Card, CardContent } from '@/components/ui/card';
 import { NavigationPaths } from '@/constants/shared.constants';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { useAppStore } from '@/store/app.store';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ export const InvitesPage = () => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isDesktop = useIsDesktop();
 
   const { data: invitesData } = useQuery({
     queryKey: ['invites'],
@@ -38,7 +40,7 @@ export const InvitesPage = () => {
           </CardContent>
         </Card>
 
-        <InvitesTable />
+        {isDesktop && <InvitesTable />}
       </div>
     </>
   );
