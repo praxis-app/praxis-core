@@ -31,7 +31,7 @@ export const Container = ({
     <div
       className={cn(
         fixed ? 'w-full' : 'mx-auto w-full',
-        'pt-4 md:pt-12',
+        'pt-5 md:pt-12',
         maxWidthClass,
         gutterClasses,
         className,
