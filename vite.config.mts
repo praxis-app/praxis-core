@@ -26,9 +26,6 @@ export default defineConfig(async () => {
         '@': path.resolve(__dirname, './view'),
       },
     },
-    define: {
-      'process.env': process.env,
-    },
     build: {
       outDir: '../dist/view',
     },
