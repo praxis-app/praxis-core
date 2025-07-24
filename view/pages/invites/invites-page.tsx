@@ -1,3 +1,4 @@
+import { api } from '@/client/api-client';
 import { InviteForm } from '@/components/invites/invite-form';
 import { TopNav } from '@/components/nav/top-nav';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,12 +11,25 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { NavigationPaths } from '@/constants/shared.constants';
+import { useAppStore } from '@/store/app.store';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export const InvitesPage = () => {
+  const { isLoggedIn } = useAppStore();
+
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const { data: invitesData } = useQuery({
+    queryKey: ['invites'],
+    queryFn: api.getInvites,
+    enabled: isLoggedIn,
+  });
+
+  // TODO: Remove when no longer needed for testing
+  console.log(invitesData);
 
   return (
     <>
