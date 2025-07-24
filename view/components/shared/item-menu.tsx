@@ -27,7 +27,7 @@ interface Props {
   onEditButtonClick?: () => void;
   prependChildren?: boolean;
   updateBtnLabel?: string;
-  variant?: 'ghost' | 'default';
+  variant?: 'ghost' | 'outline';
 }
 
 const ItemMenu = ({
@@ -43,7 +43,7 @@ const ItemMenu = ({
   onEditButtonClick,
   prependChildren,
   updateBtnLabel,
-  variant,
+  variant = 'ghost',
 }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();

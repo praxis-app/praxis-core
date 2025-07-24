@@ -43,7 +43,7 @@ export const InvitesPage = () => {
         </Card>
 
         {isDesktop ? (
-          <InvitesTable />
+          <InvitesTable invites={invitesData.invites} />
         ) : (
           invitesData.invites.map((invite) => (
             <InviteCard key={invite.id} invite={invite} />

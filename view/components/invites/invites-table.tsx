@@ -7,29 +7,41 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Invite } from '@/types/invite.types';
 import { useTranslation } from 'react-i18next';
+import { InviteTableRow } from './invite-table-row';
 
-export const InvitesTable = () => {
+interface Props {
+  invites: Invite[];
+}
+
+export const InvitesTable = ({ invites }: Props) => {
   const { t } = useTranslation();
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md py-3">
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t('invites.columnNames.code')}</TableHead>
-              <TableHead>{t('invites.columnNames.expires')}</TableHead>
               <TableHead>{t('invites.columnNames.inviter')}</TableHead>
+              <TableHead>{t('invites.columnNames.code')}</TableHead>
               <TableHead>{t('invites.columnNames.uses')}</TableHead>
+              <TableHead>{t('invites.columnNames.expires')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell colSpan={4} className="pt-8 text-center">
-                {t('invites.prompts.noInvites')}
-              </TableCell>
-            </TableRow>
+            {invites.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="pt-8 text-center">
+                  {t('invites.prompts.noInvites')}
+                </TableCell>
+              </TableRow>
+            ) : (
+              invites.map((invite) => (
+                <InviteTableRow key={invite.id} invite={invite} />
+              ))
+            )}
           </TableBody>
         </Table>
       </CardContent>
