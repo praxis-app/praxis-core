@@ -1,4 +1,7 @@
+import { BrowserEvents, KeyCodes } from '@/constants/shared.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { useAppStore } from '@/store/app.store';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft } from 'react-icons/lu';
 import { MdSearch } from 'react-icons/md';
@@ -11,8 +14,26 @@ import { Button } from '../ui/button';
 // }
 
 export const ChannelTopNav = () => {
+  const { isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
+
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === KeyCodes.Escape) {
+        if (isNavSheetOpen) {
+          setIsNavSheetOpen(false);
+        } else {
+          setIsNavSheetOpen(true);
+        }
+      }
+    };
+    window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
+    return () => {
+      window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
+    };
+  }, [isNavSheetOpen, setIsNavSheetOpen]);
 
   return (
     <header className="flex h-[55px] items-center justify-between border-b border-[--color-border] px-2 md:pl-6">
