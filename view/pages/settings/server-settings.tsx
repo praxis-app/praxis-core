@@ -29,6 +29,7 @@ export const ServerSettings = () => {
         header={t('navigation.labels.serverSettings')}
         onBackClick={handleBackClick}
         backBtnIcon={<MdClose className="size-6" />}
+        goBackOnEscape
       />
 
       <Container className="flex flex-col gap-4.5">

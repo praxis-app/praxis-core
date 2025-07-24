@@ -18,9 +18,15 @@ interface Props {
   header?: string;
   onBackClick?: () => void;
   backBtnIcon?: ReactNode;
+  goBackOnEscape?: boolean;
 }
 
-export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
+export const TopNav = ({
+  header,
+  onBackClick,
+  backBtnIcon,
+  goBackOnEscape = false,
+}: Props) => {
   const { isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
 
   const { t } = useTranslation();
@@ -40,9 +46,10 @@ export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
     setIsNavSheetOpen(true);
   }, [isDesktop, navigate, onBackClick, setIsNavSheetOpen]);
 
+  // Handle escape key to go back or open nav sheet
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === KeyCodes.Escape) {
+      if (event.key === KeyCodes.Escape && goBackOnEscape) {
         if (isNavSheetOpen) {
           setIsNavSheetOpen(false);
         } else {
@@ -54,7 +61,7 @@ export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
     return () => {
       window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
     };
-  }, [handleBackClick, isNavSheetOpen, setIsNavSheetOpen]);
+  }, [handleBackClick, isNavSheetOpen, setIsNavSheetOpen, goBackOnEscape]);
 
   const renderBackBtn = () => (
     <Button variant="ghost" size="icon" onClick={handleBackClick}>
