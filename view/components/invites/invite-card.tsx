@@ -11,6 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { copyInviteLink } from '@/lib/invite.utils';
 import { toast } from 'sonner';
 import { UserAvatar } from '../users/user-avatar';
+import ItemMenu from '../shared/item-menu';
+import { MdAssignment } from 'react-icons/md';
+import { useAbility } from '@/hooks/use-ability';
+import { DropdownMenuItem } from '../ui/dropdown-menu';
 
 interface Props {
   invite: Invite;
@@ -20,10 +24,14 @@ export const InviteCard = ({
   invite: { token, uses, maxUses, expiresAt, user },
 }: Props) => {
   const { t } = useTranslation();
+  const ability = useAbility();
 
   const usesText = `${t('invites.labels.usesWithColon')} ${
     uses + (maxUses ? `/${maxUses}` : '')
   }`;
+  const deleteInvitePrompt = t('prompts.deleteItem', {
+    itemType: 'invite link',
+  });
 
   const handleCopyLink = async () => {
     await copyInviteLink(token);
@@ -32,8 +40,8 @@ export const InviteCard = ({
 
   return (
     <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle className="flex gap-2 font-normal">
+      <CardHeader className="flex h-full items-center justify-between">
+        <CardTitle className="flex h-full items-center gap-2 font-normal">
           <div onClick={handleCopyLink} className="cursor-pointer">
             {token}
           </div>
@@ -41,7 +49,19 @@ export const InviteCard = ({
             {expiresAt ? timeFromNow(expiresAt) : t('time.never')}
           </div>
         </CardTitle>
-        <CardAction></CardAction>
+        <CardAction>
+          <ItemMenu
+            canDelete={ability.can('manage', 'Invite')}
+            deletePrompt={deleteInvitePrompt}
+            variant="ghost"
+            prependChildren
+          >
+            <DropdownMenuItem onClick={handleCopyLink}>
+              <MdAssignment className="mr-2" />
+              {t('actions.copy')}
+            </DropdownMenuItem>
+          </ItemMenu>
+        </CardAction>
       </CardHeader>
       <CardContent className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">

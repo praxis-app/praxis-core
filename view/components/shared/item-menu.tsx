@@ -1,0 +1,124 @@
+// TODO: Make confirm dialog optional for deleteItem prop
+
+import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { LuEllipsis, LuPencil, LuTrash } from 'react-icons/lu';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/shared.utils';
+
+interface Props {
+  canDelete?: boolean;
+  canUpdate?: boolean;
+  children?: ReactNode;
+  className?: string;
+  deleteBtnLabel?: string;
+  deleteItem?: () => void;
+  deletePrompt?: string;
+  editPath?: string;
+  loading?: boolean;
+  onEditButtonClick?: () => void;
+  prependChildren?: boolean;
+  updateBtnLabel?: string;
+  variant?: 'ghost' | 'default';
+}
+
+const ItemMenu = ({
+  canDelete,
+  canUpdate,
+  children,
+  className,
+  deleteBtnLabel,
+  deleteItem,
+  deletePrompt,
+  editPath,
+  loading,
+  onEditButtonClick,
+  prependChildren,
+  updateBtnLabel,
+  variant,
+}: Props) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  if (!canUpdate && !canDelete && !children) {
+    return null;
+  }
+  const showEditButton = canUpdate && (editPath || onEditButtonClick);
+  const showDeleteButton = canDelete && deleteItem && deletePrompt;
+
+  const handleEditButtonClick = () => {
+    if (onEditButtonClick) {
+      onEditButtonClick();
+      return;
+    }
+    if (!editPath) {
+      return;
+    }
+    navigate(editPath);
+  };
+
+  const handleDelete = () => {
+    if (!deleteItem) {
+      return;
+    }
+    deleteItem();
+  };
+
+  const handleDeleteWithPrompt = () =>
+    window.confirm(deletePrompt) && handleDelete();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          aria-label="Menu"
+          className={cn('h-9 w-9 p-0', className)}
+          variant={variant === 'ghost' ? 'ghost' : 'outline'}
+          size="icon"
+          disabled={loading}
+        >
+          {loading ? (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          ) : (
+            <LuEllipsis className="h-4 w-4" />
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        align="end"
+        className={cn(variant === 'ghost' && 'mt-1')}
+      >
+        {prependChildren && children}
+
+        {showEditButton && (
+          <DropdownMenuItem onClick={handleEditButtonClick}>
+            <LuPencil className="h-4 w-4" />
+            {updateBtnLabel || t('actions.edit')}
+          </DropdownMenuItem>
+        )}
+
+        {showDeleteButton && (
+          <DropdownMenuItem
+            onClick={handleDeleteWithPrompt}
+            variant="destructive"
+          >
+            <LuTrash className="h-4 w-4" />
+            {deleteBtnLabel || t('actions.delete')}
+          </DropdownMenuItem>
+        )}
+
+        {!prependChildren && children}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default ItemMenu;
