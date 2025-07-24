@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
-  const { setIsNavSheetOpen } = useAppStore();
+  const { isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
 
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
@@ -43,14 +43,18 @@ export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === KeyCodes.Escape) {
-        handleBackClick();
+        if (isNavSheetOpen) {
+          setIsNavSheetOpen(false);
+        } else {
+          handleBackClick();
+        }
       }
     };
     window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
     return () => {
       window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
     };
-  }, [handleBackClick]);
+  }, [handleBackClick, isNavSheetOpen, setIsNavSheetOpen]);
 
   const renderBackBtn = () => (
     <Button variant="ghost" size="icon" onClick={handleBackClick}>

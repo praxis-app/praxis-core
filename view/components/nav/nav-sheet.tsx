@@ -44,6 +44,7 @@ export const NavSheet = ({ trigger }: Props) => {
       <SheetContent
         side="left"
         className="bg-accent dark:bg-background min-w-[100%] border-r-0 px-0 pt-4"
+        onEscapeKeyDown={(e) => e.preventDefault()}
         hideCloseButton
       >
         <SheetHeader className="space-y-4">
