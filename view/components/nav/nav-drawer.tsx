@@ -94,7 +94,7 @@ export const NavDrawer = ({ trigger }: Props) => {
             }}
           >
             <MdSettings className="size-6" />
-            {t('navigation.headers.serverSettings')}
+            {t('navigation.labels.serverSettings')}
           </Button>
         </div>
       </DrawerContent>

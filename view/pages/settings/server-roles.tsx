@@ -3,14 +3,14 @@ import { NavigationPaths } from '@/constants/shared.constants';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-export const InvitesPage = () => {
+export const ServerRoles = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
     <>
       <TopNav
-        header={t('navigation.labels.invites')}
+        header={t('navigation.labels.roles')}
         onBackClick={() => navigate(NavigationPaths.Settings)}
       />
     </>

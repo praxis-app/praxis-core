@@ -68,7 +68,7 @@ export const LeftNavDesktop = () => {
             <Link to={NavigationPaths.Settings}>
               <DropdownMenuItem className="text-md">
                 <MdSettings className="text-foreground size-5" />
-                {t('navigation.headers.serverSettings')}
+                {t('navigation.labels.serverSettings')}
               </DropdownMenuItem>
             </Link>
           </DropdownMenuContent>
