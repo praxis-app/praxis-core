@@ -153,12 +153,8 @@ export const InviteForm = () => {
         />
 
         <div className="flex justify-end">
-          <Button
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            className="w-22"
-            type="submit"
-          >
-            {t('actions.save')}
+          <Button disabled={form.formState.isSubmitting} type="submit">
+            {t('invites.actions.generateLink')}
           </Button>
         </div>
       </form>

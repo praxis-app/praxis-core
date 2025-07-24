@@ -1,4 +1,5 @@
 import { api } from '@/client/api-client';
+import { InviteCard } from '@/components/invites/invite-card';
 import { InviteForm } from '@/components/invites/invite-form';
 import { InvitesTable } from '@/components/invites/invites-table';
 import { TopNav } from '@/components/nav/top-nav';
@@ -23,8 +24,9 @@ export const InvitesPage = () => {
     enabled: isLoggedIn,
   });
 
-  // TODO: Remove when no longer needed for testing
-  console.log(invitesData);
+  if (!invitesData) {
+    return null;
+  }
 
   return (
     <>
@@ -40,7 +42,13 @@ export const InvitesPage = () => {
           </CardContent>
         </Card>
 
-        {isDesktop && <InvitesTable />}
+        {isDesktop ? (
+          <InvitesTable />
+        ) : (
+          invitesData.invites.map((invite) => (
+            <InviteCard key={invite.id} invite={invite} />
+          ))
+        )}
       </div>
     </>
   );
