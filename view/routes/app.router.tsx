@@ -4,6 +4,7 @@ import { PageNotFound } from '@/pages/page-not-found';
 import { createBrowserRouter } from 'react-router-dom';
 import { App } from '../components/app/app';
 import { authRouter } from './auth.router';
+import { settingsRouter } from './settings.router';
 
 export const appRouter = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ export const appRouter = createBrowserRouter([
         element: <PageNotFound />,
       },
       authRouter,
+      settingsRouter,
     ],
   },
 ]);

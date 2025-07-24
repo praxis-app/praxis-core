@@ -154,6 +154,12 @@
     "titles": {
       "navDrawer": "Navigation drawer"
     },
+    "headers": {
+      "serverSettings": "Server Settings"
+    },
+    "labels": {
+      "serverSettings": "Server settings"
+    },
     "descriptions": {
       "navDrawer": "Create a new room, join a room, or view your settings.",
       "navSheet": "Navigate to your rooms, profile, and more."

@@ -4,6 +4,7 @@ import {
   NavigationPaths,
 } from '@/constants/shared.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { useAppStore } from '@/store/app.store';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft } from 'react-icons/lu';
@@ -11,6 +12,7 @@ import { MdSearch } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
+import { NavSheet } from './nav-sheet';
 
 interface Props {
   header?: string;
@@ -19,6 +21,8 @@ interface Props {
 }
 
 export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
+  const { setIsNavSheetOpen } = useAppStore();
+
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
   const navigate = useNavigate();
@@ -33,10 +37,8 @@ export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
       return;
     }
 
-    // TODO: Show nav drawer as default behavior
-    // Show nav drawer as default behavior
-    // setNavSheetOpen(true);
-  }, [isDesktop, navigate, onBackClick]);
+    setIsNavSheetOpen(true);
+  }, [isDesktop, navigate, onBackClick, setIsNavSheetOpen]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -59,7 +61,7 @@ export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
   return (
     <header className="flex h-[55px] items-center justify-between border-b border-[--color-border] px-2">
       <div className="mr-1 flex flex-1 items-center gap-2.5">
-        {isDesktop && renderBackBtn()}
+        {isDesktop ? renderBackBtn() : <NavSheet trigger={renderBackBtn()} />}
 
         <div className="flex flex-1 items-center text-[1.05rem] font-medium select-none">
           {header}
