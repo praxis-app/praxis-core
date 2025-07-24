@@ -51,7 +51,9 @@ export const InviteTableRow = ({
           <div>{truncatedUsername}</div>
         </Link>
       </TableCell>
-      <TableCell>{token}</TableCell>
+      <TableCell className="cursor-pointer" onClick={handleCopyLink}>
+        {token}
+      </TableCell>
       <TableCell>{uses + (maxUses ? `/${maxUses}` : '')}</TableCell>
       <TableCell>
         {expiresAt ? timeFromNow(expiresAt) : t('time.infinity')}

@@ -1,5 +1,6 @@
 import { ErrorPage } from '@/pages/error-page';
 import { HomePage } from '@/pages/home-page';
+import InviteCheck from '@/pages/invites/invite-check';
 import { PageNotFound } from '@/pages/page-not-found';
 import { createBrowserRouter } from 'react-router-dom';
 import { App } from '../components/app/app';
@@ -19,6 +20,10 @@ export const appRouter = createBrowserRouter([
       {
         path: '*',
         element: <PageNotFound />,
+      },
+      {
+        path: 'i/:token',
+        element: <InviteCheck />,
       },
       authRouter,
       settingsRouter,
