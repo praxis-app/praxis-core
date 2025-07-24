@@ -105,8 +105,8 @@ export const InviteForm = () => {
                 <SelectContent>
                   {expiresAtOptions.map((option) => (
                     <SelectItem
-                      value={option.value as string}
-                      key={option.value}
+                      value={option.value.toString()}
+                      key={option.value.toString()}
                     >
                       {option.message}
                     </SelectItem>
@@ -133,7 +133,10 @@ export const InviteForm = () => {
                 </FormControl>
                 <SelectContent>
                   {MAX_USES_OPTIONS.map((option) => (
-                    <SelectItem value={option.toString()} key={option}>
+                    <SelectItem
+                      value={option.toString()}
+                      key={option.toString()}
+                    >
                       {t('invites.form.maxUsesOptions.xUses', {
                         uses: option,
                       })}
