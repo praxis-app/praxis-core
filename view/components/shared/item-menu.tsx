@@ -1,9 +1,5 @@
 // TODO: Make confirm dialog optional for deleteItem prop
 
-import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { LuEllipsis, LuPencil, LuTrash } from 'react-icons/lu';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +8,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/shared.utils';
+import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LuPencil, LuTrash } from 'react-icons/lu';
+import { MdMoreHoriz } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   canDelete?: boolean;
@@ -87,7 +88,7 @@ const ItemMenu = ({
           {loading ? (
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
           ) : (
-            <LuEllipsis className="h-4 w-4" />
+            <MdMoreHoriz className="size-6" />
           )}
         </Button>
       </DropdownMenuTrigger>

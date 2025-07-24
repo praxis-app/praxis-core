@@ -39,8 +39,8 @@ export const InviteCard = ({
   };
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="flex h-full items-center justify-between">
+    <Card className="w-full max-w-md pt-2.5 pb-3.5">
+      <CardHeader className="flex h-full items-center justify-between px-3 md:px-6">
         <CardTitle className="flex h-full items-center gap-2 font-normal">
           <div onClick={handleCopyLink} className="cursor-pointer">
             {token}
@@ -63,7 +63,7 @@ export const InviteCard = ({
           </ItemMenu>
         </CardAction>
       </CardHeader>
-      <CardContent className="flex items-center justify-between gap-2">
+      <CardContent className="flex items-center justify-between gap-2 px-3 md:px-6">
         <div className="flex items-center gap-2">
           <UserAvatar
             name={user.name}
