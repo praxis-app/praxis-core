@@ -2,6 +2,7 @@ import { ChangeEvent, ReactNode, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 import { MdImage } from 'react-icons/md';
+import { cn } from '@/lib/shared.utils';
 
 interface Props {
   multiple?: boolean;
@@ -64,7 +65,9 @@ export const ImageInput = ({
         size="icon"
         className="rounded-full"
       >
-        <MdImage className="text-muted-foreground size-6" />
+        <MdImage
+          className={cn('text-muted-foreground size-6', iconClassName)}
+        />
       </Button>
     );
   };

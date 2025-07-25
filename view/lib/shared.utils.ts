@@ -21,6 +21,7 @@ export const debounce = <T extends (...args: any[]) => any>(
   let timeout: ReturnType<typeof setTimeout>;
   function debounced(...args: Parameters<T>) {
     const later = () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       func.apply(this, args);
     };

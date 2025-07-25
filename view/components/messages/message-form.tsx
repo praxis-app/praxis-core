@@ -170,7 +170,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     if (draft) {
       form.setValue('body', draft);
     }
-  }, [form.setValue, draftKey]);
+  }, [form, draftKey]);
 
   const saveDraft = debounce((draft: string) => {
     localStorage.setItem(draftKey, draft);
