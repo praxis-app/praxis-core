@@ -4,7 +4,7 @@ import { AppAbility } from '../types/role.types';
 import { useMeQuery } from './use-me-query';
 
 export const useAbility = () => {
-  const { isLoggedIn } = useAppStore((state) => state);
+  const { isLoggedIn } = useAppStore();
   const { data: meData } = useMeQuery({
     enabled: isLoggedIn,
   });

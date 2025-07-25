@@ -11,7 +11,7 @@ import {
 import { useAppStore } from '../../store/app.store';
 
 export const InviteCheck = () => {
-  const { isLoggedIn, setInviteToken } = useAppStore((state) => state);
+  const { isLoggedIn, setInviteToken } = useAppStore();
 
   const { t } = useTranslation();
   const { token } = useParams();

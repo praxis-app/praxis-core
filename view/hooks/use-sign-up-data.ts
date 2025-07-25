@@ -5,7 +5,7 @@ import { useMeQuery } from './use-me-query';
 import { NavigationPaths } from '@/constants/shared.constants';
 
 export const useSignUpData = () => {
-  const { isLoggedIn, inviteToken } = useAppStore((state) => state);
+  const { isLoggedIn, inviteToken } = useAppStore();
 
   const { data } = useQuery({
     queryKey: ['is-first-user'],
