@@ -15,7 +15,7 @@ interface Props {
   isPending: boolean;
 }
 
-const LogOutDialogContent = ({
+export const LogOutDialogContent = ({
   setShowLogoutDialog,
   handleLogout,
   isPending,
@@ -50,5 +50,3 @@ const LogOutDialogContent = ({
     </DialogContent>
   );
 };
-
-export default LogOutDialogContent;

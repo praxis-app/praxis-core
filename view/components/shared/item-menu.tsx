@@ -39,7 +39,7 @@ interface Props {
   variant?: 'ghost' | 'outline';
 }
 
-const ItemMenu = ({
+export const ItemMenu = ({
   canDelete,
   canUpdate,
   children,
@@ -154,5 +154,3 @@ const ItemMenu = ({
     </DropdownMenu>
   );
 };
-
-export default ItemMenu;

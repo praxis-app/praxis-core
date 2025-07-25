@@ -23,7 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import LeftNavUserMenu from './left-nav-user-menu';
+import { LeftNavUserMenu } from './left-nav-user-menu';
 
 export const LeftNavDesktop = () => {
   const { isLoggedIn } = useAppStore();

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { MdExitToApp } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import LogOutDialogContent from '../auth/log-out-dialog-content';
+import { LogOutDialogContent } from '../auth/log-out-dialog-content';
 import { Dialog, DialogTrigger } from '../ui/dialog';
 import {
   DropdownMenu,
@@ -18,7 +18,7 @@ import {
 } from '../ui/dropdown-menu';
 import { UserAvatar } from '../users/user-avatar';
 
-const LeftNavUserMenu = () => {
+export const LeftNavUserMenu = () => {
   const { isLoggedIn, setIsLoggedIn } = useAppStore();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
@@ -101,5 +101,3 @@ const LeftNavUserMenu = () => {
     </Dialog>
   );
 };
-
-export default LeftNavUserMenu;

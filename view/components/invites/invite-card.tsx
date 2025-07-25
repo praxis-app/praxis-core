@@ -6,7 +6,7 @@ import { Invite } from '@/types/invite.types';
 import { useTranslation } from 'react-i18next';
 import { MdAssignment } from 'react-icons/md';
 import { toast } from 'sonner';
-import ItemMenu from '../shared/item-menu';
+import { ItemMenu } from '../shared/item-menu';
 import {
   Card,
   CardAction,

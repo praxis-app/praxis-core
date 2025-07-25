@@ -10,7 +10,7 @@ import {
 } from '../../constants/shared.constants';
 import { useAppStore } from '../../store/app.store';
 
-const InviteCheck = () => {
+export const InviteCheck = () => {
   const { isLoggedIn, setInviteToken } = useAppStore((state) => state);
 
   const { t } = useTranslation();
@@ -46,5 +46,3 @@ const InviteCheck = () => {
 
   return <ChannelSkeleton />;
 };
-
-export default InviteCheck;

@@ -1,5 +1,5 @@
 import { timeAgo } from '@/lib/time.utils';
-import FormattedText from '../shared/formatted-text';
+import { FormattedText } from '../shared/formatted-text';
 import { UserAvatar } from '../users/user-avatar';
 
 interface Props {

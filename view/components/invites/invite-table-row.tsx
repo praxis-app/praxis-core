@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { MdAssignment } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import ItemMenu from '../shared/item-menu';
+import { ItemMenu } from '../shared/item-menu';
 import { DropdownMenuItem } from '../ui/dropdown-menu';
 import { TableCell, TableRow } from '../ui/table';
 import { UserAvatar } from '../users/user-avatar';
