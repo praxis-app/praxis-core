@@ -91,15 +91,23 @@ export const verifyAccessToken = (token: string) => {
 };
 
 export const getAuthedUser = async (userId: string, includePerms = true) => {
-  const user = await userRepository.findOne({ where: { id: userId } });
-  if (!user) {
+  try {
+    if (!userId) {
+      throw new Error('User ID is missing or invalid');
+    }
+    const user = await userRepository.findOneOrFail({
+      where: { id: userId },
+    });
+    if (!includePerms) {
+      return user;
+    }
+
+    const permissions = await rolesService.getUserPermissions(userId);
+    return { ...user, permissions };
+  } catch (error) {
+    console.error(error);
     return null;
   }
-  if (!includePerms) {
-    return user;
-  }
-  const permissions = await rolesService.getUserPermissions(userId);
-  return { ...user, permissions };
 };
 
 export const generateAccessToken = (userId: string) => {

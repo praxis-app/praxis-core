@@ -53,9 +53,10 @@ export const UserAvatar = ({
         >
           <span className="relative">
             {animateOnlineStatus && (
-              <span className="absolute h-full w-full animate-ping rounded-full bg-(--online) opacity-75"></span>
+              <span className="absolute h-full w-full animate-ping rounded-full bg-(--positive) opacity-75"></span>
             )}
-            <span className="absolute h-full w-full rounded-full bg-(--online)"></span>
+            {/* TODO: Add positive token to theme inline for more convenient syntax */}
+            <span className="absolute h-full w-full rounded-full bg-(--positive)"></span>
           </span>
         </AvatarBadge>
       )}

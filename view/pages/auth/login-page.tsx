@@ -20,7 +20,7 @@ export const LoginPage = () => {
       <div className="flex h-full flex-col items-center justify-center p-4 md:p-18">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">
+            <CardTitle className="text-center text-2xl font-bold">
               {t('auth.actions.signIn')}
             </CardTitle>
             <CardDescription className="text-center">
@@ -30,11 +30,11 @@ export const LoginPage = () => {
           <CardContent>
             <LoginForm />
 
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-center text-sm">
               {t('auth.prompts.dontHaveAccount')}{' '}
               <Link
                 to={NavigationPaths.SignUp}
-                className="font-medium text-primary hover:underline"
+                className="text-primary font-medium hover:underline"
               >
                 {t('auth.prompts.createAccount')}
               </Link>

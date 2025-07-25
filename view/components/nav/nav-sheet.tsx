@@ -1,12 +1,11 @@
 import { NavigationPaths } from '@/constants/shared.constants';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { useMeQuery } from '@/hooks/use-me-query';
+import { useSignUpData } from '@/hooks/use-sign-up-data';
 import { useAppStore } from '@/store/app.store';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuChevronRight } from 'react-icons/lu';
-import { MdExitToApp } from 'react-icons/md';
+import { MdExitToApp, MdPersonAdd } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
 import { Button } from '../ui/button';
@@ -30,13 +29,9 @@ export const NavSheet = ({ trigger }: Props) => {
   const { isLoggedIn, isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
 
   const { t } = useTranslation();
-  const isDesktop = useIsDesktop();
   const navigate = useNavigate();
 
-  const { data: meData } = useMeQuery({
-    enabled: !isDesktop && isLoggedIn,
-  });
-  const me = meData?.user;
+  const { me, signUpPath, showSignUp } = useSignUpData();
 
   return (
     <Sheet open={isNavSheetOpen} onOpenChange={setIsNavSheetOpen}>
@@ -44,6 +39,7 @@ export const NavSheet = ({ trigger }: Props) => {
       <SheetContent
         side="left"
         className="bg-accent dark:bg-background min-w-[100%] border-r-0 px-0 pt-4"
+        onEscapeKeyDown={(e) => e.preventDefault()}
         hideCloseButton
       >
         <SheetHeader className="space-y-4">
@@ -83,12 +79,24 @@ export const NavSheet = ({ trigger }: Props) => {
           </VisuallyHidden>
         </SheetHeader>
 
-        <div className="bg-background dark:bg-card flex h-full w-full flex-col gap-6 overflow-y-auto rounded-t-2xl pt-6 pb-12 px-2">
+        <div className="bg-background dark:bg-card flex h-full w-full flex-col gap-6 overflow-y-auto rounded-t-2xl px-2 pt-6 pb-12">
           {/* TODO: List channels */}
           {/* TODO: Add divider between channels and login */}
 
-          {!isLoggedIn && (
+          {(showSignUp || !isLoggedIn) && (
             <div className="flex flex-col gap-4">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-base font-light"
+                onClick={() => {
+                  navigate(signUpPath);
+                  setIsNavSheetOpen(false);
+                }}
+              >
+                <MdPersonAdd className="mr-1 size-6" />
+                {t('auth.actions.signUp')}
+              </Button>
+
               <Button
                 variant="ghost"
                 className="w-full justify-start text-base font-light"
@@ -97,7 +105,7 @@ export const NavSheet = ({ trigger }: Props) => {
                   setIsNavSheetOpen(false);
                 }}
               >
-                <MdExitToApp className="size-6 mr-1" />
+                <MdExitToApp className="mr-1 size-6" />
                 {t('auth.actions.logIn')}
               </Button>
             </div>

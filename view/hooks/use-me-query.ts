@@ -8,7 +8,7 @@ import { CurrentUser } from '../types/user.types';
 export const useMeQuery = (
   options?: Omit<UseQueryOptions<{ user: CurrentUser }>, 'queryKey'>,
 ) => {
-  const { setIsAppLoading, setIsLoggedIn } = useAppStore((state) => state);
+  const { setIsAppLoading, setIsLoggedIn } = useAppStore();
 
   return useQuery({
     queryKey: ['me'],

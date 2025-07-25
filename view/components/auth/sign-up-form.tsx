@@ -1,3 +1,5 @@
+// TODO: Add show password toggle
+
 import { api } from '@/client/api-client';
 import {
   LocalStorageKeys,

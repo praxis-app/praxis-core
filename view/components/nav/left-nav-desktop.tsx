@@ -1,4 +1,5 @@
 import { NavigationPaths } from '@/constants/shared.constants';
+import { useSignUpData } from '@/hooks/use-sign-up-data';
 import { cn } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
 import { useState } from 'react';
@@ -22,12 +23,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import LeftNavUserMenu from './left-nav-user-menu';
+import { LeftNavUserMenu } from './left-nav-user-menu';
 
 export const LeftNavDesktop = () => {
   const { isLoggedIn } = useAppStore();
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
 
+  const { signUpPath } = useSignUpData();
   const { t } = useTranslation();
 
   return (
@@ -36,7 +38,7 @@ export const LeftNavDesktop = () => {
         <DropdownMenu>
           <DropdownMenuTrigger
             className={cn(
-              ' flex h-[55px] w-full  justify-between border-b border-[--color-border] pr-3 pl-4 select-none focus:outline-none',
+              'flex h-[55px] w-full justify-between border-b border-[--color-border] pr-3 pl-4 select-none focus:outline-none',
               isLoggedIn &&
                 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 cursor-pointer',
             )}
@@ -64,6 +66,13 @@ export const LeftNavDesktop = () => {
                 {t('channels.actions.create')}
               </DropdownMenuItem>
             </DialogTrigger>
+
+            <Link to={NavigationPaths.Settings}>
+              <DropdownMenuItem className="text-md">
+                <MdSettings className="text-foreground size-5" />
+                {t('navigation.labels.serverSettings')}
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -109,12 +118,14 @@ export const LeftNavDesktop = () => {
             <MdSettings className="text-muted-foreground size-6" />
           </Button>
         ) : (
-          // TODO: Add sign up button after implementing invites
-          <Link to={NavigationPaths.Login} className="w-full">
-            <Button variant="ghost" className="w-full">
-              {t('auth.actions.logIn')}
-            </Button>
-          </Link>
+          <div className="flex w-full justify-center gap-2">
+            <Link to={NavigationPaths.Login}>
+              <Button variant="ghost">{t('auth.actions.logIn')}</Button>
+            </Link>
+            <Link to={signUpPath}>
+              <Button variant="ghost">{t('auth.actions.signUp')}</Button>
+            </Link>
+          </div>
         )}
       </div>
     </div>

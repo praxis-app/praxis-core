@@ -14,7 +14,7 @@ interface Props {
   className?: string;
 }
 
-const FormattedText = ({ text, urlTrimSize, className }: Props) => {
+export const FormattedText = ({ text, urlTrimSize, className }: Props) => {
   const [formattedText, setFormattedText] = useState<string>();
   const isDesktop = useIsDesktop();
 
@@ -46,5 +46,3 @@ const FormattedText = ({ text, urlTrimSize, className }: Props) => {
     />
   );
 };
-
-export default FormattedText;

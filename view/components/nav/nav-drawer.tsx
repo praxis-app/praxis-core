@@ -1,8 +1,10 @@
+import { NavigationPaths } from '@/constants/shared.constants';
 import { useAppStore } from '@/store/app.store';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdAddCircle } from 'react-icons/md';
+import { MdAddCircle, MdSettings } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -26,11 +28,12 @@ interface Props {
 }
 
 export const NavDrawer = ({ trigger }: Props) => {
-  const { isLoggedIn } = useAppStore();
+  const { isLoggedIn, setIsNavSheetOpen } = useAppStore();
   const [showNavDrawer, setShowNavDrawer] = useState(false);
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <Drawer open={showNavDrawer} onOpenChange={setShowNavDrawer}>
@@ -81,6 +84,18 @@ export const NavDrawer = ({ trigger }: Props) => {
               /> */}
             </DialogContent>
           </Dialog>
+
+          <Button
+            variant="ghost"
+            className="text-md flex items-center gap-6 font-normal"
+            onClick={() => {
+              navigate(NavigationPaths.Settings);
+              setIsNavSheetOpen(false);
+            }}
+          >
+            <MdSettings className="size-6" />
+            {t('navigation.labels.serverSettings')}
+          </Button>
         </div>
       </DrawerContent>
     </Drawer>

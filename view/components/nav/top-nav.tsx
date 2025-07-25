@@ -4,6 +4,7 @@ import {
   NavigationPaths,
 } from '@/constants/shared.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { useAppStore } from '@/store/app.store';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft } from 'react-icons/lu';
@@ -11,14 +12,25 @@ import { MdSearch } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
+import { NavSheet } from './nav-sheet';
 
 interface Props {
   header?: string;
   onBackClick?: () => void;
   backBtnIcon?: ReactNode;
+  goBackOnEscape?: boolean;
+  bypassNavSheet?: boolean;
 }
 
-export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
+export const TopNav = ({
+  header,
+  onBackClick,
+  backBtnIcon,
+  goBackOnEscape = false,
+  bypassNavSheet = false,
+}: Props) => {
+  const { isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
+
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
   const navigate = useNavigate();
@@ -33,22 +45,25 @@ export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
       return;
     }
 
-    // TODO: Show nav drawer as default behavior
-    // Show nav drawer as default behavior
-    // setNavSheetOpen(true);
-  }, [isDesktop, navigate, onBackClick]);
+    setIsNavSheetOpen(true);
+  }, [isDesktop, navigate, onBackClick, setIsNavSheetOpen]);
 
+  // Handle escape key to go back or open nav sheet
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === KeyCodes.Escape) {
-        handleBackClick();
+      if (event.key === KeyCodes.Escape && goBackOnEscape) {
+        if (isNavSheetOpen) {
+          setIsNavSheetOpen(false);
+        } else {
+          handleBackClick();
+        }
       }
     };
     window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
     return () => {
       window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
     };
-  }, [handleBackClick]);
+  }, [handleBackClick, isNavSheetOpen, setIsNavSheetOpen, goBackOnEscape]);
 
   const renderBackBtn = () => (
     <Button variant="ghost" size="icon" onClick={handleBackClick}>
@@ -59,7 +74,7 @@ export const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
   return (
     <header className="flex h-[55px] items-center justify-between border-b border-[--color-border] px-2">
       <div className="mr-1 flex flex-1 items-center gap-2.5">
-        {isDesktop && renderBackBtn()}
+        {isDesktop || bypassNavSheet ? renderBackBtn() : <NavSheet trigger={renderBackBtn()} />}
 
         <div className="flex flex-1 items-center text-[1.05rem] font-medium select-none">
           {header}

@@ -13,5 +13,9 @@ export const authRouter: RouteObject = {
       path: 'signup',
       element: <SignUp />,
     },
+    {
+      path: 'signup/:token',
+      element: <SignUp />,
+    },
   ],
 };

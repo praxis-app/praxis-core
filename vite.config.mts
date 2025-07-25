@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import * as dotenv from 'dotenv';
 import path from 'path';
@@ -7,8 +8,6 @@ dotenv.config();
 
 // https://vitejs.dev/config
 export default defineConfig(async () => {
-  const tailwindcss = (await import('@tailwindcss/vite')).default;
-
   return {
     root: 'view',
     server: {
@@ -25,9 +24,6 @@ export default defineConfig(async () => {
       alias: {
         '@': path.resolve(__dirname, './view'),
       },
-    },
-    define: {
-      'process.env': process.env,
     },
     build: {
       outDir: '../dist/view',
