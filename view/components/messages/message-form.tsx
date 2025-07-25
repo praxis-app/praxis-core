@@ -13,7 +13,7 @@ import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { BiSolidSend } from 'react-icons/bi';
-import { MdAdd, MdPoll } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
 import { TbMicrophoneFilled } from 'react-icons/tb';
 import { toast } from 'sonner';
 import * as zod from 'zod';
@@ -21,21 +21,8 @@ import { ChooseAuthDialog } from '../auth/choose-auth-dialog';
 import { AttachedImagePreview } from '../images/attached-image-preview';
 import { ImageInput } from '../images/image-input';
 import { Button } from '../ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
 import { Textarea } from '../ui/textarea';
+import { MessageFormMenu } from './message-form-menu';
 
 const MESSAGE_BODY_MAX = 6000;
 
@@ -54,7 +41,6 @@ interface Props {
 export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   const { isLoggedIn, inviteToken } = useAppStore();
 
-  const [showProposalForm, setShowProposalForm] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
@@ -224,45 +210,20 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     setImagesInputKey(Date.now());
   };
 
-  // TODO: Add component for message form menu
-
   return (
     <form className="flex w-full items-center gap-2 overflow-y-auto border-t p-2 pt-2.5 pb-4">
-      <Dialog open={showProposalForm} onOpenChange={setShowProposalForm}>
-        <DropdownMenu open={showMenu} onOpenChange={setShowMenu}>
-          <DropdownMenuTrigger className="bg-input/30 hover:bg-input/40 inline-flex size-11 cursor-pointer items-center justify-center rounded-full p-2 px-3 focus:outline-none [&_svg]:shrink-0">
-            <MdAdd
-              className={cn(
-                'text-muted-foreground size-7 transition-transform duration-200',
-                showMenu && 'rotate-45',
-              )}
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-52"
-            align="start"
-            alignOffset={-1}
-            side="top"
-            sideOffset={20}
-          >
-            <DialogTrigger asChild>
-              <DropdownMenuItem className="text-md">
-                <MdPoll className="text-foreground size-5" />
-                {t('proposals.actions.create')}
-              </DropdownMenuItem>
-            </DialogTrigger>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <DialogContent className="pt-10 md:pt-6">
-          <DialogHeader>
-            <DialogTitle>{t('proposals.headers.create')}</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            {t('proposals.descriptions.create')}
-          </DialogDescription>
-        </DialogContent>
-      </Dialog>
+      <MessageFormMenu
+        trigger={
+          <MdAdd
+            className={cn(
+              'text-muted-foreground size-7 transition-transform duration-200',
+              showMenu && 'rotate-45',
+            )}
+          />
+        }
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+      />
 
       <div className="bg-input/30 flex w-full items-center rounded-3xl px-2">
         <Textarea
