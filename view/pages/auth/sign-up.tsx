@@ -89,7 +89,7 @@ export const SignUp = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <SignUpForm />
+            <SignUpForm setIsRedirecting={setIsRedirecting} />
 
             <div className="text-muted-foreground text-center text-sm">
               {t('auth.prompts.alreadyHaveAccount')}{' '}
