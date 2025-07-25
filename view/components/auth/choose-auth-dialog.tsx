@@ -58,7 +58,7 @@ export const ChooseAuthDialog = ({ isOpen, setIsOpen, sendMessage }: Props) => {
         </DialogHeader>
 
         <DialogFooter className="flex flex-row gap-2 self-center">
-          <Button onClick={handleSendAnonMsgBtnClick}>
+          <Button onClick={handleSendAnonMsgBtnClick} variant="outline">
             {t('messages.actions.sendAnonymous')}
           </Button>
           <Button onClick={() => navigate(signUpPath)}>
