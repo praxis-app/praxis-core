@@ -13,7 +13,7 @@ interface Props {
 export const SettingsNavItem = ({ Icon, label, onClick, to }: Props) => {
   const renderButton = () => (
     <Button
-      className="text-md flex justify-between gap-6 w-full py-6.5 bg-primary/8 hover:bg-primary/10 text-card-foreground font-normal has-[>svg]:px-5 has-[>svg]:pr-3.5"
+      className="text-md bg-primary/8 hover:bg-primary/10 text-card-foreground flex w-full justify-between gap-6 py-6.5 font-normal has-[>svg]:px-5 has-[>svg]:pr-3.5"
       onClick={onClick}
     >
       <div className="flex gap-2">
