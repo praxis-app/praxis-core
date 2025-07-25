@@ -272,7 +272,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
           sendMessage={form.handleSubmit((values) => sendMessage(values))}
         />
 
-        {form.formState.isValid ? (
+        {!isEmpty ? (
           <Button
             type="submit"
             className="mx-0.5 size-10 rounded-full"
