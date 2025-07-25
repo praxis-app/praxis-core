@@ -62,6 +62,10 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
 
   const isEmptyBody = !getValues('body') && !formState.dirtyFields.body;
   const isEmpty = isEmptyBody && !images.length;
+
+  // TODO: Remove when no longer needed for testing
+  console.log(isEmpty);
+
   const draftKey = `message-draft-${channelId}`;
 
   const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
