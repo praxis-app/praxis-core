@@ -8,6 +8,7 @@ import { cn, debounce, t } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
 import { Image } from '@/types/image.types';
 import { MessagesQuery } from '@/types/message.types';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,6 +22,7 @@ import { ChooseAuthDialog } from '../auth/choose-auth-dialog';
 import { AttachedImagePreview } from '../images/attached-image-preview';
 import { ImageInput } from '../images/image-input';
 import { Button } from '../ui/button';
+import { Form, FormField } from '../ui/form';
 import { Textarea } from '../ui/textarea';
 import { MessageFormMenu } from './message-form-menu';
 
@@ -50,17 +52,15 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const queryClient = useQueryClient();
 
-  const { handleSubmit, register, setValue, formState, reset, getValues } =
-    useForm<zod.infer<typeof formSchema>>({ mode: 'onChange' });
-
-  const { onChange, ...registerBodyProps } = register('body', {
-    maxLength: {
-      value: MESSAGE_BODY_MAX,
-      message: t('messages.errors.longBody'),
+  const form = useForm<zod.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      body: '',
     },
   });
 
-  const isEmptyBody = !getValues('body') && !formState.dirtyFields.body;
+  const isEmptyBody =
+    !form.getValues('body') && !form.formState.dirtyFields.body;
   const isEmpty = isEmptyBody && !images.length;
 
   // TODO: Remove when no longer needed for testing
@@ -123,9 +123,9 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
         },
       );
       localStorage.removeItem(draftKey);
-      setValue('body', '');
+      form.setValue('body', '');
       onSend?.();
-      reset();
+      form.reset();
     },
     onError: (error: Error) => {
       toast(error.message);
@@ -168,9 +168,9 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   useEffect(() => {
     const draft = localStorage.getItem(draftKey);
     if (draft) {
-      setValue('body', draft);
+      form.setValue('body', draft);
     }
-  }, [setValue, draftKey]);
+  }, [form.setValue, draftKey]);
 
   const saveDraft = debounce((draft: string) => {
     localStorage.setItem(draftKey, draft);
@@ -195,7 +195,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
       setIsAuthPromptOpen(true);
       return;
     }
-    handleSubmit((values) => sendMessage(values))();
+    form.handleSubmit((values) => sendMessage(values))();
   };
 
   const handleInputKeyDown: KeyboardEventHandler = (e) => {
@@ -215,72 +215,79 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   };
 
   return (
-    <form className="flex w-full items-center gap-2 overflow-y-auto border-t p-2 pt-2.5 pb-4">
-      <MessageFormMenu
-        trigger={
-          <MdAdd
-            className={cn(
-              'text-muted-foreground size-7 transition-transform duration-200',
-              showMenu && 'rotate-45',
+    <Form {...form}>
+      <form className="flex w-full items-center gap-2 overflow-y-auto border-t p-2 pt-2.5 pb-4">
+        <MessageFormMenu
+          trigger={
+            <MdAdd
+              className={cn(
+                'text-muted-foreground size-7 transition-transform duration-200',
+                showMenu && 'rotate-45',
+              )}
+            />
+          }
+          showMenu={showMenu}
+          setShowMenu={setShowMenu}
+        />
+
+        <div className="bg-input/30 flex w-full items-center rounded-3xl px-2">
+          <FormField
+            control={form.control}
+            name="body"
+            render={({ field }) => (
+              <Textarea
+                placeholder={t('messages.placeholders.sendMessage')}
+                className="min-h-12 resize-none border-none bg-transparent py-3 shadow-none focus-visible:border-none focus-visible:ring-0 md:py-3.5 dark:bg-transparent"
+                onKeyDown={handleInputKeyDown}
+                onChange={(e) => {
+                  saveDraft(e.target.value);
+                  field.onChange(e);
+                }}
+                ref={inputRef}
+                rows={1}
+              />
             )}
           />
-        }
-        showMenu={showMenu}
-        setShowMenu={setShowMenu}
-      />
 
-      <div className="bg-input/30 flex w-full items-center rounded-3xl px-2">
-        <Textarea
-          {...registerBodyProps}
-          placeholder={t('messages.placeholders.sendMessage')}
-          className="min-h-12 resize-none border-none bg-transparent py-3 shadow-none focus-visible:border-none focus-visible:ring-0 md:py-3.5 dark:bg-transparent"
-          onKeyDown={handleInputKeyDown}
-          onChange={(e) => {
-            saveDraft(e.target.value);
-            onChange(e);
-          }}
-          ref={inputRef}
-          rows={1}
+          <ImageInput
+            key={imagesInputKey}
+            setImages={setImages}
+            iconClassName="text-muted-foreground size-6"
+            multiple
+          />
+        </div>
+
+        {!!images.length && (
+          <AttachedImagePreview
+            handleRemove={handleRemoveSelectedImage}
+            selectedImages={images}
+            className="ml-1.5"
+          />
+        )}
+
+        <ChooseAuthDialog
+          isOpen={isAuthPromptOpen}
+          setIsOpen={setIsAuthPromptOpen}
+          sendMessage={form.handleSubmit((values) => sendMessage(values))}
         />
 
-        <ImageInput
-          key={imagesInputKey}
-          setImages={setImages}
-          iconClassName="text-muted-foreground size-6"
-          multiple
-        />
-      </div>
-
-      {!!images.length && (
-        <AttachedImagePreview
-          handleRemove={handleRemoveSelectedImage}
-          selectedImages={images}
-          className="ml-1.5"
-        />
-      )}
-
-      <ChooseAuthDialog
-        isOpen={isAuthPromptOpen}
-        setIsOpen={setIsAuthPromptOpen}
-        sendMessage={handleSubmit((values) => sendMessage(values))}
-      />
-
-      {formState.isValid ? (
-        <Button
-          type="submit"
-          className="mx-0.5 size-10 rounded-full"
-          disabled={isDisabled()}
-        >
-          <BiSolidSend className="ml-0.5 size-5" />
-        </Button>
-      ) : (
-        <Button
-          className="bg-input/30 hover:bg-input/40 size-11 rounded-full"
-          onClick={() => toast(t('prompts.inDev'))}
-        >
-          <TbMicrophoneFilled className="text-muted-foreground size-5.5" />
-        </Button>
-      )}
-    </form>
+        {form.formState.isValid ? (
+          <Button
+            type="submit"
+            className="mx-0.5 size-10 rounded-full"
+            disabled={isDisabled()}
+          >
+            <BiSolidSend className="ml-0.5 size-5" />
+          </Button>
+        ) : (
+          <Button
+            className="bg-input/30 hover:bg-input/40 size-11 rounded-full"
+            onClick={() => toast(t('prompts.inDev'))}
+          >
+            <TbMicrophoneFilled className="text-muted-foreground size-5.5" />
+          </Button>
+        )}
+      </form>
+    </Form>
   );
 };
