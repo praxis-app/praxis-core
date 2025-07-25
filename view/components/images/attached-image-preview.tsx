@@ -51,7 +51,7 @@ interface Props {
   className?: string;
 }
 
-const AttachedImagePreview = ({
+export const AttachedImagePreview = ({
   handleDelete,
   handleRemove,
   imageContainerClassName,
@@ -93,5 +93,3 @@ const AttachedImagePreview = ({
     </div>
   );
 };
-
-export default AttachedImagePreview;

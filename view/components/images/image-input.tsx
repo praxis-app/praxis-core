@@ -14,7 +14,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const ImageInput = ({
+export const ImageInput = ({
   children,
   multiple,
   name,
@@ -84,5 +84,3 @@ const ImageInput = ({
     </div>
   );
 };
-
-export default ImageInput;

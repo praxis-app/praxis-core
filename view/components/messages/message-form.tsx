@@ -18,8 +18,8 @@ import { TbMicrophoneFilled } from 'react-icons/tb';
 import { toast } from 'sonner';
 import * as zod from 'zod';
 import { ChooseAuthDialog } from '../auth/choose-auth-dialog';
-import AttachedImagePreview from '../images/attached-image-preview';
-import ImageInput from '../images/image-input';
+import { AttachedImagePreview } from '../images/attached-image-preview';
+import { ImageInput } from '../images/image-input';
 import { Button } from '../ui/button';
 import {
   Dialog,
