@@ -1,6 +1,7 @@
 import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
 import { useMeQuery } from '@/hooks/use-me-query';
+import { truncate } from '@/lib/text.utils';
 import { useAppStore } from '@/store/app.store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
@@ -44,10 +45,13 @@ export const NavDropdown = ({ trigger }: Props) => {
   const { data: meData } = useMeQuery({
     enabled: isLoggedIn,
   });
-  const me = meData?.user;
-  if (!me) {
+
+  if (!meData) {
     return null;
   }
+
+  const me = meData.user;
+  const truncatedUsername = truncate(me.name, 22);
 
   return (
     <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
@@ -67,7 +71,7 @@ export const NavDropdown = ({ trigger }: Props) => {
               className="size-5"
               fallbackClassName="text-[0.7rem]"
             />
-            {me.name}
+            {truncatedUsername}
           </DropdownMenuItem>
 
           <DialogTrigger asChild>
