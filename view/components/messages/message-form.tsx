@@ -177,7 +177,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   }, [draftKey, setValue]);
 
   const saveDraft = debounce((draft: string) => {
-    if (draft) {
+    if (draft.trim() !== '') {
       localStorage.setItem(draftKey, draft);
     } else {
       localStorage.removeItem(draftKey);
