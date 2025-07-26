@@ -1,6 +1,7 @@
 import { useAbility } from '@/hooks/use-ability';
 import { useDeleteInviteMutation } from '@/hooks/use-delete-invite-mutation';
 import { copyInviteLink } from '@/lib/invite.utils';
+import { truncate } from '@/lib/text.utils';
 import { timeFromNow } from '@/lib/time.utils';
 import { Invite } from '@/types/invite.types';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +37,8 @@ export const InviteCard = ({
   const deleteInvitePrompt = t('prompts.deleteItem', {
     itemType: 'invite link',
   });
+
+  const truncatedUsername = truncate(user.name, 25);
 
   const handleCopyLink = async () => {
     await copyInviteLink(token);
@@ -77,7 +80,7 @@ export const InviteCard = ({
             className="size-7"
             fallbackClassName="text-[0.8rem]"
           />
-          <div>{user.name}</div>
+          <div>{truncatedUsername}</div>
         </div>
         <div>{usesText}</div>
       </CardContent>

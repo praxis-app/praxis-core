@@ -1,6 +1,7 @@
 import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
 import { useMeQuery } from '@/hooks/use-me-query';
+import { truncate } from '@/lib/text.utils';
 import { useAppStore } from '@/store/app.store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -39,16 +40,21 @@ export const LeftNavUserMenu = () => {
   const { data: meData } = useMeQuery({
     enabled: isLoggedIn,
   });
-  const me = meData?.user;
 
-  if (!me) {
+  if (!meData) {
     return null;
   }
+
+  const me = meData.user;
+  const truncatedUsername = truncate(me.name, 18);
 
   return (
     <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
       <DropdownMenu>
-        <DropdownMenuTrigger className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 mr-1 flex h-11.5 w-full cursor-pointer items-center justify-start gap-2 rounded-[4px] px-2 text-left select-none focus:outline-none">
+        <DropdownMenuTrigger
+          className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 mr-1 flex h-11.5 w-full cursor-pointer items-center justify-start gap-2 rounded-[4px] px-2 text-left select-none focus:outline-none"
+          title={me.name}
+        >
           <UserAvatar
             className="size-8"
             fallbackClassName="text-sm"
@@ -58,7 +64,7 @@ export const LeftNavUserMenu = () => {
             showOnlineStatus
           />
           <div className="flex flex-col pt-[0.16rem]">
-            <div className="text-[0.81rem]/tight">{me.name}</div>
+            <div className="text-[0.81rem]/tight">{truncatedUsername}</div>
             <div className="text-muted-foreground text-[0.7rem]/[0.9rem] font-light">
               {t('users.presence.online')}
             </div>
@@ -74,6 +80,7 @@ export const LeftNavUserMenu = () => {
           <DropdownMenuItem
             className="text-md"
             onClick={() => toast(t('prompts.inDev'))}
+            title={me.name}
           >
             <UserAvatar
               name={me.name}
@@ -82,7 +89,7 @@ export const LeftNavUserMenu = () => {
               fallbackClassName="text-[0.65rem]"
               isOnline={true}
             />
-            {me.name}
+            {truncatedUsername}
           </DropdownMenuItem>
           <DialogTrigger asChild>
             <DropdownMenuItem className="text-md">
