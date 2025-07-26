@@ -54,9 +54,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
 
   const form = useForm<zod.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      body: '',
-    },
+    defaultValues: { body: '' },
   });
 
   const { getValues, formState, setValue, reset, handleSubmit, control } = form;
