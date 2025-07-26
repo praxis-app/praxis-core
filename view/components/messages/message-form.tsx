@@ -116,6 +116,8 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
           return { pages, pageParams: oldData.pageParams };
         },
       );
+
+      // FIXME: Even though the form is reset and the value is set to an empty string, the form is not updated in the UI
       localStorage.removeItem(draftKey);
       setValue('body', '');
       onSend?.();
