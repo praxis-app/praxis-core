@@ -170,6 +170,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   useEffect(() => {
     const draft = localStorage.getItem(draftKey);
     if (draft) {
+      // FIXME: This is what's causing the form to not update in the UI
       setValue('body', draft);
     }
   }, [draftKey, setValue]);
