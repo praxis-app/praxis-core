@@ -270,7 +270,10 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
 
         {!isEmpty ? (
           <Button
-            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSendMessage();
+            }}
             className="mx-0.5 size-10 rounded-full"
             disabled={isDisabled()}
           >
