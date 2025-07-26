@@ -171,6 +171,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     const draft = localStorage.getItem(draftKey);
     if (draft) {
       // FIXME: This is what's causing the form to not update in the UI
+      // State gets updated correctly but this then gets called after the form is reset
       setValue('body', draft);
     }
   }, [draftKey, setValue]);
