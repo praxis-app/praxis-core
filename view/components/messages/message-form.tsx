@@ -169,7 +169,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   // Restore draft on page load
   useEffect(() => {
     const draft = localStorage.getItem(draftKey);
-    if (draft) {
+    if (draft && draft.trim() !== '') {
       // FIXME: This is what's causing the form to not update in the UI
       // State gets updated correctly but this then gets called after the form is reset
       setValue('body', draft);
@@ -177,7 +177,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   }, [draftKey, setValue]);
 
   const saveDraft = debounce((draft: string) => {
-    if (draft.trim() !== '') {
+    if (draft && draft.trim() !== '') {
       localStorage.setItem(draftKey, draft);
     } else {
       localStorage.removeItem(draftKey);
