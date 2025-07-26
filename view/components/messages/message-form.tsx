@@ -59,13 +59,9 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     },
   });
 
-  const isEmptyBody =
-    !form.getValues('body') && !form.formState.dirtyFields.body;
+  const { getValues, formState, setValue, reset, handleSubmit, control } = form;
+  const isEmptyBody = !getValues('body') && !formState.dirtyFields.body;
   const isEmpty = isEmptyBody && !images.length;
-
-  // TODO: Remove when no longer needed for testing
-  console.log(isEmpty);
-
   const draftKey = `message-draft-${channelId}`;
 
   const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
@@ -123,9 +119,9 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
         },
       );
       localStorage.removeItem(draftKey);
-      form.setValue('body', '');
+      setValue('body', '');
       onSend?.();
-      form.reset();
+      reset();
     },
     onError: (error: Error) => {
       toast(error.message);
@@ -138,6 +134,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     enabled: !isLoggedIn,
   });
 
+  // Focus on input when pressing space, enter, etc.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const activeElement = document.activeElement;
@@ -165,12 +162,13 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     };
   }, []);
 
+  // Restore draft on page load
   useEffect(() => {
     const draft = localStorage.getItem(draftKey);
     if (draft) {
-      form.setValue('body', draft);
+      setValue('body', draft);
     }
-  }, [form, draftKey]);
+  }, [draftKey, setValue]);
 
   const saveDraft = debounce((draft: string) => {
     localStorage.setItem(draftKey, draft);
@@ -195,7 +193,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
       setIsAuthPromptOpen(true);
       return;
     }
-    form.handleSubmit((values) => sendMessage(values))();
+    handleSubmit((values) => sendMessage(values))();
   };
 
   const handleInputKeyDown: KeyboardEventHandler = (e) => {
@@ -232,7 +230,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
 
         <div className="bg-input/30 flex w-full items-center rounded-3xl px-2">
           <FormField
-            control={form.control}
+            control={control}
             name="body"
             render={({ field }) => (
               <Textarea
@@ -269,7 +267,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
         <ChooseAuthDialog
           isOpen={isAuthPromptOpen}
           setIsOpen={setIsAuthPromptOpen}
-          sendMessage={form.handleSubmit((values) => sendMessage(values))}
+          sendMessage={handleSubmit((values) => sendMessage(values))}
         />
 
         {!isEmpty ? (
