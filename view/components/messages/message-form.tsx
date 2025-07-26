@@ -83,14 +83,18 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
           );
           messageImages.push(image);
         }
-        setImagesInputKey(Date.now());
-        setImages([]);
       }
 
-      const messageWithImages = {
+      return {
         ...message,
         images: messageImages,
       };
+    },
+    onSuccess: (messageWithImages) => {
+      if (images.length) {
+        setImagesInputKey(Date.now());
+        setImages([]);
+      }
 
       const resolvedChannelId = isGeneralChannel
         ? GENERAL_CHANNEL_NAME
