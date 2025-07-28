@@ -37,7 +37,7 @@ const PASSWORD_MAX_LENGTH = 64;
 
 const signUpFormSchema = zod
   .object({
-    username: zod
+    name: zod
       .string()
       .min(NAME_MIN_LENGTH, {
         message: t('auth.errors.shortName'),
@@ -86,7 +86,7 @@ export const SignUpForm = ({ setIsRedirecting }: Props) => {
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       email: '',
-      username: '',
+      name: '',
       password: '',
       confirmPassword: '',
     },
@@ -141,7 +141,7 @@ export const SignUpForm = ({ setIsRedirecting }: Props) => {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t('auth.labels.username')}</FormLabel>

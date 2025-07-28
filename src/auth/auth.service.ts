@@ -64,11 +64,11 @@ export const signUp = async ({
 };
 
 export const upgradeAnonSession = async (
-  { email, password }: SignUpReq,
+  { name, email, password }: SignUpReq,
   userId: string,
 ) => {
   const passwordHash = await hash(password, SALT_ROUNDS);
-  await usersService.upgradeAnonUser(userId, email, passwordHash);
+  await usersService.upgradeAnonUser(userId, email, passwordHash, name);
 };
 
 export const createAnonSession = async (inviteToken?: string) => {
