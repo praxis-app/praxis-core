@@ -1,12 +1,12 @@
 import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
-import { useMeQuery } from '@/hooks/use-me-query';
+import { useSignUpData } from '@/hooks/use-sign-up-data';
 import { truncate } from '@/lib/text.utils';
 import { useAppStore } from '@/store/app.store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdExitToApp } from 'react-icons/md';
+import { MdExitToApp, MdPersonAdd } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { LogOutDialogContent } from '../auth/log-out-dialog-content';
@@ -20,7 +20,7 @@ import {
 import { UserAvatar } from '../users/user-avatar';
 
 export const LeftNavUserMenu = () => {
-  const { isLoggedIn, setIsLoggedIn } = useAppStore();
+  const { setIsLoggedIn } = useAppStore();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const { t } = useTranslation();
@@ -37,15 +37,11 @@ export const LeftNavUserMenu = () => {
     },
   });
 
-  const { data: meData } = useMeQuery({
-    enabled: isLoggedIn,
-  });
+  const { me, signUpPath } = useSignUpData();
 
-  if (!meData) {
+  if (!me) {
     return null;
   }
-
-  const me = meData.user;
   const truncatedUsername = truncate(me.name, 18);
 
   return (
@@ -91,6 +87,15 @@ export const LeftNavUserMenu = () => {
             />
             {truncatedUsername}
           </DropdownMenuItem>
+          {me.anonymous && (
+            <DropdownMenuItem
+              className="text-md"
+              onClick={() => navigate(signUpPath)}
+            >
+              <MdPersonAdd className="text-foreground size-5" />
+              {t('auth.actions.signUp')}
+            </DropdownMenuItem>
+          )}
           <DialogTrigger asChild>
             <DropdownMenuItem className="text-md">
               <MdExitToApp className="text-foreground size-5" />
