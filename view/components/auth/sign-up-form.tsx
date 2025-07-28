@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as zod from 'zod';
 import { Button } from '../ui/button';
@@ -95,11 +95,14 @@ export const SignUpForm = ({ setIsRedirecting }: Props) => {
   const { isAnon } = useSignUpData();
 
   const { t } = useTranslation();
+  const { token } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
-    mutationFn: api.signUp,
+    mutationFn: async (values: zod.infer<typeof signUpFormSchema>) => {
+      return api.signUp({ ...values, inviteToken: token });
+    },
     onSuccess({ access_token }) {
       localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       navigate(NavigationPaths.Home);
@@ -113,7 +116,9 @@ export const SignUpForm = ({ setIsRedirecting }: Props) => {
   });
 
   const { mutate: upgradeAnon, isPending: isUpgradeAnonPending } = useMutation({
-    mutationFn: api.upgradeAnonSession,
+    mutationFn: async (values: zod.infer<typeof signUpFormSchema>) => {
+      return api.upgradeAnonSession({ ...values, inviteToken: token });
+    },
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: ['me'] });
       navigate(NavigationPaths.Home);
