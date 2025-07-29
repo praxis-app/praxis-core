@@ -15,7 +15,7 @@ export default defineConfig(async () => {
       port: parseInt(process.env.CLIENT_PORT || '3000'),
       proxy: {
         '/api': {
-          target: `http://localhost:${process.env.SERVER_PORT}/api`,
+          target: `http://localhost:${process.env.VITE_SERVER_PORT}/api`,
           rewrite: (path: string) => path.replace(/^\/api/, ''),
           changeOrigin: true,
         },
