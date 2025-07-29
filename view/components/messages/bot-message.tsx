@@ -1,14 +1,26 @@
+import { cn } from '@/lib/shared.utils';
 import { timeAgo } from '@/lib/time.utils';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import appIconImg from '../../assets/images/app-icon.png';
 import { UserAvatar } from '../users/user-avatar';
+import { MdVisibility } from 'react-icons/md';
+import { MIDDOT_WITH_SPACES } from '@/constants/shared.constants';
+import { Button } from '../ui/button';
 
 interface Props {
+  bodyClassName?: string;
   children: ReactNode;
+  currentUserOnly?: boolean;
+  onDismiss?: () => void;
 }
 
-export const BotMessage = ({ children }: Props) => {
+export const BotMessage = ({
+  children,
+  bodyClassName,
+  currentUserOnly,
+  onDismiss,
+}: Props) => {
   const { t } = useTranslation();
   const formattedDate = timeAgo(Date());
 
@@ -26,7 +38,34 @@ export const BotMessage = ({ children }: Props) => {
           <div className="text-muted-foreground text-sm">{formattedDate}</div>
         </div>
 
-        <div>{children}</div>
+        <div className={cn(bodyClassName)}>{children}</div>
+
+        {(currentUserOnly || onDismiss) && (
+          <div className="flex gap-1 pt-1">
+            {currentUserOnly && (
+              <div className="flex items-center gap-1">
+                <MdVisibility className="text-muted-foreground text-sm" />
+                <div className="text-muted-foreground text-sm">
+                  {t('messages.prompts.onlyVisibleToYou')}
+                </div>
+              </div>
+            )}
+            {currentUserOnly && onDismiss && (
+              <div className="text-muted-foreground mt-0.5 text-sm">
+                {MIDDOT_WITH_SPACES}
+              </div>
+            )}
+            {onDismiss && (
+              <Button
+                onClick={onDismiss}
+                variant="link"
+                className="text-muted-foreground mt-0.5 text-sm"
+              >
+                {t('messages.actions.dismissMessage')}
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

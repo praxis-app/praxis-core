@@ -1,4 +1,5 @@
 export const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+export const MIDDOT_WITH_SPACES = ' · ';
 
 export enum Time {
   Minute = 60,
