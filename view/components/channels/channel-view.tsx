@@ -3,12 +3,14 @@ import { MessageForm } from '../messages/message-form';
 import { LeftNavDesktop } from '../nav/left-nav-desktop';
 import { ChannelFeed } from './channel-feed';
 import { ChannelTopNav } from './channel-top-nav';
+import { Channel } from '@/types/channel.types';
 
-// interface Props {
-//   channel: any;
-// }
+interface Props {
+  channel: Channel;
+  isGeneralChannel?: boolean;
+}
 
-export const ChannelView = () => {
+export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
   const isDesktop = useIsDesktop();
 
   return (
@@ -20,7 +22,10 @@ export const ChannelView = () => {
 
         <ChannelFeed />
 
-        <MessageForm />
+        <MessageForm
+          channelId={channel.id}
+          isGeneralChannel={isGeneralChannel}
+        />
       </div>
     </div>
   );

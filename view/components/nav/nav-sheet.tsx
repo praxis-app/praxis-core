@@ -85,29 +85,33 @@ export const NavSheet = ({ trigger }: Props) => {
 
           {(showSignUp || !isLoggedIn) && (
             <div className="flex flex-col gap-4">
-              <Button
-                variant="ghost"
-                className="w-full justify-start text-base font-light"
-                onClick={() => {
-                  navigate(signUpPath);
-                  setIsNavSheetOpen(false);
-                }}
-              >
-                <MdPersonAdd className="mr-1 size-6" />
-                {t('auth.actions.signUp')}
-              </Button>
+              {showSignUp && (
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-base font-light"
+                  onClick={() => {
+                    navigate(signUpPath);
+                    setIsNavSheetOpen(false);
+                  }}
+                >
+                  <MdPersonAdd className="mr-1 size-6" />
+                  {t('auth.actions.signUp')}
+                </Button>
+              )}
 
-              <Button
-                variant="ghost"
-                className="w-full justify-start text-base font-light"
-                onClick={() => {
-                  navigate(NavigationPaths.Login);
-                  setIsNavSheetOpen(false);
-                }}
-              >
-                <MdExitToApp className="mr-1 size-6" />
-                {t('auth.actions.logIn')}
-              </Button>
+              {!isLoggedIn && (
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-base font-light"
+                  onClick={() => {
+                    navigate(NavigationPaths.Login);
+                    setIsNavSheetOpen(false);
+                  }}
+                >
+                  <MdExitToApp className="mr-1 size-6" />
+                  {t('auth.actions.logIn')}
+                </Button>
+              )}
             </div>
           )}
         </div>

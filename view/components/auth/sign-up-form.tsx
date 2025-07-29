@@ -5,13 +5,14 @@ import {
   LocalStorageKeys,
   NavigationPaths,
 } from '@/constants/shared.constants';
+import { useSignUpData } from '@/hooks/use-sign-up-data';
 import { t } from '@/lib/shared.utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as zod from 'zod';
 import { Button } from '../ui/button';
@@ -36,7 +37,7 @@ const PASSWORD_MAX_LENGTH = 64;
 
 const signUpFormSchema = zod
   .object({
-    username: zod
+    name: zod
       .string()
       .min(NAME_MIN_LENGTH, {
         message: t('auth.errors.shortName'),
@@ -76,22 +77,32 @@ const signUpFormSchema = zod
     path: ['confirmPassword'],
   });
 
-export const SignUpForm = () => {
+interface Props {
+  setIsRedirecting: (isRedirecting: boolean) => void;
+}
+
+export const SignUpForm = ({ setIsRedirecting }: Props) => {
   const form = useForm<zod.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       email: '',
-      username: '',
+      name: '',
       password: '',
       confirmPassword: '',
     },
   });
 
+  const { isAnon } = useSignUpData();
+
   const { t } = useTranslation();
+  const { token } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
-    mutationFn: api.signUp,
+    mutationFn: async (values: zod.infer<typeof signUpFormSchema>) => {
+      return api.signUp({ ...values, inviteToken: token });
+    },
     onSuccess({ access_token }) {
       localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       navigate(NavigationPaths.Home);
@@ -104,15 +115,33 @@ export const SignUpForm = () => {
     },
   });
 
+  const { mutate: upgradeAnon, isPending: isUpgradeAnonPending } = useMutation({
+    mutationFn: async (values: zod.infer<typeof signUpFormSchema>) => {
+      return api.upgradeAnonSession({ ...values, inviteToken: token });
+    },
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['me'] });
+      navigate(NavigationPaths.Home);
+      setIsRedirecting(true);
+    },
+    onError: (error: Error) => {
+      toast(error.message);
+    },
+  });
+
+  const isPending = isSignUpPending || isUpgradeAnonPending;
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((fv) => signUp(fv))}
+        onSubmit={form.handleSubmit((fv) =>
+          isAnon ? upgradeAnon(fv) : signUp(fv),
+        )}
         className="space-y-4 pb-4"
       >
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t('auth.labels.username')}</FormLabel>
@@ -186,7 +215,7 @@ export const SignUpForm = () => {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isSignUpPending}>
+        <Button type="submit" className="w-full" disabled={isPending}>
           {t('auth.actions.createAccount')}
         </Button>
       </form>

@@ -3,6 +3,37 @@ import { t as translate } from 'i18next';
 import { Namespace, TFunction } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
+export interface Cancelable {
+  clear(): void;
+}
+
+/**
+ * Corresponds to 10 frames at 60 Hz.
+ *
+ * A few bytes payload overhead when lodash/debounce is ~3 kB and debounce ~300 B.
+ *
+ * Ref: https://github.com/mui/material-ui/blob/master/packages/mui-utils/src/debounce/debounce.ts
+ */
+export const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  wait = 166,
+) => {
+  let timeout: ReturnType<typeof setTimeout>;
+  function debounced(this: ThisParameterType<T>, ...args: Parameters<T>) {
+    const later = () => {
+      func.apply(this, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  }
+
+  debounced.clear = () => {
+    clearTimeout(timeout);
+  };
+
+  return debounced as T & Cancelable;
+};
+
 /**
  * Utility function for conditionally combining and merging CSS class names.
  * Combines clsx for conditional classes with twMerge to resolve Tailwind CSS conflicts.

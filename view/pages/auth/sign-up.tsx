@@ -85,21 +85,25 @@ export const SignUp = () => {
               {t('auth.actions.createAccount')}
             </CardTitle>
             <CardDescription className="text-center">
-              {t('auth.prompts.enterDetails')}
+              {isAnon
+                ? t('auth.prompts.upgradeAccount')
+                : t('auth.prompts.enterDetails')}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <SignUpForm />
+            <SignUpForm setIsRedirecting={setIsRedirecting} />
 
-            <div className="text-muted-foreground text-center text-sm">
-              {t('auth.prompts.alreadyHaveAccount')}{' '}
-              <Link
-                to={NavigationPaths.Login}
-                className="text-primary font-medium hover:underline"
-              >
-                {t('auth.actions.signIn')}
-              </Link>
-            </div>
+            {!isAnon && (
+              <div className="text-muted-foreground text-center text-sm">
+                {t('auth.prompts.alreadyHaveAccount')}{' '}
+                <Link
+                  to={NavigationPaths.Login}
+                  className="text-primary font-medium hover:underline"
+                >
+                  {t('auth.actions.signIn')}
+                </Link>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

@@ -50,6 +50,7 @@ export const upgradeAnonUser = async (
   userId: string,
   email: string,
   password: string,
+  name?: string,
 ) => {
   const user = await userRepository.findOne({
     where: { id: userId },
@@ -62,6 +63,7 @@ export const upgradeAnonUser = async (
     ...user,
     anonymous: false,
     email: normalizeText(email),
+    name: name?.trim(),
     password,
   });
   return;
