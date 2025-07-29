@@ -24,7 +24,6 @@ export const ImageInput = ({
   setImages,
   iconClassName,
   disabled,
-  ...boxProps
 }: Props) => {
   const imageInput = useRef<HTMLInputElement>(null);
   const { t } = useTranslation();
@@ -46,7 +45,9 @@ export const ImageInput = ({
     }
   };
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
     if (disabled || !imageInput.current) {
       return;
     }
@@ -73,7 +74,7 @@ export const ImageInput = ({
   };
 
   return (
-    <div className="mt-1.5" {...boxProps}>
+    <>
       <input
         accept="image/*"
         multiple={multiple}
@@ -84,6 +85,6 @@ export const ImageInput = ({
         type="file"
       />
       <div onClick={handleClick}>{renderContent()}</div>
-    </div>
+    </>
   );
 };

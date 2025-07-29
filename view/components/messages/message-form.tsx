@@ -261,7 +261,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
           <ImageInput
             key={imagesInputKey}
             setImages={setImages}
-            iconClassName="text-muted-foreground size-6"
+            iconClassName="text-muted-foreground size-6 self-center"
             multiple
           />
         </div>
