@@ -1,17 +1,15 @@
+// TODO: Add images
+
 import { timeAgo } from '@/lib/time.utils';
+import { Message as MessageType } from '@/types/message.types';
 import { FormattedText } from '../shared/formatted-text';
 import { UserAvatar } from '../users/user-avatar';
 
 interface Props {
-  message: any;
+  message: MessageType;
 }
 
-export const Message = ({ message }: Props) => {
-  const { body } = message.getContent();
-
-  const userId = message.getSender() ?? '';
-
-  const createdAt = message.getDate()?.toString() ?? '';
+export const Message = ({ message: { body, user, createdAt } }: Props) => {
   const formattedDate = timeAgo(createdAt);
 
   if (!body) {
@@ -20,11 +18,11 @@ export const Message = ({ message }: Props) => {
 
   return (
     <div className="flex gap-4 pt-4">
-      <UserAvatar name={'TODO: name'} userId={userId} className="mt-0.5" />
+      <UserAvatar name={user.name} userId={user.id} className="mt-0.5" />
 
       <div>
         <div className="flex items-center gap-1.5">
-          <div className="font-medium">{'TODO: name'}</div>
+          <div className="font-medium">{user.name}</div>
           <div className="text-muted-foreground text-sm">{formattedDate}</div>
         </div>
 
