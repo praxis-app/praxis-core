@@ -34,6 +34,11 @@ export const debounce = <T extends (...args: any[]) => any>(
   return debounced as T & Cancelable;
 };
 
+export const getWebSocketURL = () =>
+  process.env.NODE_ENV === 'development'
+    ? `ws://${window.location.hostname}:${process.env.SERVER_PORT}/ws`
+    : `wss://${window.location.host}/ws`;
+
 /**
  * Utility function for conditionally combining and merging CSS class names.
  * Combines clsx for conditional classes with twMerge to resolve Tailwind CSS conflicts.
