@@ -121,7 +121,6 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
         },
       );
 
-      // FIXME: Even though the form is reset and the value is set to an empty string, the form is not updated in the UI
       localStorage.removeItem(draftKey);
       setValue('body', '');
       onSend?.();
@@ -170,8 +169,6 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   useEffect(() => {
     const draft = localStorage.getItem(draftKey);
     if (draft && draft.trim() !== '') {
-      // FIXME: This is what's causing the form to not update in the UI
-      // State gets updated correctly but this then gets called after the form is reset
       setValue('body', draft);
     }
   }, [draftKey, setValue]);
