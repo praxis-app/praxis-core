@@ -10,6 +10,7 @@ dotenv.config();
 export default defineConfig(async () => {
   return {
     root: 'view',
+    envDir: '../',
     server: {
       port: parseInt(process.env.CLIENT_PORT || '3000'),
       proxy: {

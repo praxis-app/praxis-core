@@ -35,8 +35,8 @@ export const debounce = <T extends (...args: any[]) => any>(
 };
 
 export const getWebSocketURL = () =>
-  process.env.NODE_ENV === 'development'
-    ? `ws://${window.location.hostname}:${process.env.SERVER_PORT}/ws`
+  import.meta.env.DEV
+    ? `ws://${window.location.hostname}:${import.meta.env.VITE_SERVER_PORT}/ws`
     : `wss://${window.location.host}/ws`;
 
 /**
