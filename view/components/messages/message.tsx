@@ -20,13 +20,15 @@ export const Message = ({
   const showImages = !!images?.length;
 
   return (
-    <div className="flex gap-4 pt-4">
+    <div className="flex gap-4">
       <UserAvatar name={user.name} userId={user.id} className="mt-0.5" />
 
       <div>
-        <div className="flex items-center gap-1.5">
+        <div className="mb-[-0.15rem] flex items-center gap-1.5">
           <div className="font-medium">{user.name}</div>
-          <div className="text-muted-foreground text-sm">{formattedDate}</div>
+          <div className="text-muted-foreground text-sm font-light">
+            {formattedDate}
+          </div>
         </div>
 
         {/* TODO: Truncate message body if it exceeds a certain length */}

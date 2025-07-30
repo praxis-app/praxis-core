@@ -38,7 +38,7 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   return (
     <div
       ref={feedBoxRef}
-      className="flex flex-1 flex-col-reverse overflow-y-scroll p-2.5 pb-4"
+      className="flex flex-1 flex-col-reverse gap-4.5 overflow-y-scroll p-2.5 pb-4"
       onScroll={handleScroll}
     >
       {showWelcomeMessage && (
@@ -50,7 +50,7 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
       ))}
 
       {/* Bottom is top due to `column-reverse` */}
-      <div ref={feedTopRef} className="pb-2.5" />
+      <div ref={feedTopRef} className="pb-0.5" />
     </div>
   );
 };
