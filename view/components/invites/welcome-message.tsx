@@ -29,16 +29,20 @@ const WelcomeMessage = ({ onDismiss }: Props) => {
       onDismiss={handleDismiss}
       currentUserOnly
     >
-      <p className="mb-1">{t('prompts.welcomeToPraxis')}</p>
+      <p className="mb-2 text-xl">{t('prompts.welcomeToPraxis')}</p>
 
-      <p className="mb-1.5">{t('welcome.messages.projectDescription1')}</p>
+      <p className="mb-2.5">{t('welcome.messages.projectDescription1')}</p>
 
-      <p className="mb-1.5">{t('welcome.messages.projectDescription2')}</p>
+      <p className="mb-2.5">{t('welcome.messages.projectDescription2')}</p>
 
-      <p className="mb-1.5">{t('welcome.messages.inDev')}</p>
+      <p className="mb-3">{t('welcome.messages.inDev')}</p>
 
       {showSignUp && (
-        <Button onClick={() => navigate(signUpPath)} className="mr-3 uppercase">
+        <Button
+          onClick={() => navigate(signUpPath)}
+          className="mr-3 uppercase"
+          variant="secondary"
+        >
           {t('auth.actions.signUp')}
         </Button>
       )}
@@ -46,6 +50,7 @@ const WelcomeMessage = ({ onDismiss }: Props) => {
       <Button
         onClick={() => navigate(NavigationPaths.Login)}
         className="uppercase"
+        variant="secondary"
       >
         {t('auth.actions.logIn')}
       </Button>

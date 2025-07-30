@@ -35,23 +35,25 @@ export const BotMessage = ({
       <div>
         <div className="flex items-center gap-1.5">
           <div className="font-medium">{t('messages.names.praxisBot')}</div>
-          <div className="text-muted-foreground text-sm">{formattedDate}</div>
+          <div className="text-muted-foreground text-sm font-light">
+            {formattedDate}
+          </div>
         </div>
 
         <div className={cn(bodyClassName)}>{children}</div>
 
         {(currentUserOnly || onDismiss) && (
-          <div className="flex gap-1 pt-1">
+          <div className="flex items-center gap-1 pt-1">
             {currentUserOnly && (
               <div className="flex items-center gap-1">
                 <MdVisibility className="text-muted-foreground text-sm" />
-                <div className="text-muted-foreground text-sm">
+                <div className="text-muted-foreground text-xs">
                   {t('messages.prompts.onlyVisibleToYou')}
                 </div>
               </div>
             )}
             {currentUserOnly && onDismiss && (
-              <div className="text-muted-foreground mt-0.5 text-sm">
+              <div className="text-muted-foreground text-xs">
                 {MIDDOT_WITH_SPACES}
               </div>
             )}
@@ -59,7 +61,7 @@ export const BotMessage = ({
               <Button
                 onClick={onDismiss}
                 variant="link"
-                className="text-muted-foreground mt-0.5 text-sm"
+                className="text-muted-foreground mt-0.5 p-0 text-xs font-normal"
               >
                 {t('messages.actions.dismissMessage')}
               </Button>
