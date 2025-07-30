@@ -148,7 +148,15 @@
 
   "channels": {
     "actions": {
-      "create": "Create Channel"
+      "create": "Create Channel",
+      "delete": "Delete Channel"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Description"
+    },
+    "headers": {
+      "channelSettings": "Channel Settings"
     },
     "prompts": {
       "createChannel": "Create a new channel",

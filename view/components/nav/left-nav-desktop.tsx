@@ -2,12 +2,14 @@ import { NavigationPaths } from '@/constants/shared.constants';
 import { useSignUpData } from '@/hooks/use-sign-up-data';
 import { cn } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
+import { CurrentUser } from '@/types/user.types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdAddCircle, MdExpandMore, MdSettings } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import appIconImg from '../../assets/images/app-icon.png';
+import { ChannelListDesktop } from '../channels/channel-list-desktop';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -25,7 +27,11 @@ import {
 } from '../ui/dropdown-menu';
 import { LeftNavUserMenu } from './left-nav-user-menu';
 
-export const LeftNavDesktop = () => {
+interface Props {
+  me?: CurrentUser;
+}
+
+export const LeftNavDesktop = ({ me }: Props) => {
   const { isLoggedIn } = useAppStore();
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
 
@@ -95,16 +101,7 @@ export const LeftNavDesktop = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="flex flex-1 flex-col overflow-y-scroll py-2 select-none">
-        {/* TODO: Add channels list */}
-        {/* {rooms.map((room) => (
-          <RoomListItem
-            key={room.roomId}
-            activeRoomId={activeRoomId}
-            room={room}
-          />
-        ))} */}
-      </div>
+      <ChannelListDesktop me={me} />
 
       <div className="flex h-[60px] items-center justify-between border-t border-[--color-border] px-1.5">
         <LeftNavUserMenu />
