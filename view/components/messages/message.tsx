@@ -24,7 +24,7 @@ export const Message = ({
       <UserAvatar name={user.name} userId={user.id} className="mt-0.5" />
 
       <div>
-        <div className="mb-[-0.15rem] flex items-center gap-1.5">
+        <div className="mb-[-0.1rem] flex items-center gap-1.5">
           <div className="font-medium">{user.name}</div>
           <div className="text-muted-foreground text-sm font-light">
             {formattedDate}
@@ -39,7 +39,7 @@ export const Message = ({
           <AttachedImageList
             images={images}
             imageClassName="rounded-lg"
-            className={`pt-3 ${isDesktop ? 'w-[350px]' : 'w-full'}`}
+            className={`pt-1.5 ${isDesktop ? 'w-[350px]' : 'w-full'}`}
           />
         )}
 
