@@ -15,9 +15,9 @@ const RemoveButton = ({ onClick }: { onClick(): void }) => {
       onClick={onClick}
       variant="ghost"
       size="icon"
-      className="absolute top-0 right-0"
+      className="absolute top-[-18px] right-[-18px] rounded-full"
     >
-      <MdRemoveCircle />
+      <MdRemoveCircle className="size-6" />
     </Button>
   );
 };
