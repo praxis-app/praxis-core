@@ -1,9 +1,4 @@
-import {
-  ComponentProps,
-  SyntheticEvent,
-  useRef,
-  useState,
-} from 'react';
+import { ComponentProps, SyntheticEvent, useRef, useState } from 'react';
 import { useImageSrc } from '@/hooks/use-image-src';
 import { cn } from '@/lib/shared.utils';
 import { Box } from '@/components/ui/box';
@@ -17,7 +12,7 @@ interface Props extends ComponentProps<'img'> {
   className?: string;
 }
 
-const LazyLoadImage = ({
+export const LazyLoadImage = ({
   alt,
   skipAnimation = false,
   isPlaceholder,
@@ -40,7 +35,7 @@ const LazyLoadImage = ({
     'object-cover',
     !skipAnimation && 'transition-all duration-300',
     !skipAnimation && (loaded ? 'blur-0 opacity-100' : 'blur-sm opacity-0'),
-    className
+    className,
   );
 
   return (
@@ -56,5 +51,3 @@ const LazyLoadImage = ({
     />
   );
 };
-
-export default LazyLoadImage;

@@ -12,7 +12,7 @@ interface Props {
   onDismiss: () => void;
 }
 
-const WelcomeMessage = ({ onDismiss }: Props) => {
+export const WelcomeMessage = ({ onDismiss }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -57,5 +57,3 @@ const WelcomeMessage = ({ onDismiss }: Props) => {
     </BotMessage>
   );
 };
-
-export default WelcomeMessage;

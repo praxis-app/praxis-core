@@ -1,7 +1,7 @@
 import { Box } from '@/components/ui/box';
 import { cn } from '@/lib/shared.utils';
 import { Image } from '@/types/image.types';
-import AttachedImage from './attached-image';
+import { AttachedImage } from './attached-image';
 
 interface Props {
   images: Image[];
@@ -12,7 +12,7 @@ interface Props {
   className?: string;
 }
 
-const AttachedImageList = ({
+export const AttachedImageList = ({
   images,
   imageClassName,
   onImageLoad,
@@ -46,5 +46,3 @@ const AttachedImageList = ({
     </Box>
   );
 };
-
-export default AttachedImageList;

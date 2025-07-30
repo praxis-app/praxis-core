@@ -4,8 +4,8 @@ import { useScrollDirection } from '@/hooks/use-scroll-direction';
 import { useAppStore } from '@/store/app.store';
 import { Message as MessageType } from '@/types/message.types';
 import { RefObject, UIEvent, useRef, useState } from 'react';
+import { WelcomeMessage } from '../invites/welcome-message';
 import { Message } from '../messages/message';
-import WelcomeMessage from '../invites/welcome-message';
 
 interface Props {
   messages: MessageType[];

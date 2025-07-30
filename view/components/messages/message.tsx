@@ -1,4 +1,4 @@
-import AttachedImageList from '@/components/images/attached-image-list';
+import { AttachedImageList } from '@/components/images/attached-image-list';
 import { FormattedText } from '@/components/shared/formatted-text';
 import { UserAvatar } from '@/components/users/user-avatar';
 import { useIsDesktop } from '@/hooks/use-is-desktop';

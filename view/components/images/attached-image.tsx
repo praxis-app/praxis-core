@@ -5,7 +5,7 @@ import { Image } from '@/types/image.types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import LazyLoadImage from './lazy-load-image';
+import { LazyLoadImage } from './lazy-load-image';
 
 interface Props {
   image: Image;
@@ -13,11 +13,7 @@ interface Props {
   className?: string;
 }
 
-const AttachedImage = ({
-  image,
-  onImageLoad,
-  className,
-}: Props) => {
+export const AttachedImage = ({ image, onImageLoad, className }: Props) => {
   const queryClient = useQueryClient();
   const previouslyLoaded = queryClient.getQueryData(['image', image.id]);
   const [isLoaded, setIsLoaded] = useState(previouslyLoaded);
@@ -28,7 +24,9 @@ const AttachedImage = ({
 
   const imageClassName = cn(
     'w-full',
-    isLoaded ? 'cursor-pointer h-auto' : `cursor-default ${isDesktop ? 'h-[400px]' : 'h-[300px]'}`,
+    isLoaded
+      ? 'cursor-pointer h-auto'
+      : `cursor-default ${isDesktop ? 'h-[400px]' : 'h-[300px]'}`,
     className,
   );
 
@@ -73,5 +71,3 @@ const AttachedImage = ({
     </>
   );
 };
-
-export default AttachedImage;
