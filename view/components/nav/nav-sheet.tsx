@@ -1,12 +1,16 @@
+import { api } from '@/client/api-client';
+import { GENERAL_CHANNEL_NAME } from '@/constants/channel.constants';
 import { NavigationPaths } from '@/constants/shared.constants';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { useSignUpData } from '@/hooks/use-sign-up-data';
 import { useAppStore } from '@/store/app.store';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuChevronRight } from 'react-icons/lu';
-import { MdExitToApp, MdPersonAdd } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { MdExitToApp, MdPersonAdd, MdTag } from 'react-icons/md';
+import { Link, useNavigate } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
 import { Button } from '../ui/button';
 import {
@@ -30,8 +34,22 @@ export const NavSheet = ({ trigger }: Props) => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isDesktop = useIsDesktop();
 
-  const { me, signUpPath, showSignUp } = useSignUpData();
+  const { me, signUpPath, showSignUp, isMeLoading, isRegistered } =
+    useSignUpData();
+
+  const { data: channelsData } = useQuery({
+    queryKey: ['channels'],
+    queryFn: api.getChannels,
+    enabled: !isDesktop && isRegistered,
+  });
+
+  const { data: generalChannelData } = useQuery({
+    queryKey: ['channels', GENERAL_CHANNEL_NAME],
+    queryFn: () => api.getGeneralChannel(),
+    enabled: !isMeLoading && !isRegistered,
+  });
 
   return (
     <Sheet open={isNavSheetOpen} onOpenChange={setIsNavSheetOpen}>
@@ -79,8 +97,30 @@ export const NavSheet = ({ trigger }: Props) => {
           </VisuallyHidden>
         </SheetHeader>
 
-        <div className="bg-background dark:bg-card flex h-full w-full flex-col gap-6 overflow-y-auto rounded-t-2xl px-2 pt-6 pb-12">
-          {/* TODO: List channels */}
+        <div className="bg-background dark:bg-card flex h-full w-full flex-col gap-6 overflow-y-auto rounded-t-2xl px-4 pt-7 pb-12">
+          {channelsData?.channels.map((channel) => (
+            <Link
+              key={channel.id}
+              to={`${NavigationPaths.Channels}/${channel.id}`}
+              onClick={() => setIsNavSheetOpen(false)}
+              className="flex items-center gap-1.5 font-light tracking-[0.01em]"
+            >
+              <MdTag className="mr-1 size-6" />
+              <div>{channel.name}</div>
+            </Link>
+          ))}
+
+          {/* Show general channel for unregistered users */}
+          {!isRegistered && generalChannelData && (
+            <Link
+              key={generalChannelData.channel.id}
+              to={NavigationPaths.Home}
+              onClick={() => setIsNavSheetOpen(false)}
+            >
+              <div>{generalChannelData.channel.name}</div>
+            </Link>
+          )}
+
           {/* TODO: Add divider between channels and login */}
 
           {(showSignUp || !isLoggedIn) && (

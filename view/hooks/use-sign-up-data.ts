@@ -13,7 +13,7 @@ export const useSignUpData = () => {
     enabled: !isLoggedIn,
   });
 
-  const { data: meData } = useMeQuery({
+  const { data: meData, isLoading: isMeLoading } = useMeQuery({
     enabled: isLoggedIn,
   });
 
@@ -46,6 +46,7 @@ export const useSignUpData = () => {
     showSignUp: getShowSignUp(),
     inviteToken,
     signUpPath,
+    isMeLoading,
     me,
   };
 };
