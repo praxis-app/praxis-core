@@ -28,8 +28,12 @@ export const InviteTableRow = ({
     useDeleteInviteMutation(id);
 
   const handleCopyLink = async () => {
-    await copyInviteLink(token);
-    toast(t('invites.prompts.copiedToClipboard'));
+    const success = await copyInviteLink(token);
+    if (success) {
+      toast(t('invites.prompts.copiedToClipboard'));
+    } else {
+      toast(t('errors.somethingWentWrong'));
+    }
   };
 
   const truncatedUsername = truncate(user.name, 18);
