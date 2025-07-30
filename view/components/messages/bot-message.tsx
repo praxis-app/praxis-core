@@ -53,7 +53,7 @@ export const BotMessage = ({
               </div>
             )}
             {currentUserOnly && onDismiss && (
-              <div className="text-muted-foreground text-xs">
+              <div className="text-muted-foreground px-0.5 text-sm">
                 {MIDDOT_WITH_SPACES}
               </div>
             )}
@@ -61,7 +61,7 @@ export const BotMessage = ({
               <Button
                 onClick={onDismiss}
                 variant="link"
-                className="text-muted-foreground mt-0.5 p-0 text-xs font-normal"
+                className="text-blurple dark:text-blurple-light mt-0.5 p-0 text-xs font-normal"
               >
                 {t('messages.actions.dismissMessage')}
               </Button>
