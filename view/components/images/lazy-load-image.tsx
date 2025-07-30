@@ -1,8 +1,5 @@
-// TODO: Convert CSS properties to className for Tailwind
-
 import {
   ComponentProps,
-  CSSProperties,
   SyntheticEvent,
   useRef,
   useState,
@@ -34,31 +31,27 @@ const LazyLoadImage = ({
   const srcFromImageId = useImageSrc(imageId, ref, !isPlaceholder);
   const [loaded, setLoaded] = useState(!!srcFromImageId);
 
-  const animationStyles: CSSProperties = {
-    transition: 'filter 0.3s, opacity 0.3s',
-    filter: loaded ? 'blur(0)' : 'blur(15px)',
-    opacity: loaded ? 1 : 0,
-  };
-
-  const imageStyles: CSSProperties = {
-    objectFit: 'cover',
-    ...(!skipAnimation && animationStyles),
-  };
-
   const handleLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     onLoad && onLoad(event);
     setLoaded(true);
   };
 
+  const imageClassName = cn(
+    'object-cover',
+    !skipAnimation && 'transition-all duration-300',
+    !skipAnimation && (loaded ? 'blur-0 opacity-100' : 'blur-sm opacity-0'),
+    className
+  );
+
   return (
     <Box
       ref={ref}
       alt={alt}
-      component={isPlaceholder ? 'div' : 'img'}
+      as={isPlaceholder ? 'div' : 'img'}
       loading={src ? 'lazy' : 'eager'}
       onLoad={handleLoad}
       src={src || srcFromImageId}
-      className={cn(imageStyles, className)}
+      className={imageClassName}
       {...imgProps}
     />
   );

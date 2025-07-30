@@ -9,16 +9,12 @@ import LazyLoadImage from './lazy-load-image';
 
 interface Props {
   image: Image;
-  marginBottom?: string | number;
-  width?: string | number;
   onImageLoad?(): void;
   className?: string;
 }
 
 const AttachedImage = ({
   image,
-  marginBottom,
-  width = '100%',
   onImageLoad,
   className,
 }: Props) => {
@@ -30,11 +26,9 @@ const AttachedImage = ({
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
 
-  const loadingHeight = isDesktop ? '400px' : '300px';
-  const height = isLoaded ? 'auto' : loadingHeight;
-
   const imageClassName = cn(
-    isLoaded ? 'cursor-pointer' : 'cursor-default',
+    'w-full',
+    isLoaded ? 'cursor-pointer h-auto' : `cursor-default ${isDesktop ? 'h-[400px]' : 'h-[300px]'}`,
     className,
   );
 
@@ -71,13 +65,10 @@ const AttachedImage = ({
       <LazyLoadImage
         imageId={image.id}
         alt={t('images.labels.attachedImage')}
-        width={width}
-        height={height}
         onLoad={handleLoad}
         isPlaceholder={image.isPlaceholder}
         onClick={handleClick}
         className={imageClassName}
-        style={{ marginBottom }}
       />
     </>
   );
