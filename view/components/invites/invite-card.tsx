@@ -41,12 +41,8 @@ export const InviteCard = ({
   const truncatedUsername = truncate(user.name, 25);
 
   const handleCopyLink = async () => {
-    const success = await copyInviteLink(token);
-    if (success) {
-      toast(t('invites.prompts.copiedToClipboard'));
-    } else {
-      toast(t('errors.somethingWentWrong'));
-    }
+    await copyInviteLink(token);
+    toast(t('invites.prompts.copiedToClipboard'));
   };
 
   return (
