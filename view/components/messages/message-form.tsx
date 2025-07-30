@@ -221,46 +221,74 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
 
   return (
     <Form {...form}>
-      <form className="flex w-full items-center gap-2 overflow-y-auto border-t p-2 pt-2.5 pb-4">
-        <MessageFormMenu
-          trigger={
-            <MdAdd
-              className={cn(
-                'text-muted-foreground size-7 transition-transform duration-200',
-                showMenu && 'rotate-45',
+      <form className="flex w-full flex-col gap-2 overflow-y-auto border-t p-2 pt-2.5 pb-4">
+        <div className="flex w-full items-center gap-2">
+          <MessageFormMenu
+            trigger={
+              <MdAdd
+                className={cn(
+                  'text-muted-foreground size-7 transition-transform duration-200',
+                  showMenu && 'rotate-45',
+                )}
+              />
+            }
+            showMenu={showMenu}
+            setShowMenu={setShowMenu}
+          />
+
+          <div className="bg-input/30 flex w-full items-center rounded-3xl px-2">
+            <FormField
+              control={control}
+              name="body"
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  placeholder={t('messages.placeholders.sendMessage')}
+                  className="min-h-12 resize-none border-none bg-transparent py-3 shadow-none focus-visible:border-none focus-visible:ring-0 md:py-3.5 dark:bg-transparent"
+                  onKeyDown={handleInputKeyDown}
+                  onChange={(e) => {
+                    saveDraft(e.target.value);
+                    field.onChange(e);
+                  }}
+                  ref={inputRef}
+                  rows={1}
+                />
               )}
             />
-          }
-          showMenu={showMenu}
-          setShowMenu={setShowMenu}
-        />
 
-        <div className="bg-input/30 flex w-full items-center rounded-3xl px-2">
-          <FormField
-            control={control}
-            name="body"
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                placeholder={t('messages.placeholders.sendMessage')}
-                className="min-h-12 resize-none border-none bg-transparent py-3 shadow-none focus-visible:border-none focus-visible:ring-0 md:py-3.5 dark:bg-transparent"
-                onKeyDown={handleInputKeyDown}
-                onChange={(e) => {
-                  saveDraft(e.target.value);
-                  field.onChange(e);
-                }}
-                ref={inputRef}
-                rows={1}
-              />
-            )}
+            <ImageInput
+              key={imagesInputKey}
+              setImages={setImages}
+              iconClassName="text-muted-foreground size-6 self-center"
+              multiple
+            />
+          </div>
+
+          <ChooseAuthDialog
+            isOpen={isAuthPromptOpen}
+            setIsOpen={setIsAuthPromptOpen}
+            sendMessage={handleSubmit((values) => sendMessage(values))}
           />
 
-          <ImageInput
-            key={imagesInputKey}
-            setImages={setImages}
-            iconClassName="text-muted-foreground size-6 self-center"
-            multiple
-          />
+          {!isEmpty ? (
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                handleSendMessage();
+              }}
+              className="mx-0.5 size-10 rounded-full"
+              disabled={isDisabled()}
+            >
+              <BiSolidSend className="ml-0.5 size-5" />
+            </Button>
+          ) : (
+            <Button
+              className="bg-input/30 hover:bg-input/40 size-11 rounded-full"
+              onClick={() => toast(t('prompts.inDev'))}
+            >
+              <TbMicrophoneFilled className="text-muted-foreground size-5.5" />
+            </Button>
+          )}
         </div>
 
         {!!images.length && (
@@ -269,32 +297,6 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
             selectedImages={images}
             className="ml-1.5"
           />
-        )}
-
-        <ChooseAuthDialog
-          isOpen={isAuthPromptOpen}
-          setIsOpen={setIsAuthPromptOpen}
-          sendMessage={handleSubmit((values) => sendMessage(values))}
-        />
-
-        {!isEmpty ? (
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-            className="mx-0.5 size-10 rounded-full"
-            disabled={isDisabled()}
-          >
-            <BiSolidSend className="ml-0.5 size-5" />
-          </Button>
-        ) : (
-          <Button
-            className="bg-input/30 hover:bg-input/40 size-11 rounded-full"
-            onClick={() => toast(t('prompts.inDev'))}
-          >
-            <TbMicrophoneFilled className="text-muted-foreground size-5.5" />
-          </Button>
         )}
       </form>
     </Form>
