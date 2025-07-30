@@ -17,10 +17,11 @@
 
   "prompts": {
     "deleteItem": "Are you sure you want to delete this {{itemType}}?",
-    "welcomeToPraxis": "Welcome to Praxis",
     "inDev": "This feature is still in development.",
+    "loading": "Loading...",
+    "noContent": "No content to display.",
     "tryAgain": "Please try again.",
-    "loading": "Loading..."
+    "welcomeToPraxis": "Welcome to Praxis"
   },
 
   "errors": {

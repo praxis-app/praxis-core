@@ -1,20 +1,23 @@
-// TODO: Add images
-
+import AttachedImageList from '@/components/images/attached-image-list';
+import { FormattedText } from '@/components/shared/formatted-text';
+import { UserAvatar } from '@/components/users/user-avatar';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { timeAgo } from '@/lib/time.utils';
 import { Message as MessageType } from '@/types/message.types';
-import { FormattedText } from '../shared/formatted-text';
-import { UserAvatar } from '../users/user-avatar';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   message: MessageType;
 }
 
-export const Message = ({ message: { body, user, createdAt } }: Props) => {
-  const formattedDate = timeAgo(createdAt);
+export const Message = ({
+  message: { body, images, user, createdAt },
+}: Props) => {
+  const { t } = useTranslation();
+  const isDesktop = useIsDesktop();
 
-  if (!body) {
-    return null;
-  }
+  const formattedDate = timeAgo(createdAt);
+  const showImages = !!images?.length;
 
   return (
     <div className="flex gap-4 pt-4">
@@ -26,7 +29,23 @@ export const Message = ({ message: { body, user, createdAt } }: Props) => {
           <div className="text-muted-foreground text-sm">{formattedDate}</div>
         </div>
 
-        <FormattedText text={body} />
+        {/* TODO: Truncate message body if it exceeds a certain length */}
+        {body && <FormattedText text={body} />}
+
+        {/* TODO: Enable navigation between images in modal */}
+        {showImages && (
+          <AttachedImageList
+            images={images}
+            imageClassName="rounded-lg"
+            className={`pt-3 ${isDesktop ? 'w-[350px]' : 'w-full'}`}
+          />
+        )}
+
+        {!body && !showImages && (
+          <div className="text-muted-foreground text-sm">
+            {t('prompts.noContent')}
+          </div>
+        )}
       </div>
     </div>
   );
