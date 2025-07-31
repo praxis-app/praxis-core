@@ -160,6 +160,7 @@
     },
     "prompts": {
       "createChannel": "Create a new channel",
+      "creatingChannel": "Creating...",
       "startConversation": "Start a conversation around a topic or idea."
     }
   },

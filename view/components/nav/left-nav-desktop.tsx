@@ -10,11 +10,16 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import appIconImg from '../../assets/images/app-icon.png';
 import { ChannelListDesktop } from '../channels/channel-list-desktop';
+import {
+  CreateChannelForm,
+  CreateChannelFormSubmitButton,
+} from '../channels/create-channel-form';
 import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -89,15 +94,15 @@ export const LeftNavDesktop = ({ me }: Props) => {
           <DialogDescription>
             {t('channels.prompts.startConversation')}
           </DialogDescription>
-          {/* TODO: Add create channel form */}
-          {/* <CreateRoomForm
+
+          <CreateChannelForm
             submitButton={(props) => (
               <DialogFooter>
-                <RoomFormSubmitButton {...props} />
+                <CreateChannelFormSubmitButton {...props} />
               </DialogFooter>
             )}
             onSubmit={() => setShowRoomFormDialog(false)}
-          /> */}
+          />
         </DialogContent>
       </Dialog>
 
