@@ -1,5 +1,10 @@
-import { BrowserEvents, KeyCodes } from '@/constants/shared.constants';
+import {
+  BrowserEvents,
+  KeyCodes,
+  MIDDOT_WITH_SPACES,
+} from '@/constants/shared.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { truncate } from '@/lib/text.utils';
 import { useAppStore } from '@/store/app.store';
 import { Channel } from '@/types/channel.types';
 import { useEffect } from 'react';
@@ -9,6 +14,7 @@ import { MdChevronRight, MdSearch, MdTag } from 'react-icons/md';
 import { toast } from 'sonner';
 import { NavSheet } from '../nav/nav-sheet';
 import { Button } from '../ui/button';
+import { ChannelDetailsDialogDesktop } from './channel-details-dialog-desktop';
 import { ChannelDetailsDrawer } from './channel-details-drawer';
 
 interface Props {
@@ -20,6 +26,9 @@ export const ChannelTopNav = ({ channel }: Props) => {
 
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
+
+  const description = channel?.description ?? '';
+  const truncatedDescription = truncate(description, 100);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -50,20 +59,39 @@ export const ChannelTopNav = ({ channel }: Props) => {
           />
         )}
 
-        {channel && (
-          <ChannelDetailsDrawer
-            channel={channel}
-            trigger={
-              <div className="flex flex-1 items-center text-[15px] font-medium select-none">
-                <MdTag className="text-muted-foreground m-1 mr-[0.3rem] size-5" />
-                <div className="tracking-[0.015rem]">{channel.name}</div>
-                {!isDesktop && (
-                  <MdChevronRight className="text-muted-foreground mt-[0.07rem] size-5" />
-                )}
+        <div className="flex gap-2.5">
+          {channel && (
+            <ChannelDetailsDrawer
+              channel={channel}
+              trigger={
+                <div className="flex flex-1 items-center text-[15px] font-medium select-none">
+                  <MdTag className="text-muted-foreground m-1 mr-[0.3rem] size-5" />
+                  <div className="tracking-[0.015rem]">{channel.name}</div>
+                  {!isDesktop && (
+                    <MdChevronRight className="text-muted-foreground mt-[0.07rem] size-5" />
+                  )}
+                </div>
+              }
+            />
+          )}
+
+          {channel && isDesktop && (
+            <div className="text-muted-foreground/75 flex items-center gap-2.5 font-medium">
+              <div className="text-muted-foreground/30 text-xl">
+                {MIDDOT_WITH_SPACES}
               </div>
-            }
-          />
-        )}
+
+              <ChannelDetailsDialogDesktop
+                channel={channel}
+                trigger={
+                  <div className="cursor-pointer text-sm select-none">
+                    {truncatedDescription}
+                  </div>
+                }
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       <Button
