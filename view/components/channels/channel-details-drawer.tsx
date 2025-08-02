@@ -2,7 +2,8 @@ import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { Channel } from '@/types/channel.types';
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BiDoorOpen } from 'react-icons/bi';
+import { BiTrash } from 'react-icons/bi';
+import { MdTag } from 'react-icons/md';
 import { Button } from '../ui/button';
 import { Dialog, DialogTrigger } from '../ui/dialog';
 import {
@@ -14,7 +15,6 @@ import {
   DrawerTrigger,
 } from '../ui/drawer';
 import { Separator } from '../ui/separator';
-import { MdTag } from 'react-icons/md';
 
 interface Props {
   channel: Channel;
@@ -70,7 +70,7 @@ export const ChannelDetailsDrawer = ({ channel, trigger }: Props) => {
               variant="secondary"
               size="lg"
             >
-              <BiDoorOpen className="size-6.5" />
+              <BiTrash className="size-5" />
               {t('channels.actions.delete')}
             </Button>
           </DialogTrigger>
