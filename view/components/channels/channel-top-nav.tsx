@@ -14,7 +14,7 @@ import { Button } from '../ui/button';
 // }
 
 export const ChannelTopNav = () => {
-  const { isNavSheetOpen, setIsNavSheetOpen } = useAppStore();
+  const { isNavSheetOpen, setIsNavSheetOpen, isAppLoading } = useAppStore();
 
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
@@ -38,7 +38,7 @@ export const ChannelTopNav = () => {
   return (
     <header className="flex h-[55px] items-center justify-between border-b border-[--color-border] px-2 md:pl-6">
       <div className="mr-1 flex flex-1 items-center gap-2.5">
-        {!isDesktop && (
+        {!isDesktop && !isAppLoading && (
           <NavSheet
             trigger={
               <Button variant="ghost" size="icon">
