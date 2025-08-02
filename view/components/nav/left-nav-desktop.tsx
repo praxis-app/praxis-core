@@ -37,7 +37,7 @@ interface Props {
 }
 
 export const LeftNavDesktop = ({ me }: Props) => {
-  const { isLoggedIn } = useAppStore();
+  const { isLoggedIn, isAppLoading } = useAppStore();
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
 
   const { signUpPath } = useSignUpData();
@@ -120,7 +120,12 @@ export const LeftNavDesktop = ({ me }: Props) => {
             <MdSettings className="text-muted-foreground size-6" />
           </Button>
         ) : (
-          <div className="flex w-full justify-center gap-2">
+          <div
+            className={cn(
+              'flex w-full justify-center gap-2',
+              isAppLoading && 'hidden',
+            )}
+          >
             <Link to={NavigationPaths.Login}>
               <Button variant="ghost">{t('auth.actions.logIn')}</Button>
             </Link>
