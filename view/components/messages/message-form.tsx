@@ -35,7 +35,7 @@ const formSchema = zod.object({
 });
 
 interface Props {
-  channelId: string;
+  channelId?: string;
   onSend?(): void;
   isGeneralChannel?: boolean;
 }
@@ -64,6 +64,9 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
 
   const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
     mutationFn: async ({ body }: zod.infer<typeof formSchema>) => {
+      if (!channelId) {
+        throw new Error('Channel ID is required');
+      }
       validateImageInput(images);
 
       const { message } = await api.sendMessage(channelId, body, images.length);

@@ -1,20 +1,19 @@
+import { api } from '@/client/api-client';
+import { GENERAL_CHANNEL_NAME } from '@/constants/channel.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { useMeQuery } from '@/hooks/use-me-query';
+import { useSubscription } from '@/hooks/use-subscription';
+import { debounce } from '@/lib/shared.utils';
+import { useAppStore } from '@/store/app.store';
+import { Channel } from '@/types/channel.types';
+import { Message, MessagesQuery } from '@/types/message.types';
+import { PubSubMessage } from '@/types/shared.types';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useRef } from 'react';
 import { MessageForm } from '../messages/message-form';
 import { LeftNavDesktop } from '../nav/left-nav-desktop';
 import { ChannelFeed } from './channel-feed';
 import { ChannelTopNav } from './channel-top-nav';
-import { Channel } from '@/types/channel.types';
-import { Message, MessagesQuery } from '@/types/message.types';
-import { useAppStore } from '@/store/app.store';
-import { useRef } from 'react';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { GENERAL_CHANNEL_NAME } from '@/constants/channel.constants';
-import { useMeQuery } from '@/hooks/use-me-query';
-import { api } from '@/client/api-client';
-import { useSubscription } from '@/hooks/use-subscription';
-import { PubSubMessage } from '@/types/shared.types';
-import { ChannelSkeleton } from './channel-skeleton';
-import { debounce } from '@/lib/shared.utils';
 
 enum MessageType {
   MESSAGE = 'message',
@@ -34,7 +33,7 @@ interface ImageMessagePayload {
 }
 
 interface Props {
-  channel: Channel;
+  channel?: Channel;
   isGeneralChannel?: boolean;
 }
 
@@ -47,7 +46,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
 
   const resolvedChannelId = isGeneralChannel
     ? GENERAL_CHANNEL_NAME
-    : channel.id;
+    : channel?.id;
 
   const { data: meData } = useMeQuery({
     enabled: isLoggedIn,
@@ -65,7 +64,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
     enabled: !!resolvedChannelId,
   });
 
-  useSubscription(`new-message-${channel.id}-${meData?.user.id}`, {
+  useSubscription(`new-message-${channel?.id}-${meData?.user.id}`, {
     onMessage: (event) => {
       const { body }: PubSubMessage<NewMessagePayload | ImageMessagePayload> =
         JSON.parse(event.data);
@@ -138,10 +137,6 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
     }
   };
 
-  if (!messagesData) {
-    return <ChannelSkeleton />;
-  }
-
   return (
     <div className="fixed top-0 right-0 bottom-0 left-0 flex">
       {isDesktop && <LeftNavDesktop me={meData?.user} />}
@@ -152,11 +147,11 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
         <ChannelFeed
           feedBoxRef={feedBoxRef}
           onLoadMore={debounce(fetchNextPage, 500)}
-          messages={messagesData.pages.flatMap((page) => page.messages)}
+          messages={messagesData?.pages.flatMap((page) => page.messages) ?? []}
         />
 
         <MessageForm
-          channelId={channel.id}
+          channelId={channel?.id}
           isGeneralChannel={isGeneralChannel}
         />
       </div>

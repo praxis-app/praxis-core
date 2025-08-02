@@ -3,7 +3,7 @@ import { useInView } from '@/hooks/use-in-view';
 import { useScrollDirection } from '@/hooks/use-scroll-direction';
 import { useAppStore } from '@/store/app.store';
 import { Message as MessageType } from '@/types/message.types';
-import { RefObject, UIEvent, useRef, useState } from 'react';
+import { RefObject, UIEvent, useEffect, useRef, useState } from 'react';
 import { WelcomeMessage } from '../invites/welcome-message';
 import { Message } from '../messages/message';
 
@@ -14,11 +14,9 @@ interface Props {
 }
 
 export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
-  const { isLoggedIn } = useAppStore((state) => state);
+  const { isLoggedIn, isAppLoading } = useAppStore((state) => state);
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [showWelcomeMessage, setShowWelcomeMessage] = useState(
-    !isLoggedIn && !localStorage.getItem(LocalStorageKeys.HideWelcomeMessage),
-  );
 
   const scrollDirection = useScrollDirection(feedBoxRef, 800);
   const feedTopRef = useRef<HTMLDivElement>(null);
@@ -34,6 +32,16 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
     const target = e.target as HTMLDivElement;
     setScrollPosition(target.scrollTop);
   };
+
+  useEffect(() => {
+    if (
+      !isLoggedIn &&
+      !isAppLoading &&
+      !localStorage.getItem(LocalStorageKeys.HideWelcomeMessage)
+    ) {
+      setShowWelcomeMessage(true);
+    }
+  }, [isLoggedIn, isAppLoading]);
 
   return (
     <div
