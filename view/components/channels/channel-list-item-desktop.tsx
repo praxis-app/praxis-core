@@ -12,7 +12,19 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from '../ui/context-menu';
-import { Dialog, DialogTrigger } from '../ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
+import {
+  DeleteChannelForm,
+  DeleteChannelFormSubmitButton,
+} from './delete-channel-form';
 
 interface Props {
   channel: Channel;
@@ -25,7 +37,7 @@ export const ChannelListItemDesktop = ({
   isActive,
   isGeneralChannel,
 }: Props) => {
-  const [showLeaveRoomDialog, setShowLeaveRoomDialog] = useState(false);
+  const [showDeleteChannelDialog, setShowDeleteChannelDialog] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
   const { t } = useTranslation();
@@ -33,12 +45,16 @@ export const ChannelListItemDesktop = ({
   const ability = useAbility();
 
   const canManageChannels = ability.can('manage', 'Channel');
+  const canDeleteChannel = ability.can('delete', 'Channel');
   const showSettingsBtn = canManageChannels && (isHovering || isActive);
   const channelPath = `${NavigationPaths.Channels}/${channel.id}`;
   const settingsPath = `${channelPath}/edit`;
 
   return (
-    <Dialog open={showLeaveRoomDialog} onOpenChange={setShowLeaveRoomDialog}>
+    <Dialog
+      open={showDeleteChannelDialog}
+      onOpenChange={setShowDeleteChannelDialog}
+    >
       <ContextMenu modal={false}>
         <ContextMenuTrigger>
           <div
@@ -76,13 +92,36 @@ export const ChannelListItemDesktop = ({
             </ContextMenuItem>
           )}
 
-          <DialogTrigger asChild>
-            <ContextMenuItem className="text-destructive">
-              {t('channels.actions.delete')}
-            </ContextMenuItem>
-          </DialogTrigger>
+          {canDeleteChannel && (
+            <DialogTrigger asChild>
+              <ContextMenuItem className="text-destructive">
+                {t('channels.actions.delete')}
+              </ContextMenuItem>
+            </DialogTrigger>
+          )}
         </ContextMenuContent>
       </ContextMenu>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t('channels.actions.delete')}</DialogTitle>
+          <DialogDescription className="pt-3.5">
+            {t('prompts.deleteItem', {
+              itemType: t('channels.labels.channel'),
+            })}
+          </DialogDescription>
+        </DialogHeader>
+
+        <DeleteChannelForm
+          channel={channel}
+          submitButton={(props) => (
+            <DialogFooter>
+              <DeleteChannelFormSubmitButton {...props} />
+            </DialogFooter>
+          )}
+          onSubmit={() => setShowDeleteChannelDialog(false)}
+        />
+      </DialogContent>
     </Dialog>
   );
 };
