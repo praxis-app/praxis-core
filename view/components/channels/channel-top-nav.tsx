@@ -75,7 +75,7 @@ export const ChannelTopNav = ({ channel }: Props) => {
             />
           )}
 
-          {channel && isDesktop && (
+          {!!channel?.description && isDesktop && (
             <div className="text-muted-foreground/75 flex items-center gap-2.5 font-medium">
               <div className="text-muted-foreground/30 text-xl">
                 {MIDDOT_WITH_SPACES}
