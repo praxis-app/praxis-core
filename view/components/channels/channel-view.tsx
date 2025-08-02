@@ -142,7 +142,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
       {isDesktop && <LeftNavDesktop me={meData?.user} />}
 
       <div className="flex flex-1 flex-col">
-        <ChannelTopNav />
+        <ChannelTopNav channel={channel} />
 
         <ChannelFeed
           feedBoxRef={feedBoxRef}

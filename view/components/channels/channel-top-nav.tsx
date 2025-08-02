@@ -1,19 +1,21 @@
 import { BrowserEvents, KeyCodes } from '@/constants/shared.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { useAppStore } from '@/store/app.store';
+import { Channel } from '@/types/channel.types';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft } from 'react-icons/lu';
-import { MdSearch } from 'react-icons/md';
+import { MdChevronRight, MdSearch, MdTag } from 'react-icons/md';
 import { toast } from 'sonner';
 import { NavSheet } from '../nav/nav-sheet';
 import { Button } from '../ui/button';
+import { ChannelDetailsDrawer } from './channel-details-drawer';
 
-// interface Props {
-//   channel: any;
-// }
+interface Props {
+  channel?: Channel;
+}
 
-export const ChannelTopNav = () => {
+export const ChannelTopNav = ({ channel }: Props) => {
   const { isNavSheetOpen, setIsNavSheetOpen, isAppLoading } = useAppStore();
 
   const { t } = useTranslation();
@@ -48,17 +50,20 @@ export const ChannelTopNav = () => {
           />
         )}
 
-        {/* <RoomDetailsDrawer
-          room={room}
-          trigger={
-            <div className="flex flex-1 items-center text-[15px] font-medium select-none">
-              {roomName}
-              {!isDesktop && (
-                <MdChevronRight className="text-muted-foreground mt-[0.07rem] size-5" />
-              )}
-            </div>
-          }
-        /> */}
+        {channel && (
+          <ChannelDetailsDrawer
+            channel={channel}
+            trigger={
+              <div className="flex flex-1 items-center text-[15px] font-medium select-none">
+                <MdTag className="text-muted-foreground m-1 mr-[0.3rem] size-5" />
+                <div className="tracking-[0.015rem]">{channel.name}</div>
+                {!isDesktop && (
+                  <MdChevronRight className="text-muted-foreground mt-[0.07rem] size-5" />
+                )}
+              </div>
+            }
+          />
+        )}
       </div>
 
       <Button
