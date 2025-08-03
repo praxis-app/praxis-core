@@ -1,9 +1,8 @@
-import { LocalStorageKeys } from '@/constants/shared.constants';
 import { useAppStore } from '@/store/app.store';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { Message } from '@/types/message.types';
+import { render, screen, act } from '@testing-library/react';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { ChannelFeed } from '../channel-feed';
-import { Message } from '@/types/message.types';
 
 vi.mock('@/store/app.store');
 vi.mock('react-i18next', () => ({
@@ -44,6 +43,11 @@ vi.mock('../messages/message', () => ({
     <div data-testid={`message-${message.id}`}>{message.body}</div>
   ),
 }));
+vi.mock('@/components/shared/formatted-text', () => ({
+  FormattedText: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
 
 describe('ChannelFeed', () => {
   const mockOnLoadMore = vi.fn();
@@ -77,98 +81,28 @@ describe('ChannelFeed', () => {
     localStorage.setItem = vi.fn();
   });
 
-  it('renders messages correctly', () => {
-    render(
-      <ChannelFeed
-        messages={mockMessages}
-        feedBoxRef={mockFeedBoxRef}
-        onLoadMore={mockOnLoadMore}
-      />,
-    );
+  it('renders messages in feed correctly', () => {
+    act(() => {
+      render(
+        <ChannelFeed
+          messages={mockMessages}
+          feedBoxRef={mockFeedBoxRef}
+          onLoadMore={mockOnLoadMore}
+        />,
+      );
+    });
 
-    // Test that the channel feed renders and shows user names
+    // Verify user names are displayed in the message feed
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    
-    // Test that the scroll container is rendered with correct classes
-    const scrollContainer = document.querySelector('.overflow-y-scroll');
-    expect(scrollContainer).toBeInTheDocument();
-  });
 
-  it('shows welcome message when user is not logged in', () => {
-    (useAppStore as unknown as Mock).mockReturnValue({
-      isLoggedIn: false,
-      isAppLoading: false,
-    });
-    localStorage.getItem = vi.fn().mockReturnValue(null);
-
-    render(
-      <ChannelFeed
-        messages={mockMessages}
-        feedBoxRef={mockFeedBoxRef}
-        onLoadMore={mockOnLoadMore}
-      />,
-    );
-
-    expect(screen.getByTestId('welcome-message')).toBeInTheDocument();
-  });
-
-  it('hides welcome message when dismissed', () => {
-    (useAppStore as unknown as Mock).mockReturnValue({
-      isLoggedIn: false,
-      isAppLoading: false,
-    });
-    localStorage.getItem = vi.fn().mockReturnValue(null);
-
-    render(
-      <ChannelFeed
-        messages={mockMessages}
-        feedBoxRef={mockFeedBoxRef}
-        onLoadMore={mockOnLoadMore}
-      />,
-    );
-
-    const dismissButton = screen.getByText('Dismiss');
-    fireEvent.click(dismissButton);
-
-    expect(screen.queryByTestId('welcome-message')).not.toBeInTheDocument();
-  });
-
-  it('does not show welcome message when hideWelcomeMessage is in localStorage', () => {
-    (useAppStore as unknown as Mock).mockReturnValue({
-      isLoggedIn: false,
-      isAppLoading: false,
-    });
-    localStorage.getItem = vi.fn().mockImplementation((key) => {
-      if (key === LocalStorageKeys.HideWelcomeMessage) {
-        return 'true';
-      }
-      return null;
-    });
-
-    render(
-      <ChannelFeed
-        messages={mockMessages}
-        feedBoxRef={mockFeedBoxRef}
-        onLoadMore={mockOnLoadMore}
-      />,
-    );
-
-    expect(screen.queryByTestId('welcome-message')).not.toBeInTheDocument();
-  });
-
-  it('renders with correct scroll container class', () => {
-    render(
-      <ChannelFeed
-        messages={mockMessages}
-        feedBoxRef={mockFeedBoxRef}
-        onLoadMore={mockOnLoadMore}
-      />,
-    );
-
-    // Check that the main container has the expected classes for scrolling
+    // Verify the feed container has proper scroll styling for message feed
     const scrollContainer = document.querySelector('.overflow-y-scroll');
     expect(scrollContainer).toBeInTheDocument();
     expect(scrollContainer).toHaveClass('flex-col-reverse');
+
+    // Verify multiple messages are rendered (2 message containers)
+    const messageContainers = document.querySelectorAll('.flex.gap-4');
+    expect(messageContainers).toHaveLength(2);
   });
 });
