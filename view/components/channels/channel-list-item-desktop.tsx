@@ -68,7 +68,7 @@ export const ChannelListItemDesktop = ({
           >
             <Link
               to={isGeneralChannel ? NavigationPaths.Home : channelPath}
-              className="mr-1.5 flex flex-1 items-center gap-2 truncate py-0.5 pl-2.5"
+              className="mr-1.5 flex flex-1 items-center gap-2 truncate py-[0.225rem] pl-2"
             >
               <MdTag className="size-6" />
               <div className="text-[0.925rem]">{channel.name}</div>
