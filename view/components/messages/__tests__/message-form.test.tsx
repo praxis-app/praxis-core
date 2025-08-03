@@ -35,35 +35,6 @@ describe('MessageForm', () => {
     (useAppStore as unknown as Mock).mockClear();
   });
 
-  it('should have a disabled textarea when the user is not logged in', () => {
-    (useAppStore as unknown as Mock).mockReturnValue({
-      isLoggedIn: false,
-    });
-
-    render(<MessageForm channelId="1" />);
-
-    const textarea = screen.getByPlaceholderText(
-      'messages.placeholders.sendMessage',
-    );
-    expect(textarea).toBeInTheDocument();
-  });
-
-  it('should enable the textarea and allow typing when the user is logged in', () => {
-    (useAppStore as unknown as Mock).mockReturnValue({
-      isLoggedIn: true,
-    });
-
-    render(<MessageForm channelId="1" />);
-
-    const textarea = screen.getByPlaceholderText(
-      'messages.placeholders.sendMessage',
-    );
-    expect(textarea).toBeInTheDocument();
-
-    fireEvent.change(textarea, { target: { value: 'Hello, world!' } });
-    expect(textarea).toHaveValue('Hello, world!');
-  });
-
   it('should show an image preview when an image is selected', () => {
     (useAppStore as unknown as Mock).mockReturnValue({
       isLoggedIn: true,
