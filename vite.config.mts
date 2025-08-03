@@ -30,5 +30,10 @@ export default defineConfig(async () => {
       outDir: '../dist/view',
     },
     plugins: [react(), tailwindcss()],
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./test/test-setup.ts'],
+      globals: true,
+    },
   };
 });

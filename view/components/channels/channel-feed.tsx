@@ -7,8 +7,8 @@ import { Message as MessageType } from '@/types/message.types';
 import {
   RefObject,
   UIEvent,
-  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -47,9 +47,9 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   });
 
   // Debounced scroll handler to improve performance
-  const debouncedSetScrollPosition = useCallback(
-    debounce((position: number) => setScrollPosition(position), 16),
-    [],
+  const debouncedSetScrollPosition = useMemo(
+    () => debounce((position: number) => setScrollPosition(position), 16),
+    [setScrollPosition],
   );
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
