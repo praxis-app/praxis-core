@@ -48,7 +48,7 @@ export const ChannelDetailsDrawer = ({ channel, trigger }: Props) => {
     <Drawer>
       {isDesktop ? trigger : <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
 
-      <DrawerContent className="flex min-h-[calc(100vh-10.25rem)] flex-col items-start rounded-t-2xl border-0">
+      <DrawerContent className="flex min-h-[calc(100%-3.5rem)] flex-col items-start rounded-t-2xl border-0">
         <DrawerHeader className="w-full pt-5 pb-6">
           <DrawerTitle className="flex items-center justify-center gap-0.5 text-center text-[1.3rem]">
             <MdTag className="mt-0.5 size-6" />
