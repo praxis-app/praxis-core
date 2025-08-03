@@ -47,6 +47,7 @@ export const useSignUpData = () => {
     inviteToken,
     signUpPath,
     isMeLoading,
+    isLoggedIn,
     me,
   };
 };

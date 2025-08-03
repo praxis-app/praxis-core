@@ -16,7 +16,7 @@ export const WelcomeMessage = ({ onDismiss }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { signUpPath, showSignUp } = useSignUpData();
+  const { signUpPath, showSignUp, isAnon, isLoggedIn } = useSignUpData();
 
   const handleDismiss = () => {
     localStorage.setItem(LocalStorageKeys.HideWelcomeMessage, 'true');
@@ -47,13 +47,15 @@ export const WelcomeMessage = ({ onDismiss }: Props) => {
         </Button>
       )}
 
-      <Button
-        onClick={() => navigate(NavigationPaths.Login)}
-        className="uppercase"
-        variant="secondary"
-      >
-        {t('auth.actions.logIn')}
-      </Button>
+      {!isAnon && !isLoggedIn && (
+        <Button
+          onClick={() => navigate(NavigationPaths.Login)}
+          className="uppercase"
+          variant="secondary"
+        >
+          {t('auth.actions.logIn')}
+        </Button>
+      )}
     </BotMessage>
   );
 };
