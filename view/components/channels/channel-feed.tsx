@@ -1,9 +1,17 @@
 import { LocalStorageKeys } from '@/constants/shared.constants';
 import { useInView } from '@/hooks/use-in-view';
 import { useScrollDirection } from '@/hooks/use-scroll-direction';
+import { debounce, throttle } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
 import { Message as MessageType } from '@/types/message.types';
-import { RefObject, UIEvent, useEffect, useRef, useState } from 'react';
+import {
+  RefObject,
+  UIEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { WelcomeMessage } from '../invites/welcome-message';
 import { Message } from '../messages/message';
 
@@ -17,29 +25,44 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   const { isLoggedIn, isAppLoading } = useAppStore((state) => state);
 
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
-  const [isLoadingEnabled, setIsLoadingEnabled] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const scrollDirection = useScrollDirection(feedBoxRef, 800);
   const feedTopRef = useRef<HTMLDivElement>(null);
+  const onLoadMoreRef = useRef(onLoadMore);
+
+  // Create throttled function once and reuse it
+  const throttledOnLoadMore = useRef(
+    throttle(() => {
+      onLoadMoreRef.current();
+      console.log('⭐️ loading more');
+    }, 1500),
+  ).current;
 
   const { setViewed } = useInView(feedTopRef, '50px', () => {
-    if (scrollPosition < -50 && scrollDirection === 'up' && isLoadingEnabled) {
-      setIsLoadingEnabled(false);
+    if (scrollPosition < -50 && scrollDirection === 'up') {
       setViewed(false);
-      onLoadMore();
-
-      // Re-enable loading after 2 seconds
-      setTimeout(() => {
-        setIsLoadingEnabled(true);
-      }, 2000);
+      throttledOnLoadMore();
     }
   });
 
+  // Debounced scroll handler to improve performance
+  const debouncedSetScrollPosition = useCallback(
+    debounce((position: number) => setScrollPosition(position), 16),
+    [],
+  );
+
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
-    setScrollPosition(target.scrollTop);
+    debouncedSetScrollPosition(target.scrollTop);
   };
+
+  // Cleanup debounced function on unmount
+  useEffect(() => {
+    return () => {
+      debouncedSetScrollPosition.clear();
+    };
+  }, [debouncedSetScrollPosition]);
 
   useEffect(() => {
     if (

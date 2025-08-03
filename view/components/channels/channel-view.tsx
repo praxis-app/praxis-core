@@ -3,7 +3,6 @@ import { GENERAL_CHANNEL_NAME } from '@/constants/channel.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { useMeQuery } from '@/hooks/use-me-query';
 import { useSubscription } from '@/hooks/use-subscription';
-import { debounce } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
 import { Channel } from '@/types/channel.types';
 import { Message, MessagesQuery } from '@/types/message.types';
@@ -146,7 +145,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
 
         <ChannelFeed
           feedBoxRef={feedBoxRef}
-          onLoadMore={debounce(fetchNextPage, 500)}
+          onLoadMore={fetchNextPage}
           messages={messagesData?.pages.flatMap((page) => page.messages) ?? []}
         />
 
