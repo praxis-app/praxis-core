@@ -1,3 +1,4 @@
+import { useAbility } from '@/hooks/use-ability';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { Channel } from '@/types/channel.types';
 import { ReactNode, useState } from 'react';
@@ -5,7 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdTag } from 'react-icons/md';
 import { Button } from '../ui/button';
-import { Dialog, DialogTrigger } from '../ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
 import {
   Drawer,
   DrawerContent,
@@ -15,6 +24,10 @@ import {
   DrawerTrigger,
 } from '../ui/drawer';
 import { Separator } from '../ui/separator';
+import {
+  DeleteChannelForm,
+  DeleteChannelFormSubmitButton,
+} from './delete-channel-form';
 
 interface Props {
   channel: Channel;
@@ -26,6 +39,9 @@ export const ChannelDetailsDrawer = ({ channel, trigger }: Props) => {
 
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
+  const ability = useAbility();
+
+  const canDeleteChannel = ability.can('delete', 'Channel');
 
   return (
     <Drawer>
@@ -64,16 +80,39 @@ export const ChannelDetailsDrawer = ({ channel, trigger }: Props) => {
           open={showDeleteChannelDialog}
           onOpenChange={setShowDeleteChannelDialog}
         >
-          <DialogTrigger asChild>
-            <Button
-              className="text-destructive mx-auto mt-6 h-[3.2rem] w-[92%] justify-start gap-3"
-              variant="secondary"
-              size="lg"
-            >
-              <BiTrash className="size-5" />
-              {t('channels.actions.delete')}
-            </Button>
-          </DialogTrigger>
+          {canDeleteChannel && (
+            <DialogTrigger asChild>
+              <Button
+                className="text-destructive mx-auto mt-6 h-[3.2rem] w-[92%] justify-start gap-3"
+                variant="secondary"
+                size="lg"
+              >
+                <BiTrash className="size-5" />
+                {t('channels.actions.delete')}
+              </Button>
+            </DialogTrigger>
+          )}
+
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('channels.actions.delete')}</DialogTitle>
+              <DialogDescription className="pt-3.5">
+                {t('prompts.deleteItem', {
+                  itemType: t('channels.labels.channel'),
+                })}
+              </DialogDescription>
+            </DialogHeader>
+
+            <DeleteChannelForm
+              channel={channel}
+              submitButton={(props) => (
+                <DialogFooter>
+                  <DeleteChannelFormSubmitButton {...props} />
+                </DialogFooter>
+              )}
+              onSubmit={() => setShowDeleteChannelDialog(false)}
+            />
+          </DialogContent>
         </Dialog>
       </DrawerContent>
     </Drawer>
