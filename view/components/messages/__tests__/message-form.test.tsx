@@ -59,4 +59,47 @@ describe('MessageForm', () => {
     fireEvent.change(textarea, { target: { value: 'Hello, world!' } });
     expect(textarea).toHaveValue('Hello, world!');
   });
+
+  it('should show an image preview when an image is selected', () => {
+    (useAppStore as unknown as Mock).mockReturnValue({
+      isLoggedIn: true,
+    });
+
+    render(<MessageForm channelId="1" />);
+
+    const fileInput = screen.getByTestId('image-input');
+    const file = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    const imagePreview = screen.getByTestId('attached-image-preview');
+    expect(imagePreview).toBeInTheDocument();
+  });
+
+  it('should handle multiple image selection and removal', () => {
+    (useAppStore as unknown as Mock).mockReturnValue({
+      isLoggedIn: true,
+    });
+
+    render(<MessageForm channelId="1" />);
+
+    const fileInput = screen.getByTestId('image-input');
+    const file1 = new File(['image1'], 'test1.png', { type: 'image/png' });
+    const file2 = new File(['image2'], 'test2.jpg', { type: 'image/jpeg' });
+
+    fireEvent.change(fileInput, { target: { files: [file1, file2] } });
+
+    const imagePreview = screen.getByTestId('attached-image-preview');
+    expect(imagePreview).toBeInTheDocument();
+
+    // Find images specifically within the preview container
+    const images = screen.getAllByRole('img');
+    const previewImages = images.filter(img => 
+      img.getAttribute('alt') === 'test1.png' || img.getAttribute('alt') === 'test2.jpg'
+    );
+    
+    expect(previewImages).toHaveLength(2);
+    expect(previewImages[0]).toHaveAttribute('alt', 'test1.png');
+    expect(previewImages[1]).toHaveAttribute('alt', 'test2.jpg');
+  });
 });

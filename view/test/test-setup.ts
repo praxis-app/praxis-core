@@ -38,3 +38,5 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
 beforeEach(() => {
   vi.clearAllMocks();
 });
+
+URL.createObjectURL = vi.fn();

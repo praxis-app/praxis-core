@@ -76,6 +76,7 @@ export const ImageInput = ({
   return (
     <>
       <input
+        data-testid="image-input"
         accept="image/*"
         multiple={multiple}
         name={name}

@@ -68,6 +68,7 @@ export const AttachedImagePreview = ({
 
   return (
     <div
+      data-testid="attached-image-preview"
       aria-label={t('images.labels.attachedImagePreview')}
       role="img"
       className={cn('mt-2 flex flex-wrap', className)}
