@@ -61,7 +61,7 @@ export const BotMessage = ({
               <Button
                 onClick={onDismiss}
                 variant="link"
-                className="text-blurple dark:text-blurple-light mt-0.5 p-0 text-xs font-normal"
+                className="text-blurple-2 dark:text-blurple-3 mt-0.5 p-0 text-xs font-normal"
               >
                 {t('messages.actions.dismissMessage')}
               </Button>
