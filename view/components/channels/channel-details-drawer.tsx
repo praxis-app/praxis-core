@@ -4,7 +4,7 @@ import { Channel } from '@/types/channel.types';
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
-import { MdTag } from 'react-icons/md';
+import { MdChevronRight, MdSettings, MdTag } from 'react-icons/md';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -24,6 +24,7 @@ import {
   DrawerTrigger,
 } from '../ui/drawer';
 import { Separator } from '../ui/separator';
+import { ChannelSettingsSheet } from './channel-settings-sheet';
 import {
   DeleteChannelForm,
   DeleteChannelFormSubmitButton,
@@ -58,7 +59,7 @@ export const ChannelDetailsDrawer = ({ channel, trigger }: Props) => {
 
         <Separator />
 
-        {/* <ChannelSettingsSheet
+        <ChannelSettingsSheet
           trigger={
             <Button
               className="text-primary mx-auto mt-6 h-[3.2rem] w-[92%] justify-between"
@@ -67,14 +68,14 @@ export const ChannelDetailsDrawer = ({ channel, trigger }: Props) => {
             >
               <div className="flex items-center gap-3">
                 <MdSettings className="text-muted-foreground size-6.5" />
-                <div>{t('channels.labels.settings')}</div>
+                <div>{t('channels.headers.channelSettings')}</div>
               </div>
 
               <MdChevronRight className="text-muted-foreground size-5.5" />
             </Button>
           }
-          channel={channel}
-        /> */}
+          editChannel={channel}
+        />
 
         <Dialog
           open={showDeleteChannelDialog}

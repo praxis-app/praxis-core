@@ -157,7 +157,8 @@
       "description": "Description"
     },
     "headers": {
-      "channelSettings": "Channel Settings"
+      "channelSettings": "Channel Settings",
+      "channelSettingsDescription": "Edit the settings for this channel."
     },
     "labels": {
       "channel": "channel"

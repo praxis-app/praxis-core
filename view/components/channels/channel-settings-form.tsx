@@ -1,0 +1,125 @@
+import { api } from '@/client/api-client';
+import { GENERAL_CHANNEL_NAME } from '@/constants/channel.constants';
+import { Channel } from '@/types/channel.types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import * as zod from 'zod';
+import { Button } from '../ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+
+const channelSchema = zod.object({
+  name: zod.string(),
+  description: zod.string().optional(),
+});
+
+interface Props {
+  editChannel: Channel;
+  onSuccess: () => void;
+}
+
+export const ChannelSettingsForm = ({ editChannel, onSuccess }: Props) => {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+
+  const form = useForm<zod.infer<typeof channelSchema>>({
+    resolver: zodResolver(channelSchema),
+    defaultValues: {
+      name: editChannel.name,
+      description: editChannel.description ?? '',
+    },
+  });
+
+  const { mutate: updateChannel, isPending: isUpdateChannelPending } =
+    useMutation({
+      mutationFn: async (values: zod.infer<typeof channelSchema>) => {
+        await api.updateChannel(editChannel.id, {
+          name: values.name,
+          description: values.description,
+        });
+
+        const channel = { ...editChannel, ...values };
+        queryClient.setQueryData<{ channel: Channel }>(
+          ['channels', editChannel.id],
+          { channel },
+        );
+        if (channel.name === GENERAL_CHANNEL_NAME) {
+          queryClient.setQueryData<{ channel: Channel }>(
+            ['channels', GENERAL_CHANNEL_NAME],
+            { channel },
+          );
+        }
+        queryClient.setQueryData<{ channels: Channel[] }>(
+          ['channels'],
+          (oldData) => {
+            if (!oldData) {
+              return { channels: [] };
+            }
+            return {
+              channels: oldData.channels.map((c) => {
+                return c.id === channel.id ? channel : c;
+              }),
+            };
+          },
+        );
+        onSuccess();
+      },
+      onError(error: AxiosError) {
+        const errorMessage =
+          (error.response?.data as string) || t('errors.somethingWentWrong');
+
+        toast(errorMessage);
+      },
+    });
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((v) => updateChannel(v))}
+        className="flex flex-col gap-4"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('channels.form.name')}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('channels.form.description')}</FormLabel>
+              <FormControl>
+                <Textarea {...field} rows={3} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type="submit"
+          disabled={
+            isUpdateChannelPending ||
+            form.formState.isSubmitting ||
+            !form.formState.isValid
+          }
+        >
+          {t('actions.save')}
+        </Button>
+      </form>
+    </Form>
+  );
+};

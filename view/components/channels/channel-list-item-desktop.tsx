@@ -48,7 +48,7 @@ export const ChannelListItemDesktop = ({
   const canDeleteChannel = ability.can('delete', 'Channel');
   const showSettingsBtn = canManageChannels && (isHovering || isActive);
   const channelPath = `${NavigationPaths.Channels}/${channel.id}`;
-  const settingsPath = `${channelPath}/edit`;
+  const settingsPath = `${channelPath}/settings`;
 
   return (
     <Dialog
