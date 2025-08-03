@@ -4,7 +4,7 @@ import { cn } from '@/lib/shared.utils';
 import { Channel } from '@/types/channel.types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdSettings } from 'react-icons/md';
+import { MdSettings, MdTag } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ContextMenu,
@@ -59,7 +59,7 @@ export const ChannelListItemDesktop = ({
         <ContextMenuTrigger>
           <div
             className={cn(
-              'text-muted-foreground hover:bg-accent mx-2 mb-0.5 flex items-center justify-between rounded-[4px] pr-2.5',
+              'text-muted-foreground hover:bg-accent mx-2 flex items-center justify-between rounded-[4px] pr-2.5',
               isActive && 'bg-accent text-foreground',
             )}
             key={channel.id}
@@ -68,9 +68,10 @@ export const ChannelListItemDesktop = ({
           >
             <Link
               to={isGeneralChannel ? NavigationPaths.Home : channelPath}
-              className="mr-1.5 flex-1 truncate py-0.5 pl-2.5"
+              className="mr-1.5 flex flex-1 items-center gap-2 truncate py-0.5 pl-2.5"
             >
-              {channel.name}
+              <MdTag className="size-6" />
+              <div className="text-[0.925rem]">{channel.name}</div>
             </Link>
             {showSettingsBtn && (
               <Link to={settingsPath}>

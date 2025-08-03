@@ -51,7 +51,7 @@ export const ChannelListDesktop = ({ me }: Props) => {
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-scroll py-2 select-none">
+    <div className="flex flex-1 flex-col gap-0.5 overflow-y-scroll py-2 select-none">
       {channelsData?.channels.map((channel) => {
         const isHome = pathname === NavigationPaths.Home;
         const isGeneral = channel.name === GENERAL_CHANNEL_NAME;
