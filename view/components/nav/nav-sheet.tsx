@@ -13,6 +13,7 @@ import { MdExitToApp, MdPersonAdd, MdTag } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
 import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
 import {
   Sheet,
   SheetContent,
@@ -121,10 +122,10 @@ export const NavSheet = ({ trigger }: Props) => {
             </Link>
           )}
 
-          {/* TODO: Add divider between channels and login */}
-
           {(showSignUp || !isLoggedIn) && (
             <div className="flex flex-col gap-4">
+              <Separator />
+
               {showSignUp && (
                 <Button
                   variant="ghost"
