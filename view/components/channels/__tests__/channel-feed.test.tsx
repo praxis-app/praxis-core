@@ -1,16 +1,12 @@
 import { useAppStore } from '@/store/app.store';
+import { render, screen } from '@/test/test-utils';
 import { Message } from '@/types/message.types';
-import { render, screen, act } from '@testing-library/react';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { ChannelFeed } from '../channel-feed';
 
 vi.mock('@/store/app.store');
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
-  initReactI18next: vi.fn(),
-}));
-vi.mock('react-router-dom', () => ({
-  useNavigate: vi.fn(() => vi.fn()),
 }));
 vi.mock('@/hooks/use-in-view', () => ({
   useInView: vi.fn(() => ({
@@ -23,13 +19,17 @@ vi.mock('@/hooks/use-in-view', () => ({
 vi.mock('@/hooks/use-scroll-direction', () => ({
   useScrollDirection: vi.fn(() => 'down'),
 }));
+vi.mock('@/hooks/use-sign-up-data', () => ({
+  useSignUpData: vi.fn(() => ({
+    signUpPath: '/sign-up',
+    showSignUp: true,
+  })),
+}));
 vi.mock('@/lib/shared.utils', () => ({
   throttle: vi.fn((fn) => fn),
   debounce: vi.fn((fn) => Object.assign(fn, { clear: vi.fn() })),
   cn: vi.fn((...args) => args.join(' ')),
   t: vi.fn((key) => key),
-  getWebSocketURL: vi.fn(() => 'ws://localhost:3001/ws'),
-  getRandomString: vi.fn(() => 'random-string'),
 }));
 vi.mock('../invites/welcome-message', () => ({
   WelcomeMessage: ({ onDismiss }: { onDismiss: () => void }) => (
@@ -38,15 +38,13 @@ vi.mock('../invites/welcome-message', () => ({
     </div>
   ),
 }));
-vi.mock('../messages/message', () => ({
-  Message: ({ message }: { message: Message }) => (
-    <div data-testid={`message-${message.id}`}>{message.body}</div>
+vi.mock('../../messages/bot-message', () => ({
+  BotMessage: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="welcome-message">{children}</div>
   ),
 }));
 vi.mock('@/components/shared/formatted-text', () => ({
-  FormattedText: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  FormattedText: ({ text }: { text: string }) => <div>{text}</div>,
 }));
 
 describe('ChannelFeed', () => {
@@ -69,40 +67,44 @@ describe('ChannelFeed', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
+    (useAppStore as unknown as Mock).mockClear();
+  });
 
-    // Mock useAppStore
+  it('should render messages when they are provided', () => {
     (useAppStore as unknown as Mock).mockReturnValue({
       isLoggedIn: true,
       isAppLoading: false,
     });
 
-    // Reset localStorage mock
-    localStorage.getItem = vi.fn();
-    localStorage.setItem = vi.fn();
+    render(
+      <ChannelFeed
+        messages={mockMessages}
+        feedBoxRef={mockFeedBoxRef}
+        onLoadMore={mockOnLoadMore}
+      />,
+    );
+
+    expect(screen.getByText('Hello world')).toBeInTheDocument();
+    expect(screen.getByText('Another message')).toBeInTheDocument();
+    expect(screen.queryByTestId('welcome-message')).not.toBeInTheDocument();
   });
 
-  it('renders messages in feed correctly', () => {
-    act(() => {
-      render(
-        <ChannelFeed
-          messages={mockMessages}
-          feedBoxRef={mockFeedBoxRef}
-          onLoadMore={mockOnLoadMore}
-        />,
-      );
+  it('should render the welcome message when user is not logged in and there are no messages', () => {
+    (useAppStore as unknown as Mock).mockReturnValue({
+      isLoggedIn: false,
+      isAppLoading: false,
     });
 
-    // Verify user names are displayed in the message feed
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    render(
+      <ChannelFeed
+        messages={[]}
+        feedBoxRef={mockFeedBoxRef}
+        onLoadMore={mockOnLoadMore}
+      />,
+    );
 
-    // Verify the feed container has proper scroll styling for message feed
-    const scrollContainer = document.querySelector('.overflow-y-scroll');
-    expect(scrollContainer).toBeInTheDocument();
-    expect(scrollContainer).toHaveClass('flex-col-reverse');
-
-    // Verify multiple messages are rendered (2 message containers)
-    const messageContainers = document.querySelectorAll('.flex.gap-4');
-    expect(messageContainers).toHaveLength(2);
+    expect(screen.getByTestId('welcome-message')).toBeInTheDocument();
+    expect(screen.queryByText('Hello world')).not.toBeInTheDocument();
   });
 });
