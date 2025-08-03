@@ -46,8 +46,6 @@
   --color-blurple-1: var(--blurple-1);
   --color-blurple-2: var(--blurple-2);
   --color-blurple-3: var(--blurple-3);
-  --color-blurple-4: var(--blurple-4);
-  --color-blurple-5: var(--blurple-5);
 
   /* Custom fonts */
   --font-inter: 'Inter', system-ui, sans-serif;
@@ -92,8 +90,6 @@
   --blurple-1: oklch(0.5725 0.1982 274.68);
   --blurple-2: oklch(0.5549 0.1529 273.48);
   --blurple-3: oklch(0.6838 0.1187 270.06);
-  --blurple-4: oklch(0.5879 0.1407 274.72);
-  --blurple-5: oklch(0.4362 0.1123 276.93);
 
   /* Overrides for scrollbar */
   scrollbar-color: #d1d1d1 #f0f0f0;
@@ -140,8 +136,6 @@
   --blurple-1: oklch(0.5725 0.1982 274.68);
   --blurple-2: oklch(0.5549 0.1529 273.48);
   --blurple-3: oklch(0.6838 0.1187 270.06);
-  --blurple-4: oklch(0.5879 0.1407 274.72);
-  --blurple-5: oklch(0.4362 0.1123 276.93);
 }
 
 @layer base {
