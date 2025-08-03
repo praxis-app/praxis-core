@@ -287,7 +287,10 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
           ) : (
             <Button
               className="bg-input/30 hover:bg-input/40 size-11 rounded-full"
-              onClick={() => toast(t('prompts.inDev'))}
+              onClick={(e) => {
+                e.preventDefault();
+                toast(t('prompts.inDev'));
+              }}
             >
               <TbMicrophoneFilled className="text-muted-foreground size-5.5" />
             </Button>
