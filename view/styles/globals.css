@@ -96,6 +96,16 @@
   @media (prefers-color-scheme: dark) {
     scrollbar-color: #6b6b6b #2c2c2c;
   }
+
+  ::selection {
+    background-color: var(--blurple-2);
+    color: white;
+  }
+
+  ::-moz-selection {
+    background: var(--blurple-2);
+    color: white;
+  }
 }
 
 .dark {
