@@ -1,4 +1,4 @@
-import { ChannelSettingsPage } from '@/pages/channels/channel-settings';
+import { ChannelSettings } from '@/pages/channels/channel-settings';
 import { RouteObject } from 'react-router-dom';
 import { ChannelPage } from '../pages/channels/channel-page';
 
@@ -11,7 +11,7 @@ export const channelsRouter: RouteObject = {
     },
     {
       path: ':channelId/settings',
-      element: <ChannelSettingsPage />,
+      element: <ChannelSettings />,
     },
   ],
 };
