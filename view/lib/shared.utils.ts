@@ -34,6 +34,38 @@ export const debounce = <T extends (...args: any[]) => any>(
   return debounced as T & Cancelable;
 };
 
+export const throttle = <T extends (...args: any[]) => any>(
+  func: T,
+  delay: number,
+) => {
+  let timeoutId: NodeJS.Timeout | null = null;
+  let lastExecTime = 0;
+
+  return function (...args: Parameters<T>) {
+    const currentTime = Date.now();
+
+    if (currentTime - lastExecTime > delay) {
+      // Execute immediately if enough time has passed
+      func(...args);
+      lastExecTime = currentTime;
+    } else {
+      // Schedule execution for later
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(
+        () => {
+          func(...args);
+          lastExecTime = Date.now();
+          timeoutId = null;
+        },
+        delay - (currentTime - lastExecTime),
+      );
+    }
+  };
+};
+
 export const getWebSocketURL = () =>
   import.meta.env.DEV
     ? `ws://${window.location.hostname}:${import.meta.env.VITE_SERVER_PORT}/ws`
