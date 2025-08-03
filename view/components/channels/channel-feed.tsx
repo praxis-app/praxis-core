@@ -15,16 +15,24 @@ interface Props {
 
 export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   const { isLoggedIn, isAppLoading } = useAppStore((state) => state);
+
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+  const [isLoadingEnabled, setIsLoadingEnabled] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const scrollDirection = useScrollDirection(feedBoxRef, 800);
   const feedTopRef = useRef<HTMLDivElement>(null);
 
   const { setViewed } = useInView(feedTopRef, '50px', () => {
-    if (scrollPosition < -50 && scrollDirection === 'up') {
+    if (scrollPosition < -50 && scrollDirection === 'up' && isLoadingEnabled) {
+      setIsLoadingEnabled(false);
       setViewed(false);
       onLoadMore();
+
+      // Re-enable loading after 2 seconds
+      setTimeout(() => {
+        setIsLoadingEnabled(true);
+      }, 2000);
     }
   });
 
