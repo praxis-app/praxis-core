@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store/app.store';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { MessageForm } from '../message-form';
 
@@ -42,7 +42,9 @@ describe('MessageForm', () => {
 
     render(<MessageForm channelId="1" />);
 
-    const textarea = screen.getByPlaceholderText('messages.placeholders.sendMessage');
+    const textarea = screen.getByPlaceholderText(
+      'messages.placeholders.sendMessage',
+    );
     expect(textarea).toBeInTheDocument();
   });
 
@@ -53,7 +55,9 @@ describe('MessageForm', () => {
 
     render(<MessageForm channelId="1" />);
 
-    const textarea = screen.getByPlaceholderText('messages.placeholders.sendMessage');
+    const textarea = screen.getByPlaceholderText(
+      'messages.placeholders.sendMessage',
+    );
     expect(textarea).toBeInTheDocument();
 
     fireEvent.change(textarea, { target: { value: 'Hello, world!' } });
@@ -68,7 +72,7 @@ describe('MessageForm', () => {
     render(<MessageForm channelId="1" />);
 
     const fileInput = screen.getByTestId('image-input');
-    const file = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
+    const file = new File(['image1'], 'test1.png', { type: 'image/png' });
 
     fireEvent.change(fileInput, { target: { files: [file] } });
 
@@ -94,10 +98,12 @@ describe('MessageForm', () => {
 
     // Find images specifically within the preview container
     const images = screen.getAllByRole('img');
-    const previewImages = images.filter(img => 
-      img.getAttribute('alt') === 'test1.png' || img.getAttribute('alt') === 'test2.jpg'
+    const previewImages = images.filter(
+      (img) =>
+        img.getAttribute('alt') === 'test1.png' ||
+        img.getAttribute('alt') === 'test2.jpg',
     );
-    
+
     expect(previewImages).toHaveLength(2);
     expect(previewImages[0]).toHaveAttribute('alt', 'test1.png');
     expect(previewImages[1]).toHaveAttribute('alt', 'test2.jpg');
