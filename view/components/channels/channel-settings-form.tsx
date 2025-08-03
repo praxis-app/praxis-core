@@ -90,7 +90,15 @@ export const ChannelSettingsForm = ({ editChannel, onSuccess }: Props) => {
             <FormItem>
               <FormLabel>{t('channels.form.name')}</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    e.target.value = e.target.value
+                      .replace(/\s/g, '-')
+                      .toLocaleLowerCase();
+                    field.onChange(e);
+                  }}
+                />
               </FormControl>
             </FormItem>
           )}

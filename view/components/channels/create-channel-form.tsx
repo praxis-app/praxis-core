@@ -1,5 +1,6 @@
 import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
+import { cn } from '@/lib/shared.utils';
 import { Channel, CreateChannelReq } from '@/types/channel.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -20,6 +21,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
 
 interface CreateChannelFormSubmitButtonProps {
   isSubmitting: boolean;
@@ -28,6 +30,7 @@ interface CreateChannelFormSubmitButtonProps {
 interface CreateChannelFormProps {
   submitButton: (props: CreateChannelFormSubmitButtonProps) => ReactNode;
   onSubmit?(): void;
+  className?: string;
 }
 
 const createChannelFormSchema = zod.object({
@@ -51,6 +54,7 @@ export const CreateChannelFormSubmitButton = ({
 export const CreateChannelForm = ({
   submitButton,
   onSubmit,
+  className,
 }: CreateChannelFormProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -93,7 +97,7 @@ export const CreateChannelForm = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((fv) => createChannel(fv))}
-        className="space-y-4 pb-4"
+        className={cn('space-y-4 pb-4', className)}
       >
         <FormField
           control={form.control}
@@ -103,9 +107,14 @@ export const CreateChannelForm = ({
               <FormLabel>{t('channels.form.name')}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={t('channels.form.name')}
-                  autoComplete="off"
                   {...field}
+                  autoComplete="off"
+                  onChange={(e) => {
+                    e.target.value = e.target.value
+                      .replace(/\s/g, '-')
+                      .toLocaleLowerCase();
+                    field.onChange(e);
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -120,11 +129,7 @@ export const CreateChannelForm = ({
             <FormItem>
               <FormLabel>{t('channels.form.description')}</FormLabel>
               <FormControl>
-                <Input
-                  placeholder={t('channels.form.description')}
-                  autoComplete="off"
-                  {...field}
-                />
+                <Textarea {...field} rows={3} />
               </FormControl>
               <FormMessage />
             </FormItem>
