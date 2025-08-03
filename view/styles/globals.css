@@ -98,12 +98,12 @@
   }
 
   ::selection {
-    background-color: var(--blurple-2);
+    background-color: var(--blurple-1);
     color: white;
   }
 
   ::-moz-selection {
-    background: var(--blurple-2);
+    background: var(--blurple-1);
     color: white;
   }
 }
