@@ -10,11 +10,12 @@ dotenv.config();
 export default defineConfig(async () => {
   return {
     root: 'view',
+    envDir: '../',
     server: {
       port: parseInt(process.env.CLIENT_PORT || '3000'),
       proxy: {
         '/api': {
-          target: `http://localhost:${process.env.SERVER_PORT}/api`,
+          target: `http://localhost:${process.env.VITE_SERVER_PORT}/api`,
           rewrite: (path: string) => path.replace(/^\/api/, ''),
           changeOrigin: true,
         },
@@ -29,5 +30,10 @@ export default defineConfig(async () => {
       outDir: '../dist/view',
     },
     plugins: [react(), tailwindcss()],
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./test/test-setup.ts'],
+      globals: true,
+    },
   };
 });

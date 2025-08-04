@@ -1,18 +1,25 @@
 import { NavigationPaths } from '@/constants/shared.constants';
-import { useSignUpData } from '@/hooks/use-sign-up-data';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { cn } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
+import { CurrentUser } from '@/types/user.types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdAddCircle, MdExpandMore, MdSettings } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import appIconImg from '../../assets/images/app-icon.png';
+import { ChannelListDesktop } from '../channels/channel-list-desktop';
+import {
+  CreateChannelForm,
+  CreateChannelFormSubmitButton,
+} from '../channels/create-channel-form';
 import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -25,11 +32,15 @@ import {
 } from '../ui/dropdown-menu';
 import { LeftNavUserMenu } from './left-nav-user-menu';
 
-export const LeftNavDesktop = () => {
-  const { isLoggedIn } = useAppStore();
+interface Props {
+  me?: CurrentUser;
+}
+
+export const LeftNavDesktop = ({ me }: Props) => {
+  const { isLoggedIn, isAppLoading } = useAppStore();
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
 
-  const { signUpPath } = useSignUpData();
+  const { signUpPath } = useAuthData();
   const { t } = useTranslation();
 
   return (
@@ -83,28 +94,20 @@ export const LeftNavDesktop = () => {
           <DialogDescription>
             {t('channels.prompts.startConversation')}
           </DialogDescription>
-          {/* TODO: Add create channel form */}
-          {/* <CreateRoomForm
+
+          <CreateChannelForm
             submitButton={(props) => (
               <DialogFooter>
-                <RoomFormSubmitButton {...props} />
+                <CreateChannelFormSubmitButton {...props} />
               </DialogFooter>
             )}
             onSubmit={() => setShowRoomFormDialog(false)}
-          /> */}
+            className="min-w-[25rem]"
+          />
         </DialogContent>
       </Dialog>
 
-      <div className="flex flex-1 flex-col overflow-y-scroll py-2 select-none">
-        {/* TODO: Add channels list */}
-        {/* {rooms.map((room) => (
-          <RoomListItem
-            key={room.roomId}
-            activeRoomId={activeRoomId}
-            room={room}
-          />
-        ))} */}
-      </div>
+      <ChannelListDesktop me={me} />
 
       <div className="flex h-[60px] items-center justify-between border-t border-[--color-border] px-1.5">
         <LeftNavUserMenu />
@@ -118,7 +121,12 @@ export const LeftNavDesktop = () => {
             <MdSettings className="text-muted-foreground size-6" />
           </Button>
         ) : (
-          <div className="flex w-full justify-center gap-2">
+          <div
+            className={cn(
+              'flex w-full justify-center gap-2',
+              isAppLoading && 'hidden',
+            )}
+          >
             <Link to={NavigationPaths.Login}>
               <Button variant="ghost">{t('auth.actions.logIn')}</Button>
             </Link>

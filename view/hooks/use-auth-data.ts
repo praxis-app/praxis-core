@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMeQuery } from './use-me-query';
 import { NavigationPaths } from '@/constants/shared.constants';
 
-export const useSignUpData = () => {
+export const useAuthData = () => {
   const { isLoggedIn, inviteToken } = useAppStore();
 
   const { data } = useQuery({
@@ -13,7 +13,7 @@ export const useSignUpData = () => {
     enabled: !isLoggedIn,
   });
 
-  const { data: meData } = useMeQuery({
+  const { data: meData, isLoading: isMeLoading } = useMeQuery({
     enabled: isLoggedIn,
   });
 
@@ -46,6 +46,8 @@ export const useSignUpData = () => {
     showSignUp: getShowSignUp(),
     inviteToken,
     signUpPath,
+    isMeLoading,
+    isLoggedIn,
     me,
   };
 };

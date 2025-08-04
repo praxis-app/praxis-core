@@ -5,11 +5,16 @@ import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdAddCircle, MdSettings } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import {
+  CreateChannelForm,
+  CreateChannelFormSubmitButton,
+} from '../channels/create-channel-form';
 import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -66,22 +71,23 @@ export const NavDrawer = ({ trigger }: Props) => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>{t('channels.prompts.createChannel')}</DialogTitle>
+                <DialogDescription>
+                  {t('channels.prompts.startConversation')}
+                </DialogDescription>
               </DialogHeader>
-              <DialogDescription className="text-center">
-                {/* TODO: Replace with more fitting description */}
-                {t('channels.prompts.startConversation')}
-              </DialogDescription>
-              {/* <CreateRoomForm
+
+              <CreateChannelForm
                 submitButton={(props) => (
                   <DialogFooter>
-                    <RoomFormSubmitButton {...props} />
+                    <CreateChannelFormSubmitButton {...props} />
                   </DialogFooter>
                 )}
                 onSubmit={() => {
                   setShowNavDrawer(false);
                   setShowRoomFormDialog(false);
+                  setIsNavSheetOpen(false);
                 }}
-              /> */}
+              />
             </DialogContent>
           </Dialog>
 

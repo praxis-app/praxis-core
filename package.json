@@ -12,9 +12,11 @@
     "typeorm:run": "npm run typeorm migration:run -- -d ./src/database/data-source.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "types": "tsc -b",
-    "test": "vitest run",
+    "test": "vitest run --config vitest.src.config.mts",
+    "test:client": "vitest run --config vite.config.mts",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "check": "npm run types && npm run lint && npm run test && npm run test:client"
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",
@@ -41,6 +43,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "color-hash": "^2.0.2",
+    "copy-to-clipboard": "^3.3.3",
     "cors": "^2.8.5",
     "crypto-random-string": "^3.3.1",
     "dayjs": "^1.11.13",
@@ -78,6 +81,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.4",
     "@types/bcrypt": "^5.0.2",
     "@types/chroma-js": "^2.4.5",
     "@types/color-hash": "^2.0.0",
@@ -99,6 +103,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "jsdom": "^26.1.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",

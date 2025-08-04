@@ -42,6 +42,11 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* Blurple color tokens */
+  --color-blurple-1: var(--blurple-1);
+  --color-blurple-2: var(--blurple-2);
+  --color-blurple-3: var(--blurple-3);
+
   /* Custom fonts */
   --font-inter: 'Inter', system-ui, sans-serif;
 }
@@ -81,10 +86,25 @@
   --sidebar-ring: oklch(0.708 0 0);
   --positive: oklch(0.65 0.1271 148.55);
 
+  /* Blurple colors */
+  --blurple-1: oklch(0.5725 0.1982 274.68);
+  --blurple-2: oklch(0.5549 0.1529 273.48);
+  --blurple-3: oklch(0.6838 0.1187 270.06);
+
   /* Overrides for scrollbar */
   scrollbar-color: #d1d1d1 #f0f0f0;
   @media (prefers-color-scheme: dark) {
     scrollbar-color: #6b6b6b #2c2c2c;
+  }
+
+  ::selection {
+    background-color: var(--blurple-1);
+    color: white;
+  }
+
+  ::-moz-selection {
+    background: var(--blurple-1);
+    color: white;
   }
 }
 
@@ -121,6 +141,11 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
   --positive: oklch(0.65 0.1271 148.55);
+
+  /* Blurple colors */
+  --blurple-1: oklch(0.5725 0.1982 274.68);
+  --blurple-2: oklch(0.5549 0.1529 273.48);
+  --blurple-3: oklch(0.6838 0.1187 270.06);
 }
 
 @layer base {

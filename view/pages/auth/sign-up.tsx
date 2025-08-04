@@ -9,11 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Container } from '@/components/ui/container';
 import {
   LocalStorageKeys,
   NavigationPaths,
 } from '@/constants/shared.constants';
-import { useSignUpData } from '@/hooks/use-sign-up-data';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { useAppStore } from '@/store/app.store';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -28,7 +29,7 @@ export const SignUp = () => {
   const { token } = useParams();
   const navigate = useNavigate();
 
-  const { isFirstUser, isAnon, isRegistered, me } = useSignUpData();
+  const { isFirstUser, isAnon, isRegistered, me } = useAuthData();
 
   const { isLoading: isInviteLoading, error: inviteError } = useQuery({
     queryKey: ['invites', token],
@@ -49,7 +50,14 @@ export const SignUp = () => {
   }, [me, navigate, setIsRedirecting, isAnon]);
 
   if (inviteError) {
-    return <p>{t('invites.prompts.expiredOrInvalid')}</p>;
+    return (
+      <>
+        <TopNav />
+        <Container>
+          <p>{t('invites.prompts.expiredOrInvalid')}</p>
+        </Container>
+      </>
+    );
   }
 
   if (isRedirecting || isRegistered || isInviteLoading) {
@@ -60,7 +68,9 @@ export const SignUp = () => {
     return (
       <>
         <TopNav />
-        <p>{t('auth.prompts.alreadyRegistered')}</p>
+        <Container>
+          <p>{t('auth.prompts.alreadyRegistered')}</p>
+        </Container>
       </>
     );
   }
@@ -69,7 +79,9 @@ export const SignUp = () => {
     return (
       <>
         <TopNav />
-        <p>{t('invites.prompts.inviteRequired')}</p>
+        <Container>
+          <p>{t('invites.prompts.inviteRequired')}</p>
+        </Container>
       </>
     );
   }
