@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MdTag } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
@@ -77,7 +78,10 @@ export const DeleteChannelForm = ({
       }}
     >
       <div className="flex flex-col gap-3">
-        <p className="text-sm font-medium">#{channel.name}</p>
+        <div className="flex items-center gap-1.5 text-sm font-medium">
+          <MdTag className="text-muted-foreground size-5" />
+          <div>{channel.name}</div>
+        </div>
         <div className="flex justify-end">
           {submitButton({ isSubmitting: isPending })}
         </div>
