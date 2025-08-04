@@ -15,7 +15,7 @@ Object.defineProperty(window, 'localStorage', {
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -34,9 +34,10 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }));
 
+// Set up mocks for image inputs
+URL.createObjectURL = vi.fn();
+
 // Reset mocks before each test
 beforeEach(() => {
   vi.clearAllMocks();
 });
-
-URL.createObjectURL = vi.fn();
