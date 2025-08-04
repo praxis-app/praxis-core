@@ -1,5 +1,5 @@
 {
-  "name": "praxis-core",
+  "name": "praxis-chat",
   "version": "0.0.1",
   "scripts": {
     "start": "ts-node --project ./tsconfig.src.json src/main.ts",
