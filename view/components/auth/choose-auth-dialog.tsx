@@ -1,4 +1,4 @@
-import { useSignUpData } from '@/hooks/use-sign-up-data';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +36,7 @@ export const ChooseAuthDialog = ({ isOpen, setIsOpen, sendMessage }: Props) => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { signUpPath } = useSignUpData();
+  const { signUpPath } = useAuthData();
 
   const handleSendAnonMsgBtnClick = () => {
     createAnonSession();

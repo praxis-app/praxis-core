@@ -1,5 +1,5 @@
 import { NavigationPaths } from '@/constants/shared.constants';
-import { useSignUpData } from '@/hooks/use-sign-up-data';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { cn } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
 import { CurrentUser } from '@/types/user.types';
@@ -40,7 +40,7 @@ export const LeftNavDesktop = ({ me }: Props) => {
   const { isLoggedIn, isAppLoading } = useAppStore();
   const [showRoomFormDialog, setShowRoomFormDialog] = useState(false);
 
-  const { signUpPath } = useSignUpData();
+  const { signUpPath } = useAuthData();
   const { t } = useTranslation();
 
   return (

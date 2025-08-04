@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import {
   LocalStorageKeys,
   NavigationPaths,
 } from '@/constants/shared.constants';
+import { useAuthData } from '@/hooks/use-auth-data';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { BotMessage } from '../messages/bot-message';
-import { useSignUpData } from '@/hooks/use-sign-up-data';
 import { Button } from '../ui/button';
 
 interface Props {
@@ -16,7 +16,7 @@ export const WelcomeMessage = ({ onDismiss }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { signUpPath, showSignUp, isAnon, isLoggedIn } = useSignUpData();
+  const { signUpPath, showSignUp, isAnon, isLoggedIn } = useAuthData();
 
   const handleDismiss = () => {
     localStorage.setItem(LocalStorageKeys.HideWelcomeMessage, 'true');

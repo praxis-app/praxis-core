@@ -5,7 +5,7 @@ import {
   LocalStorageKeys,
   NavigationPaths,
 } from '@/constants/shared.constants';
-import { useSignUpData } from '@/hooks/use-sign-up-data';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { t } from '@/lib/shared.utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -92,7 +92,7 @@ export const SignUpForm = ({ setIsRedirecting }: Props) => {
     },
   });
 
-  const { isAnon } = useSignUpData();
+  const { isAnon } = useAuthData();
 
   const { t } = useTranslation();
   const { token } = useParams();

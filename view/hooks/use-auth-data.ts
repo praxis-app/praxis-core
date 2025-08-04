@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMeQuery } from './use-me-query';
 import { NavigationPaths } from '@/constants/shared.constants';
 
-export const useSignUpData = () => {
+export const useAuthData = () => {
   const { isLoggedIn, inviteToken } = useAppStore();
 
   const { data } = useQuery({

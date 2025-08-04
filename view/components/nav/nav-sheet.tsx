@@ -2,7 +2,7 @@ import { api } from '@/client/api-client';
 import { GENERAL_CHANNEL_NAME } from '@/constants/channel.constants';
 import { NavigationPaths } from '@/constants/shared.constants';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { useSignUpData } from '@/hooks/use-sign-up-data';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { useAppStore } from '@/store/app.store';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useQuery } from '@tanstack/react-query';
@@ -38,7 +38,7 @@ export const NavSheet = ({ trigger }: Props) => {
   const isDesktop = useIsDesktop();
 
   const { me, signUpPath, showSignUp, isMeLoading, isRegistered } =
-    useSignUpData();
+    useAuthData();
 
   const { data: channelsData } = useQuery({
     queryKey: ['channels'],

@@ -1,6 +1,6 @@
 import { api } from '@/client/api-client';
 import { NavigationPaths } from '@/constants/shared.constants';
-import { useSignUpData } from '@/hooks/use-sign-up-data';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { truncate } from '@/lib/text.utils';
 import { useAppStore } from '@/store/app.store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -37,7 +37,7 @@ export const LeftNavUserMenu = () => {
     },
   });
 
-  const { me, signUpPath } = useSignUpData();
+  const { me, signUpPath } = useAuthData();
 
   if (!me) {
     return null;
