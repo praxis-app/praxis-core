@@ -29,13 +29,13 @@ export const WelcomeMessage = ({ onDismiss }: Props) => {
       onDismiss={handleDismiss}
       currentUserOnly
     >
-      <p className="mb-2 text-xl">{t('prompts.welcomeToPraxis')}</p>
+      <p className="pb-2 text-xl">{t('prompts.welcomeToPraxis')}</p>
 
-      <p className="mb-2.5">{t('welcome.messages.projectDescription1')}</p>
+      <p className="pb-2.5">{t('welcome.messages.projectDescription1')}</p>
 
-      <p className="mb-2.5">{t('welcome.messages.projectDescription2')}</p>
+      <p className="pb-2.5">{t('welcome.messages.projectDescription2')}</p>
 
-      <p className="mb-3">{t('welcome.messages.inDev')}</p>
+      <p className="pb-3">{t('welcome.messages.inDev')}</p>
 
       {showSignUp && (
         <Button
