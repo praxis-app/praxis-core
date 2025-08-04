@@ -58,19 +58,15 @@ vi.mock('../../common/common.utils', () => ({
 }));
 
 vi.mock('../message.entity', () => ({
-  Message: class Message {
-    static name = 'Message';
-  },
+  Message: function Message() {},
 }));
 
 vi.mock('../../images/models/image.entity', () => ({
-  Image: class Image {
-    static name = 'Image';
-  },
+  Image: function Image() {},
 }));
 
 vi.mock('../../users/user.entity', () => ({
-  User: class User {},
+  User: function User() {},
 }));
 
 // Mock the service functions
