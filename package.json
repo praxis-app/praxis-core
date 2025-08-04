@@ -13,6 +13,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "types": "tsc -b",
     "test": "vitest run",
+    "test:backend": "vitest run --config vitest.src.config.ts",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "check": "npm run types && npm run lint && npm run test"
