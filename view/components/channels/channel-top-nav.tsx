@@ -28,7 +28,8 @@ export const ChannelTopNav = ({ channel }: Props) => {
   const isDesktop = useIsDesktop();
 
   const description = channel?.description ?? '';
-  const truncatedDescription = truncate(description, 100);
+  const truncatedDescription = truncate(description, 50);
+  const truncatedChannelName = truncate(channel?.name ?? '', 23);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -66,7 +67,9 @@ export const ChannelTopNav = ({ channel }: Props) => {
               trigger={
                 <div className="flex flex-1 items-center text-[15px] font-medium select-none">
                   <MdTag className="text-muted-foreground m-1 mr-[0.3rem] size-5" />
-                  <div className="tracking-[0.015rem]">{channel.name}</div>
+                  <div className="tracking-[0.015rem]">
+                    {truncatedChannelName}
+                  </div>
                   {!isDesktop && (
                     <MdChevronRight className="text-muted-foreground mt-[0.07rem] size-5" />
                   )}
