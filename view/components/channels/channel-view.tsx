@@ -168,6 +168,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
         <MessageForm
           channelId={channel?.id}
           isGeneralChannel={isGeneralChannel}
+          onSend={scrollToBottom}
         />
       </div>
     </div>
