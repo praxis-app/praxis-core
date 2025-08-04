@@ -139,6 +139,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
     enabled: !!meData && !!channel && !!resolvedChannelId,
   });
 
+  // Reset isLastPage when switching channels
   useEffect(() => {
     if (resolvedChannelId) {
       setIsLastPage(false);
