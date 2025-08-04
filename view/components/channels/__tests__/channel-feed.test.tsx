@@ -82,6 +82,7 @@ describe('ChannelFeed', () => {
         messages={mockMessages}
         feedBoxRef={mockFeedBoxRef}
         onLoadMore={mockOnLoadMore}
+        isLastPage={false}
       />,
     );
 
@@ -101,6 +102,7 @@ describe('ChannelFeed', () => {
         messages={[]}
         feedBoxRef={mockFeedBoxRef}
         onLoadMore={mockOnLoadMore}
+        isLastPage={false}
       />,
     );
 

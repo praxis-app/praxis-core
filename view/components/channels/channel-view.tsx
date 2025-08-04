@@ -8,7 +8,7 @@ import { Channel } from '@/types/channel.types';
 import { Message, MessagesQuery } from '@/types/message.types';
 import { PubSubMessage } from '@/types/shared.types';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MessageForm } from '../messages/message-form';
 import { LeftNavDesktop } from '../nav/left-nav-desktop';
 import { ChannelFeed } from './channel-feed';
@@ -38,6 +38,7 @@ interface Props {
 
 export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
   const { isLoggedIn } = useAppStore();
+  const [isLastPage, setIsLastPage] = useState(false);
 
   const queryClient = useQueryClient();
   const feedBoxRef = useRef<HTMLDivElement>(null);
@@ -53,8 +54,16 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
 
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', resolvedChannelId],
-    queryFn: ({ pageParam }) => {
-      return api.getChannelMessages(resolvedChannelId!, pageParam);
+    queryFn: async ({ pageParam }) => {
+      const result = await api.getChannelMessages(
+        resolvedChannelId!,
+        pageParam,
+      );
+      const isLastPage = result.messages.length === 0;
+      if (isLastPage) {
+        setIsLastPage(true);
+      }
+      return result;
     },
     getNextPageParam: (_lastPage, pages) => {
       return pages.flatMap((page) => page.messages).length;
@@ -130,6 +139,12 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
     enabled: !!meData && !!resolvedChannelId,
   });
 
+  useEffect(() => {
+    if (resolvedChannelId) {
+      setIsLastPage(false);
+    }
+  }, [resolvedChannelId]);
+
   const scrollToBottom = () => {
     if (feedBoxRef.current && feedBoxRef.current.scrollTop >= -200) {
       feedBoxRef.current.scrollTop = 0;
@@ -147,6 +162,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
           feedBoxRef={feedBoxRef}
           onLoadMore={fetchNextPage}
           messages={messagesData?.pages.flatMap((page) => page.messages) ?? []}
+          isLastPage={isLastPage}
         />
 
         <MessageForm

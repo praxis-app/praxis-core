@@ -22,9 +22,15 @@ interface Props {
   messages: MessageType[];
   feedBoxRef: RefObject<HTMLDivElement>;
   onLoadMore: () => void;
+  isLastPage: boolean;
 }
 
-export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
+export const ChannelFeed = ({
+  messages,
+  feedBoxRef,
+  onLoadMore,
+  isLastPage,
+}: Props) => {
   const { isLoggedIn, isAppLoading } = useAppStore((state) => state);
 
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
@@ -44,7 +50,10 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   const { setViewed } = useInView(feedTopRef, `${IN_VIEW_THRESHOLD}px`, () => {
     if (scrollPosition < -IN_VIEW_THRESHOLD && scrollDirection === 'up') {
       setViewed(false);
-      throttledOnLoadMore();
+
+      if (!isLastPage) {
+        throttledOnLoadMore();
+      }
     }
   });
 
