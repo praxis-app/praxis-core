@@ -20,7 +20,6 @@ export interface CreateMessageReq {
 const messageRepository = dataSource.getRepository(Message);
 const imageRepository = dataSource.getRepository(Image);
 
-// TODO: Return flag to indicate if there are more messages to load
 export const getMessages = async (
   channelId: string,
   offset?: number,
