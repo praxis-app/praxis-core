@@ -136,7 +136,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
 
       scrollToBottom();
     },
-    enabled: !!meData && !!resolvedChannelId,
+    enabled: !!meData && !!channel && !!resolvedChannelId,
   });
 
   useEffect(() => {
