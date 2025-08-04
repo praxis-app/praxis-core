@@ -16,8 +16,12 @@ vi.mock('../../database/data-source', () => {
   return {
     dataSource: {
       getRepository: vi.fn().mockImplementation((entity) => {
-        if (entity?.name === 'Message' || entity === 'Message') return mockMessageRepository;
-        if (entity?.name === 'Image' || entity === 'Image') return mockImageRepository;
+        if (entity?.name === 'Message' || entity === 'Message') {
+          return mockMessageRepository;
+        }
+        if (entity?.name === 'Image' || entity === 'Image') {
+          return mockImageRepository;
+        }
         return mockMessageRepository;
       }),
     },
@@ -162,7 +166,9 @@ describe('Messages Service', () => {
         createdAt: new Date('2023-01-01'),
         updatedAt: new Date('2023-01-01'),
       } as any;
-      vi.mocked(channelsService.getGeneralChannel).mockResolvedValue(mockGeneralChannel);
+      vi.mocked(channelsService.getGeneralChannel).mockResolvedValue(
+        mockGeneralChannel,
+      );
       mockMessageRepository.find.mockResolvedValue([]);
 
       await messagesService.getGeneralChannelMessages(5, 10);
@@ -173,7 +179,7 @@ describe('Messages Service', () => {
           where: { channelId: 'general-channel' },
           skip: 5,
           take: 10,
-        })
+        }),
       );
     });
   });
@@ -246,7 +252,7 @@ describe('Messages Service', () => {
             body: 'Test message',
             user: { id: 'user-1', name: 'Test User' },
           }),
-        }
+        },
       );
     });
   });
@@ -296,7 +302,7 @@ describe('Messages Service', () => {
         messageId,
         imageId,
         filename,
-        mockUser
+        mockUser,
       );
 
       expect(mockMessageRepository.findOne).toHaveBeenCalledWith({
@@ -315,7 +321,7 @@ describe('Messages Service', () => {
           isPlaceholder: false,
           messageId,
           imageId,
-        }
+        },
       );
 
       expect(result).toEqual(mockSavedImage);

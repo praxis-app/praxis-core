@@ -35,7 +35,6 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   const throttledOnLoadMore = useRef(
     throttle(() => {
       onLoadMoreRef.current();
-      console.log('⭐️ loading more');
     }, 1500),
   ).current;
 
