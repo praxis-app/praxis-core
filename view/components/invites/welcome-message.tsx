@@ -16,7 +16,7 @@ export const WelcomeMessage = ({ onDismiss }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { signUpPath, showSignUp, isAnon, isLoggedIn } = useAuthData();
+  const { signUpPath, showSignUp, isLoggedIn } = useAuthData();
 
   const handleDismiss = () => {
     localStorage.setItem(LocalStorageKeys.HideWelcomeMessage, 'true');
@@ -47,7 +47,7 @@ export const WelcomeMessage = ({ onDismiss }: Props) => {
         </Button>
       )}
 
-      {!isAnon && !isLoggedIn && (
+      {!isLoggedIn && (
         <Button
           onClick={() => navigate(NavigationPaths.Login)}
           className="uppercase"
