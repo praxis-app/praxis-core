@@ -1,4 +1,5 @@
 import { LocalStorageKeys } from '@/constants/shared.constants';
+import { useAuthData } from '@/hooks/use-auth-data';
 import { useInView } from '@/hooks/use-in-view';
 import { useScrollDirection } from '@/hooks/use-scroll-direction';
 import { debounce, throttle } from '@/lib/shared.utils';
@@ -31,7 +32,8 @@ export const ChannelFeed = ({
   onLoadMore,
   isLastPage,
 }: Props) => {
-  const { isLoggedIn, isAppLoading } = useAppStore((state) => state);
+  const { isAppLoading } = useAppStore((state) => state);
+  const { isAnon, isLoggedIn } = useAuthData();
 
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -77,13 +79,13 @@ export const ChannelFeed = ({
 
   useEffect(() => {
     if (
-      !isLoggedIn &&
       !isAppLoading &&
+      (!isLoggedIn || isAnon) &&
       !localStorage.getItem(LocalStorageKeys.HideWelcomeMessage)
     ) {
       setShowWelcomeMessage(true);
     }
-  }, [isLoggedIn, isAppLoading]);
+  }, [isLoggedIn, isAppLoading, isAnon]);
 
   return (
     <div

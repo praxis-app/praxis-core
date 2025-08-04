@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Container } from '@/components/ui/container';
 import {
   LocalStorageKeys,
   NavigationPaths,
@@ -49,7 +50,14 @@ export const SignUp = () => {
   }, [me, navigate, setIsRedirecting, isAnon]);
 
   if (inviteError) {
-    return <p>{t('invites.prompts.expiredOrInvalid')}</p>;
+    return (
+      <>
+        <TopNav />
+        <Container>
+          <p>{t('invites.prompts.expiredOrInvalid')}</p>
+        </Container>
+      </>
+    );
   }
 
   if (isRedirecting || isRegistered || isInviteLoading) {
@@ -60,7 +68,9 @@ export const SignUp = () => {
     return (
       <>
         <TopNav />
-        <p>{t('auth.prompts.alreadyRegistered')}</p>
+        <Container>
+          <p>{t('auth.prompts.alreadyRegistered')}</p>
+        </Container>
       </>
     );
   }
@@ -69,7 +79,9 @@ export const SignUp = () => {
     return (
       <>
         <TopNav />
-        <p>{t('invites.prompts.inviteRequired')}</p>
+        <Container>
+          <p>{t('invites.prompts.inviteRequired')}</p>
+        </Container>
       </>
     );
   }
