@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { BrowserEvents } from '@/constants/shared.constants';
 
-const RESET_SCROLL_DIRECTION_TIMEOUT = 700;
+const RESET_SCROLL_DIRECTION_TIMEOUT = 800;
 
 type ScrollDirection = 'up' | 'down' | null;
 

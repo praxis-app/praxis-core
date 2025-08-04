@@ -15,6 +15,9 @@ import {
 import { WelcomeMessage } from '../invites/welcome-message';
 import { Message } from '../messages/message';
 
+const LOAD_MORE_THROTTLE_MS = 1500;
+const IN_VIEW_THRESHOLD = 50;
+
 interface Props {
   messages: MessageType[];
   feedBoxRef: RefObject<HTMLDivElement>;
@@ -27,7 +30,7 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  const scrollDirection = useScrollDirection(feedBoxRef, 800);
+  const scrollDirection = useScrollDirection(feedBoxRef);
   const feedTopRef = useRef<HTMLDivElement>(null);
   const onLoadMoreRef = useRef(onLoadMore);
 
@@ -35,11 +38,11 @@ export const ChannelFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   const throttledOnLoadMore = useRef(
     throttle(() => {
       onLoadMoreRef.current();
-    }, 1500),
+    }, LOAD_MORE_THROTTLE_MS),
   ).current;
 
-  const { setViewed } = useInView(feedTopRef, '50px', () => {
-    if (scrollPosition < -50 && scrollDirection === 'up') {
+  const { setViewed } = useInView(feedTopRef, `${IN_VIEW_THRESHOLD}px`, () => {
+    if (scrollPosition < -IN_VIEW_THRESHOLD && scrollDirection === 'up') {
       setViewed(false);
       throttledOnLoadMore();
     }
