@@ -29,7 +29,11 @@ export const ChannelTopNav = ({ channel }: Props) => {
 
   const description = channel?.description ?? '';
   const truncatedDescription = truncate(description, 50);
-  const truncatedChannelName = truncate(channel?.name ?? '', 23);
+
+  const truncatedChannelName = truncate(
+    channel?.name ?? '',
+    isDesktop ? 23 : 25,
+  );
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
