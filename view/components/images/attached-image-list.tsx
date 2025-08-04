@@ -4,45 +4,41 @@ import { Image } from '@/types/image.types';
 import { AttachedImage } from './attached-image';
 
 interface Props {
-  images: Image[];
+  className?: string;
+  fillCard?: boolean;
   imageClassName?: string;
+  images: Image[];
   onImageLoad?(): void;
   topRounded?: boolean;
-  fillCard?: boolean;
-  className?: string;
 }
 
 export const AttachedImageList = ({
-  images,
+  className,
+  fillCard,
   imageClassName,
+  images,
   onImageLoad,
   topRounded,
-  fillCard,
-  className,
-}: Props) => {
-  const boxClassName = cn(fillCard ? '-mx-8' : '', className);
+}: Props) => (
+  <Box className={cn(fillCard ? '-mx-8' : '', className)}>
+    {images.map((image, index) => {
+      const isLastImage = index + 1 === images.length;
+      const isFirstImage = index === 0;
 
-  return (
-    <Box className={boxClassName}>
-      {images.map((image, index) => {
-        const isLastImage = index + 1 === images.length;
-        const isFirstImage = index === 0;
+      const imageClasses = cn(
+        !isLastImage && 'mb-3',
+        topRounded && isFirstImage && 'rounded-t-lg',
+        imageClassName,
+      );
 
-        const imageClasses = cn(
-          !isLastImage && 'mb-3',
-          topRounded && isFirstImage && 'rounded-t-lg',
-          imageClassName,
-        );
-
-        return (
-          <AttachedImage
-            key={image.id}
-            image={image}
-            onImageLoad={onImageLoad}
-            className={imageClasses}
-          />
-        );
-      })}
-    </Box>
-  );
-};
+      return (
+        <AttachedImage
+          key={image.id}
+          image={image}
+          onImageLoad={onImageLoad}
+          className={imageClasses}
+        />
+      );
+    })}
+  </Box>
+);
