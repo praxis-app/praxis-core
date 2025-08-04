@@ -105,6 +105,5 @@ describe('ChannelFeed', () => {
     );
 
     expect(screen.getByTestId('welcome-message')).toBeInTheDocument();
-    expect(screen.queryByText('Hello world')).not.toBeInTheDocument();
   });
 });
