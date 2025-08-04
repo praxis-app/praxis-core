@@ -1,6 +1,7 @@
 import { NavigationPaths } from '@/constants/shared.constants';
 import { useAbility } from '@/hooks/use-ability';
 import { cn } from '@/lib/shared.utils';
+import { truncate } from '@/lib/text.utils';
 import { Channel } from '@/types/channel.types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,6 +51,11 @@ export const ChannelListItemDesktop = ({
   const channelPath = `${NavigationPaths.Channels}/${channel.id}`;
   const settingsPath = `${channelPath}/settings`;
 
+  const truncatedChannelName = truncate(
+    channel.name,
+    isHovering || isActive ? 21 : 23,
+  );
+
   return (
     <Dialog
       open={showDeleteChannelDialog}
@@ -68,10 +74,10 @@ export const ChannelListItemDesktop = ({
           >
             <Link
               to={isGeneralChannel ? NavigationPaths.Home : channelPath}
-              className="mr-1.5 flex flex-1 items-center gap-2 truncate py-[0.225rem] pl-2"
+              className="mr-1.5 flex flex-1 items-center gap-2 py-[0.225rem] pl-2"
             >
               <MdTag className="size-6" />
-              <div className="text-[0.925rem]">{channel.name}</div>
+              <div className="text-[0.925rem]">{truncatedChannelName}</div>
             </Link>
             {showSettingsBtn && (
               <Link to={settingsPath}>
