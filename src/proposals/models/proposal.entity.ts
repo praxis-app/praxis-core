@@ -1,3 +1,5 @@
+// TODO: Add `channelId` column
+
 /**
  * Used for reference:
  * - https://github.com/forrestwilkins/anrcho/blob/master/app/models/proposal.rb

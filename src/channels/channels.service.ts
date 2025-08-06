@@ -1,3 +1,5 @@
+// TODO: Add `getChannelFeed` that includes both messages and inline proposals
+
 import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { ChannelMember } from './models/channel-member.entity';
