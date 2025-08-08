@@ -1,9 +1,11 @@
-Auto Attached
----
+## Auto Attached
+
 description: Rules for server code in /src
 globs:
-  - src/**/*.ts
-alwaysApply: false
+
+- src/\*_/_.ts
+  alwaysApply: false
+
 ---
 
 - API routes live under `/api`; expose controllers and services per resource.
