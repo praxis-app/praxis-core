@@ -42,14 +42,14 @@ export const LazyLoadImage = ({
   );
 
   const resolvedSrc = src || srcFromImageId;
-  const as = isPlaceholder || !resolvedSrc || failed ? 'div' : 'img';
+  const elementType = isPlaceholder || !resolvedSrc || failed ? 'div' : 'img';
 
   return (
     <>
       <Box
         ref={ref}
         alt={alt}
-        as={as}
+        as={elementType}
         loading={resolvedSrc ? 'lazy' : undefined}
         onLoad={handleLoad}
         onError={() => setFailed(true)}
@@ -57,7 +57,7 @@ export const LazyLoadImage = ({
         className={imageClassName}
         {...imgProps}
       />
-      {as === 'div' && !isPlaceholder && (
+      {elementType === 'div' && !isPlaceholder && (
         <div className="text-muted-foreground text-sm">
           {t('images.errors.fileMissing')}
         </div>
