@@ -5,7 +5,7 @@ match:
   - "view/**/*.{ts,tsx}"
 ---
 
-- Use react-query for data fetching; keep query keys consistent (e.g., ['feed', channelId]).
+- Use @tanstack/react-query (v5) for data fetching; keep query keys consistent (e.g., ['feed', channelId]).
 - Use zod + @hookform/resolvers for forms; keep schemas near the form.
 - All strings go through `useTranslation()` with keys under the appropriate namespace.
 - Prefer small presentational components; keep side effects in hooks.

@@ -1,4 +1,4 @@
-// TODO: Add routes for proposals and votes
+// API client for server endpoints
 
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { MESSAGES_PAGE_SIZE } from '../constants/message.constants';
