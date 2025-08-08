@@ -192,7 +192,8 @@
     "errors": {
       "unsupportedFormat": "{{format}} images are not supported.",
       "imageTooLarge": "Image is too large. Maximum file size is 8MB.",
-      "tooManyImages": "You can upload a maximum of 5 images."
+      "tooManyImages": "You can upload a maximum of 5 images.",
+      "fileMissing": "Image file is missing."
     }
   },
 

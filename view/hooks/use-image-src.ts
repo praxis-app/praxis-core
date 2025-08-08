@@ -14,15 +14,21 @@ export const useImageSrc = (
     if (!imageId) {
       return;
     }
-    const result = await api.getImage(imageId);
-    const url = URL.createObjectURL(result);
-    return url;
+    try {
+      const result = await api.getImage(imageId);
+      const url = URL.createObjectURL(result);
+      return url;
+    } catch {
+      // Gracefully handle missing image
+      return undefined;
+    }
   };
 
   const { data } = useQuery({
     queryKey: ['image', imageId],
     queryFn: getImageSrc,
     enabled: enabled && !!imageId && viewed,
+    retry: false,
   });
 
   return data;

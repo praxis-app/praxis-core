@@ -1,7 +1,8 @@
-import { ComponentProps, SyntheticEvent, useRef, useState } from 'react';
+import { Box } from '@/components/ui/box';
 import { useImageSrc } from '@/hooks/use-image-src';
 import { cn } from '@/lib/shared.utils';
-import { Box } from '@/components/ui/box';
+import { ComponentProps, SyntheticEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props extends ComponentProps<'img'> {
   alt: string;
@@ -25,6 +26,8 @@ export const LazyLoadImage = ({
   const ref = useRef<HTMLDivElement>(null);
   const srcFromImageId = useImageSrc(imageId, ref, !isPlaceholder);
   const [loaded, setLoaded] = useState(!!srcFromImageId);
+  const [failed, setFailed] = useState(false);
+  const { t } = useTranslation();
 
   const handleLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     onLoad && onLoad(event);
@@ -38,16 +41,27 @@ export const LazyLoadImage = ({
     className,
   );
 
+  const resolvedSrc = src || srcFromImageId;
+  const as = isPlaceholder || !resolvedSrc || failed ? 'div' : 'img';
+
   return (
-    <Box
-      ref={ref}
-      alt={alt}
-      as={isPlaceholder ? 'div' : 'img'}
-      loading={src ? 'lazy' : 'eager'}
-      onLoad={handleLoad}
-      src={src || srcFromImageId}
-      className={imageClassName}
-      {...imgProps}
-    />
+    <>
+      <Box
+        ref={ref}
+        alt={alt}
+        as={as}
+        loading={resolvedSrc ? 'lazy' : undefined}
+        onLoad={handleLoad}
+        onError={() => setFailed(true)}
+        src={resolvedSrc}
+        className={imageClassName}
+        {...imgProps}
+      />
+      {as === 'div' && !isPlaceholder && (
+        <div className="text-muted-foreground text-sm">
+          {t('images.errors.fileMissing')}
+        </div>
+      )}
+    </>
   );
 };
