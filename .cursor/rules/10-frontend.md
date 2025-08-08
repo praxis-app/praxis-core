@@ -14,3 +14,11 @@ match:
   - Lazy-load via `LazyLoadImage` and `useImageSrc`.
   - Missing/404 images must render a graceful placeholder text using i18n.
 - Avoid inline styles. Use utility classes and shared UI components (Button, Card, Select, etc.).
+
+- Do not invalidate feed queries after creating proposals or messages.
+  - Never call `queryClient.invalidateQueries` to update the channel feed in response to a create.
+  - Instead, perform an optimistic update using `queryClient.setQueryData` for the key `['feed', resolvedChannelId]`.
+  - Compute `resolvedChannelId = isGeneralChannel ? 'general' : channelId` to match the query keys used across the app.
+  - Insert the new item only at the start of the first page: `{ type: 'proposal' | 'message', <payload>, createdAt }`.
+  - Prevent duplicates by checking the existing first page for a matching `id` before inserting.
+  - Preserve `pageParams` and do not mutate other pages.

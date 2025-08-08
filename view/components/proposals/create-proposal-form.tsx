@@ -30,6 +30,7 @@ const PROPOSAL_BODY_MAX = 6000;
 
 interface CreateProposalFormProps {
   channelId?: string;
+  isGeneralChannel?: boolean;
   onSuccess?: () => void;
 }
 
@@ -45,6 +46,7 @@ const formSchema = zod.object({
 
 export const CreateProposalForm = ({
   channelId,
+  isGeneralChannel,
   onSuccess,
 }: CreateProposalFormProps) => {
   const { t } = useTranslation();
@@ -66,19 +68,28 @@ export const CreateProposalForm = ({
     },
     onSuccess: ({ proposal }) => {
       form.reset();
-      // Optimistically insert new proposal at top of feed
-      queryClient.setQueryData<FeedQuery>(['feed', channelId], (old) => {
+      const resolvedChannelId = isGeneralChannel ? 'general' : channelId;
+      if (!resolvedChannelId) return;
+
+      // Optimistically insert new proposal at top of feed (no refetch)
+      queryClient.setQueryData<FeedQuery>(['feed', resolvedChannelId], (old) => {
         const newItem: FeedItem = {
           type: 'proposal',
           proposal,
           createdAt: proposal.createdAt ?? new Date().toISOString(),
         };
         if (!old) return { pages: [{ feed: [newItem] }], pageParams: [0] };
-        const pages = old.pages.map((page, idx) =>
-          idx === 0 ? { feed: [newItem, ...page.feed] } : page,
-        );
+        const pages = old.pages.map((page, idx) => {
+          if (idx !== 0) return page;
+          const exists = page.feed.some(
+            (it) => it.type === 'proposal' && it.proposal.id === proposal.id,
+          );
+          if (exists) return page;
+          return { feed: [newItem, ...page.feed] };
+        });
         return { pages, pageParams: old.pageParams };
       });
+
       onSuccess?.();
     },
     onError: () => {

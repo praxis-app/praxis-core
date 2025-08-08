@@ -22,6 +22,7 @@ interface Props {
   setShowMenu: (show: boolean) => void;
   trigger: ReactNode;
   channelId?: string;
+  isGeneralChannel?: boolean;
 }
 
 export const MessageFormMenu = ({
@@ -29,6 +30,7 @@ export const MessageFormMenu = ({
   showMenu,
   setShowMenu,
   channelId,
+  isGeneralChannel,
 }: Props) => {
   const [showProposalForm, setShowProposalForm] = useState(false);
 
@@ -66,6 +68,7 @@ export const MessageFormMenu = ({
 
         <CreateProposalForm
           channelId={channelId}
+          isGeneralChannel={isGeneralChannel}
           onSuccess={() => setShowProposalForm(false)}
         />
       </DialogContent>
