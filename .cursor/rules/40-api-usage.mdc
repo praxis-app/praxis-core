@@ -1,8 +1,9 @@
+Auto Attached
 ---
-name: API Client Usage
 description: Rules for api-client.ts usage patterns
-match:
-  - "view/**/*.{ts,tsx}"
+globs:
+  - view/**/*.{ts,tsx}
+alwaysApply: false
 ---
 
 - Use the `api` client for all network requests; avoid inlining `axios`.

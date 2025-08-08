@@ -1,8 +1,9 @@
+Auto Attached
 ---
-name: Internationalization
 description: i18n rules for any user-facing strings
-match:
-  - "view/**/*.{ts,tsx}"
+globs:
+  - view/**/*.{ts,tsx}
+alwaysApply: false
 ---
 
 - Never hardcode user-facing strings. Use `useTranslation()` and keys from `view/locales/en.json`.

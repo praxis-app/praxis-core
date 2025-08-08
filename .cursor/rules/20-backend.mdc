@@ -1,8 +1,9 @@
+Auto Attached
 ---
-name: Backend (Express + TypeORM)
 description: Rules for server code in /src
-match:
-  - "src/**/*.ts"
+globs:
+  - src/**/*.ts
+alwaysApply: false
 ---
 
 - API routes live under `/api`; expose controllers and services per resource.

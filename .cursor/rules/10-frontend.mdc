@@ -1,8 +1,9 @@
+Auto Attached
 ---
-name: Frontend (Vite + React)
 description: Rules for client code in /view
-match:
-  - "view/**/*.{ts,tsx}"
+globs:
+  - view/**/*.{ts,tsx}
+alwaysApply: false
 ---
 
 - Use @tanstack/react-query (v5) for data fetching; keep query keys consistent (e.g., ['feed', channelId]).

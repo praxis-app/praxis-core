@@ -1,8 +1,8 @@
+Always
 ---
-name: Repository Conventions
 description: Core guidelines that apply to all code in this repo
-match:
-  - "**/*"
+globs:
+alwaysApply: true
 ---
 
 - Prefer TypeScript with explicit function signatures for exported APIs; avoid `any`.
