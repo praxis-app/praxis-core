@@ -76,14 +76,13 @@ export const getChannelProposals = async (
 
   // Fetch the current user's votes for these proposals in one query
   const proposalIds = proposals.map((p) => p.id);
-  const myVotes = currentUserId && proposalIds.length
-    ? await voteRepository.find({
-        where: { proposalId: In(proposalIds), userId: currentUserId },
-      })
-    : [];
-  const proposalIdToMyVote = new Map(
-    myVotes.map((v) => [v.proposalId, v]),
-  );
+  const myVotes =
+    currentUserId && proposalIds.length
+      ? await voteRepository.find({
+          where: { proposalId: In(proposalIds), userId: currentUserId },
+        })
+      : [];
+  const proposalIdToMyVote = new Map(myVotes.map((v) => [v.proposalId, v]));
 
   return proposals.map((proposal) => ({
     id: proposal.id,

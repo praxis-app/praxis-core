@@ -72,23 +72,26 @@ export const CreateProposalForm = ({
       if (!resolvedChannelId) return;
 
       // Optimistically insert new proposal at top of feed (no refetch)
-      queryClient.setQueryData<FeedQuery>(['feed', resolvedChannelId], (old) => {
-        const newItem: FeedItem = {
-          type: 'proposal',
-          proposal,
-          createdAt: proposal.createdAt ?? new Date().toISOString(),
-        };
-        if (!old) return { pages: [{ feed: [newItem] }], pageParams: [0] };
-        const pages = old.pages.map((page, idx) => {
-          if (idx !== 0) return page;
-          const exists = page.feed.some(
-            (it) => it.type === 'proposal' && it.proposal.id === proposal.id,
-          );
-          if (exists) return page;
-          return { feed: [newItem, ...page.feed] };
-        });
-        return { pages, pageParams: old.pageParams };
-      });
+      queryClient.setQueryData<FeedQuery>(
+        ['feed', resolvedChannelId],
+        (old) => {
+          const newItem: FeedItem = {
+            type: 'proposal',
+            proposal,
+            createdAt: proposal.createdAt ?? new Date().toISOString(),
+          };
+          if (!old) return { pages: [{ feed: [newItem] }], pageParams: [0] };
+          const pages = old.pages.map((page, idx) => {
+            if (idx !== 0) return page;
+            const exists = page.feed.some(
+              (it) => it.type === 'proposal' && it.proposal.id === proposal.id,
+            );
+            if (exists) return page;
+            return { feed: [newItem, ...page.feed] };
+          });
+          return { pages, pageParams: old.pageParams };
+        },
+      );
 
       onSuccess?.();
     },
