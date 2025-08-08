@@ -56,10 +56,16 @@ export const getChannelFeed = async (
   channelId: string,
   offset?: number,
   limit?: number,
+  currentUserId?: string,
 ) => {
   const [messages, proposals] = await Promise.all([
     messagesService.getMessages(channelId, offset, limit),
-    proposalsService.getChannelProposals(channelId, offset, limit),
+    proposalsService.getChannelProposals(
+      channelId,
+      offset,
+      limit,
+      currentUserId,
+    ),
   ]);
 
   const shapedMessages = messages.map((message) => ({
@@ -84,9 +90,10 @@ export const getChannelFeed = async (
 export const getGeneralChannelFeed = async (
   offset?: number,
   limit?: number,
+  currentUserId?: string,
 ) => {
   const channel = await getGeneralChannel();
-  return getChannelFeed(channel.id, offset, limit);
+  return getChannelFeed(channel.id, offset, limit, currentUserId);
 };
 
 export const isChannelMember = async (channelId: string, userId: string) => {

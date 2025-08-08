@@ -2,6 +2,7 @@
 
 import express from 'express';
 import { authenticate } from '../auth/middleware/authenticate.middleware';
+import { authenticateOptional } from '../auth/middleware/authenticate-optional.middleware';
 import { isRegistered } from '../auth/middleware/is-registered.middleware';
 import { messagesRouter } from '../messages/messages.router';
 import { proposalsRouter } from '../proposals/proposals.router';
@@ -26,7 +27,7 @@ export const channelsRouter = express.Router();
 channelsRouter
   .get('/general', getGeneralChannel)
   .get('/general/messages', getGeneralChannelMessages)
-  .get('/general/feed', getGeneralChannelFeed);
+  .get('/general/feed', authenticateOptional, getGeneralChannelFeed);
 
 // Protected routes
 channelsRouter

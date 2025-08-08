@@ -36,7 +36,12 @@ export const getChannelFeed = async (req: Request, res: Response) => {
   const offset = req.query.offset ? Number(req.query.offset) : undefined;
   const limit = req.query.limit ? Number(req.query.limit) : undefined;
 
-  const feed = await channelsService.getChannelFeed(channelId, offset, limit);
+  const feed = await channelsService.getChannelFeed(
+    channelId,
+    offset,
+    limit,
+    res.locals.user?.id,
+  );
   res.json({ feed });
 };
 
@@ -44,7 +49,11 @@ export const getGeneralChannelFeed = async (req: Request, res: Response) => {
   const offset = req.query.offset ? Number(req.query.offset) : undefined;
   const limit = req.query.limit ? Number(req.query.limit) : undefined;
 
-  const feed = await channelsService.getGeneralChannelFeed(offset, limit);
+  const feed = await channelsService.getGeneralChannelFeed(
+    offset,
+    limit,
+    res.locals.user?.id,
+  );
   res.json({ feed });
 };
 

@@ -20,7 +20,7 @@ export const InlineProposal = ({
 }: InlineProposalProps) => {
   const { t } = useTranslation();
 
-  const { body, user, createdAt, id } = proposal;
+  const { body, user, createdAt, id, myVoteId, myVoteType } = proposal;
   const name = user?.name ?? '';
   const userId = user?.id ?? '';
   const formattedDate = timeAgo(createdAt ?? '');
@@ -48,7 +48,12 @@ export const InlineProposal = ({
           <FormattedText text={body} className="pt-1 pb-2" />
 
           <CardAction className="flex flex-wrap gap-2">
-            <ProposalVoteButtons proposalId={id} channelId={channelId} />
+            <ProposalVoteButtons
+              proposalId={id}
+              channelId={channelId}
+              myVoteId={myVoteId}
+              myVoteType={myVoteType}
+            />
           </CardAction>
 
           <Separator className="my-1" />

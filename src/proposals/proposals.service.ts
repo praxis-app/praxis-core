@@ -1,4 +1,4 @@
-import { FindOptionsWhere } from 'typeorm';
+import { FindOptionsWhere, In } from 'typeorm';
 import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { deleteImageFile } from '../images/images.utils';
@@ -23,6 +23,7 @@ interface CreateProposalReq {
 }
 
 const proposalRepository = dataSource.getRepository(Proposal);
+const voteRepository = dataSource.getRepository(Vote);
 const imageRepository = dataSource.getRepository(Image);
 const userRepository = dataSource.getRepository(User);
 
@@ -44,6 +45,7 @@ export const getChannelProposals = async (
   channelId: string,
   offset?: number,
   limit?: number,
+  currentUserId?: string,
 ) => {
   const proposals = await proposalRepository.find({
     where: { channelId },
@@ -72,6 +74,17 @@ export const getChannelProposals = async (
     take: limit,
   });
 
+  // Fetch the current user's votes for these proposals in one query
+  const proposalIds = proposals.map((p) => p.id);
+  const myVotes = currentUserId && proposalIds.length
+    ? await voteRepository.find({
+        where: { proposalId: In(proposalIds), userId: currentUserId },
+      })
+    : [];
+  const proposalIdToMyVote = new Map(
+    myVotes.map((v) => [v.proposalId, v]),
+  );
+
   return proposals.map((proposal) => ({
     id: proposal.id,
     body: proposal.body,
@@ -85,6 +98,8 @@ export const getChannelProposals = async (
     })),
     action: proposal.action?.actionType,
     createdAt: proposal.createdAt,
+    myVoteId: proposalIdToMyVote.get(proposal.id)?.id,
+    myVoteType: proposalIdToMyVote.get(proposal.id)?.voteType,
   }));
 };
 

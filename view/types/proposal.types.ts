@@ -23,6 +23,8 @@ export interface Proposal {
   channelId: string;
   user?: { id: string; name: string };
   createdAt?: string;
+  myVoteId?: string;
+  myVoteType?: VoteType;
 }
 
 export interface Vote {
