@@ -11,7 +11,9 @@ import {
   getChannel,
   getChannels,
   getGeneralChannel,
+  getGeneralChannelFeed,
   getGeneralChannelMessages,
+  getChannelFeed,
   updateChannel,
 } from './channels.controller';
 import { isChannelMember } from './middleware/is-channel-member.middleware';
@@ -22,7 +24,8 @@ export const channelsRouter = express.Router();
 // Public routes
 channelsRouter
   .get('/general', getGeneralChannel)
-  .get('/general/messages', getGeneralChannelMessages);
+  .get('/general/messages', getGeneralChannelMessages)
+  .get('/general/feed', getGeneralChannelFeed);
 
 // Protected routes
 channelsRouter
@@ -32,4 +35,5 @@ channelsRouter
   .post('/', can('create', 'Channel'), validateChannel, createChannel)
   .put('/:channelId', can('update', 'Channel'), validateChannel, updateChannel)
   .delete('/:channelId', can('delete', 'Channel'), deleteChannel)
+  .get('/:channelId/feed', isChannelMember, getChannelFeed)
   .use('/:channelId/messages', isChannelMember, messagesRouter);

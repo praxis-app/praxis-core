@@ -11,7 +11,7 @@ import {
 } from '../types/channel.types';
 import { Image } from '../types/image.types';
 import { CreateInviteReq, Invite } from '../types/invite.types';
-import { Message } from '../types/message.types';
+import { FeedItem, Message } from '../types/message.types';
 import {
   CreateRoleReq,
   Role,
@@ -103,6 +103,13 @@ class ApiClient {
     return this.executeRequest<{ channel: Channel }>('get', path);
   };
 
+  getGeneralChannelFeed = async (offset: number, limit = MESSAGES_PAGE_SIZE) => {
+    const path = '/channels/general/feed';
+    return this.executeRequest<{ feed: FeedItem[] }>('get', path, {
+      params: { offset, limit },
+    });
+  };
+
   getChannelMessages = async (
     channelId: string,
     offset: number,
@@ -110,6 +117,17 @@ class ApiClient {
   ) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ messages: Message[] }>('get', path, {
+      params: { offset, limit },
+    });
+  };
+
+  getChannelFeed = async (
+    channelId: string,
+    offset: number,
+    limit = MESSAGES_PAGE_SIZE,
+  ) => {
+    const path = `/channels/${channelId}/feed`;
+    return this.executeRequest<{ feed: FeedItem[] }>('get', path, {
       params: { offset, limit },
     });
   };

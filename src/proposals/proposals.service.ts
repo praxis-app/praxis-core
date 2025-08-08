@@ -38,6 +38,54 @@ export const getProposals = (
   return proposalRepository.find({ where, relations });
 };
 
+export const getChannelProposals = async (
+  channelId: string,
+  offset?: number,
+  limit?: number,
+) => {
+  const proposals = await proposalRepository.find({
+    where: { channelId },
+    relations: ['user', 'images', 'action'],
+    select: {
+      id: true,
+      body: true,
+      stage: true,
+      channelId: true,
+      user: {
+        id: true,
+        name: true,
+      },
+      images: {
+        id: true,
+        filename: true,
+        createdAt: true,
+      },
+      action: {
+        actionType: true,
+      },
+      createdAt: true,
+    },
+    order: { createdAt: 'DESC' },
+    skip: offset,
+    take: limit,
+  });
+
+  return proposals.map((proposal) => ({
+    id: proposal.id,
+    body: proposal.body,
+    stage: proposal.stage,
+    channelId: proposal.channelId,
+    user: proposal.user,
+    images: proposal.images.map((image) => ({
+      id: image.id,
+      isPlaceholder: !image.filename,
+      createdAt: image.createdAt,
+    })),
+    action: proposal.action?.actionType,
+    createdAt: proposal.createdAt,
+  }));
+};
+
 // TODO: Account for instances with multiple servers / guilds
 export const getProposalMembers = async () => {
   return userRepository.find({
