@@ -1,25 +1,18 @@
-Auto Attached
----
+## Auto Attached
+
 description: Rules for client code in /view
 globs:
-  - view/**/*.{ts,tsx}
-alwaysApply: false
+
+- view/\*_/_.{ts,tsx}
+  alwaysApply: false
+
 ---
 
 - Use @tanstack/react-query (v5) for data fetching; keep query keys consistent (e.g., ['feed', channelId]).
 - Use zod + @hookform/resolvers for forms; keep schemas near the form.
 - All strings go through `useTranslation()` with keys under the appropriate namespace.
-- Prefer small presentational components; keep side effects in hooks.
-- When rendering lists, use stable keys of the form `message-<id>` and `proposal-<id>`.
-- For images:
-  - Lazy-load via `LazyLoadImage` and `useImageSrc`.
-  - Missing/404 images must render a graceful placeholder text using i18n.
-- Avoid inline styles. Use utility classes and shared UI components (Button, Card, Select, etc.).
 
-- Do not invalidate feed queries after creating proposals or messages.
-  - Never call `queryClient.invalidateQueries` to update the channel feed in response to a create.
-  - Instead, perform an optimistic update using `queryClient.setQueryData` for the key `['feed', resolvedChannelId]`.
-  - Compute `resolvedChannelId = isGeneralChannel ? 'general' : channelId` to match the query keys used across the app.
-  - Insert the new item only at the start of the first page: `{ type: 'proposal' | 'message', <payload>, createdAt }`.
-  - Prevent duplicates by checking the existing first page for a matching `id` before inserting.
+- Do not invalidate feed queries after creating messages, proposals, or votes.
+  - Avoid calling `queryClient.invalidateQueries` to update the channel feed in response to a create.
+  - Instead, perform an optimistic update using `queryClient.setQueryData` or similar.
   - Preserve `pageParams` and do not mutate other pages.
