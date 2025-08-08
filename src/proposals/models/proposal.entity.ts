@@ -16,6 +16,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Channel } from '../../channels/models/channel.entity';
 import { Image } from '../../images/models/image.entity';
 import { User } from '../../users/user.entity';
 import { Vote } from '../../votes/vote.entity';
@@ -62,6 +63,14 @@ export class Proposal {
 
   @Column()
   userId: string;
+
+  @ManyToOne(() => Channel, (channel) => channel.proposals, {
+    onDelete: 'CASCADE',
+  })
+  channel: Channel;
+
+  @Column()
+  channelId: string;
 
   @CreateDateColumn()
   createdAt: Date;

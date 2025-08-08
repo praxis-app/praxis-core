@@ -18,6 +18,12 @@ import {
   UpdateRolePermissionsReq,
 } from '../types/role.types';
 import { CurrentUser, User } from '../types/user.types';
+import {
+  CreateProposalReq,
+  CreateVoteReq,
+  Proposal,
+  Vote,
+} from '@/types/proposal.types';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;
@@ -142,6 +148,29 @@ class ApiClient {
     const path = `/channels/${channelId}/messages/${messageId}/images/${imageId}/upload`;
     return this.executeRequest<{ image: Image }>('post', path, {
       data: formData,
+    });
+  };
+
+  // -------------------------------------------------------------------------
+  // Proposals & Votes
+  // -------------------------------------------------------------------------
+
+  getProposals = async (channelId: string) => {
+    const path = `/channels/${channelId}/proposals`;
+    return this.executeRequest<{ proposals: Proposal[] }>('get', path);
+  };
+
+  createProposal = async (channelId: string, data: CreateProposalReq) => {
+    const path = `/channels/${channelId}/proposals`;
+    return this.executeRequest<{ proposal: Proposal }>('post', path, {
+      data,
+    });
+  };
+
+  createVote = async (proposalId: string, data: CreateVoteReq) => {
+    const path = `/proposals/${proposalId}/votes`;
+    return this.executeRequest<{ vote: Vote }>('post', path, {
+      data,
     });
   };
 
