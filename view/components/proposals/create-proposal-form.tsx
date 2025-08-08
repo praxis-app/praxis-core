@@ -84,16 +84,16 @@ export const CreateProposalForm = ({
           name="action"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('actions.create')}</FormLabel>
+              <FormLabel>{t('proposals.labels.actionType')}</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select action" />
+                    <SelectValue placeholder={t('proposals.placeholders.action')} />
                   </SelectTrigger>
                   <SelectContent>
                     {PROPOSAL_ACTION_TYPE.map((action) => (
                       <SelectItem key={action} value={action}>
-                        {action}
+                        {t(`proposals.actionTypes.${action}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
