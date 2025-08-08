@@ -3,11 +3,19 @@ import { RefObject } from 'react';
 import { api } from '../client/api-client';
 import { useInView } from './use-in-view';
 
-export const useImageSrc = (
-  imageId: string | undefined,
-  ref: RefObject<HTMLElement>,
+interface UseImageSrcProps {
+  enabled?: boolean;
+  imageId: string | undefined;
+  onError?: () => void;
+  ref: RefObject<HTMLElement>;
+}
+
+export const useImageSrc = ({
   enabled = true,
-) => {
+  imageId,
+  onError,
+  ref,
+}: UseImageSrcProps) => {
   const { viewed } = useInView(ref, '100px');
 
   const getImageSrc = async () => {
@@ -19,6 +27,8 @@ export const useImageSrc = (
       const url = URL.createObjectURL(result);
       return url;
     } catch {
+      onError?.();
+
       // Gracefully handle missing image
       return undefined;
     }

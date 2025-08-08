@@ -11,6 +11,7 @@ interface Props extends ComponentProps<'img'> {
   imageId?: string;
   src?: string;
   className?: string;
+  onError?: () => void;
 }
 
 export const LazyLoadImage = ({
@@ -21,10 +22,16 @@ export const LazyLoadImage = ({
   onLoad,
   src,
   className,
+  onError,
   ...imgProps
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const srcFromImageId = useImageSrc(imageId, ref, !isPlaceholder);
+  const srcFromImageId = useImageSrc({
+    enabled: !isPlaceholder,
+    imageId,
+    onError,
+    ref,
+  });
   const [loaded, setLoaded] = useState(!!srcFromImageId);
   const [failed, setFailed] = useState(false);
   const { t } = useTranslation();
@@ -52,7 +59,10 @@ export const LazyLoadImage = ({
         as={elementType}
         loading={resolvedSrc ? 'lazy' : undefined}
         onLoad={handleLoad}
-        onError={() => setFailed(true)}
+        onError={() => {
+          setFailed(true);
+          onError?.();
+        }}
         src={resolvedSrc}
         className={imageClassName}
         {...imgProps}
