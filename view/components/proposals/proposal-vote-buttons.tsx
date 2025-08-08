@@ -1,6 +1,7 @@
 import { api } from '@/client/api-client';
 import { VOTE_TYPE } from '@/constants/proposal.constants';
 import { cn } from '@/lib/shared.utils';
+import { VoteType } from '@/types/proposal.types';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +9,10 @@ import { toast } from 'sonner';
 import { Button } from '../ui/button';
 
 interface Props {
-  proposalId: string;
   channelId: string;
   myVoteId?: string;
-  myVoteType?: (typeof VOTE_TYPE)[number];
+  myVoteType?: VoteType;
+  proposalId: string;
 }
 
 export const ProposalVoteButtons = ({
@@ -23,9 +24,9 @@ export const ProposalVoteButtons = ({
   const { t } = useTranslation();
 
   const [myVoteId, setMyVoteId] = useState<string | undefined>(initialMyVoteId);
-  const [myVoteType, setMyVoteType] = useState<
-    (typeof VOTE_TYPE)[number] | undefined
-  >(initialMyVoteType);
+  const [myVoteType, setMyVoteType] = useState<VoteType | undefined>(
+    initialMyVoteType,
+  );
 
   useEffect(() => {
     setMyVoteId(initialMyVoteId);
@@ -33,7 +34,7 @@ export const ProposalVoteButtons = ({
   }, [initialMyVoteId, initialMyVoteType]);
 
   const { mutate: castVote, isPending } = useMutation({
-    mutationFn: async (voteType: (typeof VOTE_TYPE)[number]) => {
+    mutationFn: async (voteType: VoteType) => {
       if (!myVoteId) {
         const { vote } = await api.createVote(channelId, proposalId, {
           voteType,
