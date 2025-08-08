@@ -22,6 +22,7 @@ import {
   CreateProposalReq,
   CreateVoteReq,
   Proposal,
+  UpdateVoteReq,
   Vote,
 } from '@/types/proposal.types';
 
@@ -155,11 +156,6 @@ class ApiClient {
   // Proposals & Votes
   // -------------------------------------------------------------------------
 
-  getProposals = async (channelId: string) => {
-    const path = `/channels/${channelId}/proposals`;
-    return this.executeRequest<{ proposals: Proposal[] }>('get', path);
-  };
-
   createProposal = async (channelId: string, data: CreateProposalReq) => {
     const path = `/channels/${channelId}/proposals`;
     return this.executeRequest<{ proposal: Proposal }>('post', path, {
@@ -172,6 +168,22 @@ class ApiClient {
     return this.executeRequest<{ vote: Vote }>('post', path, {
       data,
     });
+  };
+
+  updateVote = async (
+    proposalId: string,
+    voteId: string,
+    data: UpdateVoteReq,
+  ) => {
+    const path = `/proposals/${proposalId}/votes/${voteId}`;
+    return this.executeRequest<{ vote: Vote }>('put', path, {
+      data,
+    });
+  };
+
+  deleteVote = async (proposalId: string, voteId: string) => {
+    const path = `/proposals/${proposalId}/votes/${voteId}`;
+    return this.executeRequest<void>('delete', path);
   };
 
   // -------------------------------------------------------------------------

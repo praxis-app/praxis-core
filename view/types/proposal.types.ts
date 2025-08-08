@@ -39,3 +39,7 @@ export interface CreateProposalReq {
 export interface CreateVoteReq {
   vote: Vote;
 }
+
+export interface UpdateVoteReq {
+  vote: Vote;
+}
