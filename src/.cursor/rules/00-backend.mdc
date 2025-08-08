@@ -13,5 +13,4 @@ globs:
 - Return typed JSON shapes; avoid throwing raw errors to clients.
 - When serving files (e.g., images), check existence and return 404 if missing.
 - Use services for business logic; keep controllers thin.
-- Keep migrations in sync with entities; do not mutate entities without a migration.
 - Never log secrets or tokens.
