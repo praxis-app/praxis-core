@@ -1,8 +1,8 @@
 // TODO: Add channel specific permissions
 
 import express from 'express';
-import { authenticate } from '../auth/middleware/authenticate.middleware';
 import { authenticateOptional } from '../auth/middleware/authenticate-optional.middleware';
+import { authenticate } from '../auth/middleware/authenticate.middleware';
 import { isRegistered } from '../auth/middleware/is-registered.middleware';
 import { messagesRouter } from '../messages/messages.router';
 import { proposalsRouter } from '../proposals/proposals.router';
@@ -15,7 +15,6 @@ import {
   getChannels,
   getGeneralChannel,
   getGeneralChannelFeed,
-  getGeneralChannelMessages,
   updateChannel,
 } from './channels.controller';
 import { isChannelMember } from './middleware/is-channel-member.middleware';
@@ -26,7 +25,6 @@ export const channelsRouter = express.Router();
 // Public routes
 channelsRouter
   .get('/general', getGeneralChannel)
-  .get('/general/messages', getGeneralChannelMessages)
   .get('/general/feed', authenticateOptional, getGeneralChannelFeed);
 
 // Protected routes
