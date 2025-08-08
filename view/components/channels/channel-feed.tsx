@@ -1,3 +1,5 @@
+// TODO: Ensure both messages and proposals are displayed in the feed
+
 import { LocalStorageKeys } from '@/constants/shared.constants';
 import { useAuthData } from '@/hooks/use-auth-data';
 import { useInView } from '@/hooks/use-in-view';

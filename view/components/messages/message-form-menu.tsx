@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdPoll } from 'react-icons/md';
+import { CreateProposalForm } from '../proposals/create-proposal-form';
 import {
   Dialog,
   DialogContent,
@@ -20,9 +21,15 @@ interface Props {
   showMenu: boolean;
   setShowMenu: (show: boolean) => void;
   trigger: ReactNode;
+  channelId?: string;
 }
 
-export const MessageFormMenu = ({ trigger, showMenu, setShowMenu }: Props) => {
+export const MessageFormMenu = ({
+  trigger,
+  showMenu,
+  setShowMenu,
+  channelId,
+}: Props) => {
   const [showProposalForm, setShowProposalForm] = useState(false);
 
   const { t } = useTranslation();
@@ -56,6 +63,11 @@ export const MessageFormMenu = ({ trigger, showMenu, setShowMenu }: Props) => {
         <DialogDescription>
           {t('proposals.descriptions.create')}
         </DialogDescription>
+
+        <CreateProposalForm
+          channelId={channelId}
+          onSuccess={() => setShowProposalForm(false)}
+        />
       </DialogContent>
     </Dialog>
   );

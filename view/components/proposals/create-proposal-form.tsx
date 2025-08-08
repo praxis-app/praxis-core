@@ -1,0 +1,134 @@
+import { api } from '@/client/api-client';
+import { PROPOSAL_ACTION_TYPE } from '@/constants/proposal.constants';
+import { t } from '@/lib/shared.utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import * as zod from 'zod';
+import { Button } from '../ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { Textarea } from '../ui/textarea';
+
+const PROPOSAL_BODY_MAX = 6000;
+
+interface CreateProposalFormProps {
+  channelId?: string;
+  onSuccess?: () => void;
+}
+
+const formSchema = zod.object({
+  body: zod
+    .string()
+    .min(1)
+    .max(PROPOSAL_BODY_MAX, {
+      message: t('proposals.errors.longBody'),
+    }),
+  action: zod.enum(PROPOSAL_ACTION_TYPE),
+});
+
+export const CreateProposalForm = ({
+  channelId,
+  onSuccess,
+}: CreateProposalFormProps) => {
+  const { t } = useTranslation();
+
+  const form = useForm<zod.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { body: '', action: PROPOSAL_ACTION_TYPE[0] },
+  });
+
+  const { mutate: createProposal, isPending } = useMutation({
+    mutationFn: async (values: zod.infer<typeof formSchema>) => {
+      if (!channelId) throw new Error('Channel ID is required');
+      await api.createProposal(channelId, {
+        body: values.body.trim(),
+        action: values.action,
+        images: [],
+      });
+    },
+    onSuccess: () => {
+      form.reset();
+      onSuccess?.();
+    },
+    onError: () => {
+      toast(t('proposals.errors.errorCreatingProposal'), {
+        description: t('prompts.tryAgain'),
+      });
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((values) => createProposal(values))}
+        className="space-y-6"
+      >
+        <FormField
+          control={form.control}
+          name="action"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('actions.create')}</FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select action" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PROPOSAL_ACTION_TYPE.map((action) => (
+                      <SelectItem key={action} value={action}>
+                        {action}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="body"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('proposals.labels.body')}</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder={t('proposals.placeholders.body')}
+                  className="w-full resize-none md:min-w-md"
+                  rows={4}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex justify-end gap-2">
+          <Button type="submit" disabled={isPending || !channelId}>
+            {isPending ? t('actions.submit') : t('proposals.actions.create')}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+};

@@ -237,6 +237,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
             }
             showMenu={showMenu}
             setShowMenu={setShowMenu}
+            channelId={channelId}
           />
 
           <div className="bg-input/30 flex w-full items-center rounded-3xl px-2">
