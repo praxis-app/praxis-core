@@ -1,8 +1,9 @@
 import { api } from '@/client/api-client';
 import { PROPOSAL_ACTION_TYPE } from '@/constants/proposal.constants';
 import { t } from '@/lib/shared.utils';
+import { FeedItem, FeedQuery } from '@/types/message.types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -47,6 +48,7 @@ export const CreateProposalForm = ({
   onSuccess,
 }: CreateProposalFormProps) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const form = useForm<zod.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,14 +58,27 @@ export const CreateProposalForm = ({
   const { mutate: createProposal, isPending } = useMutation({
     mutationFn: async (values: zod.infer<typeof formSchema>) => {
       if (!channelId) throw new Error('Channel ID is required');
-      await api.createProposal(channelId, {
+      return api.createProposal(channelId, {
         body: values.body.trim(),
         action: values.action,
         images: [],
       });
     },
-    onSuccess: () => {
+    onSuccess: ({ proposal }) => {
       form.reset();
+      // Optimistically insert new proposal at top of feed
+      queryClient.setQueryData<FeedQuery>(['feed', channelId], (old) => {
+        const newItem: FeedItem = {
+          type: 'proposal',
+          proposal,
+          createdAt: proposal.createdAt ?? new Date().toISOString(),
+        };
+        if (!old) return { pages: [{ feed: [newItem] }], pageParams: [0] };
+        const pages = old.pages.map((page, idx) =>
+          idx === 0 ? { feed: [newItem, ...page.feed] } : page,
+        );
+        return { pages, pageParams: old.pageParams };
+      });
       onSuccess?.();
     },
     onError: () => {
@@ -88,7 +103,9 @@ export const CreateProposalForm = ({
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t('proposals.placeholders.action')} />
+                    <SelectValue
+                      placeholder={t('proposals.placeholders.action')}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {PROPOSAL_ACTION_TYPE.map((action) => (

@@ -13,11 +13,13 @@ import {
 import { ProposalAction } from './models/proposal-action.entity';
 import { ProposalConfig } from './models/proposal-config.entity';
 import { Proposal } from './models/proposal.entity';
+import { ProposalActionType } from './proposal.types';
 
 interface CreateProposalReq {
   body: string;
   closingAt?: Date;
-  action: Partial<ProposalAction>;
+  action: Partial<ProposalAction> | ProposalActionType;
+  channelId: string;
 }
 
 const proposalRepository = dataSource.getRepository(Proposal);
@@ -169,7 +171,7 @@ export const hasMajorityVote = (
 };
 
 export const createProposal = async (
-  { body, closingAt, action }: CreateProposalReq,
+  { body, closingAt, action, channelId }: CreateProposalReq,
   userId: string,
 ) => {
   const sanitizedBody = sanitizeText(body);
@@ -190,14 +192,31 @@ export const createProposal = async (
     closingAt: closingAt || configClosingAt,
   };
 
+  const actionEntity: Partial<ProposalAction> =
+    typeof action === 'string' ? { actionType: action } : action;
+
   const proposal = await proposalRepository.save({
     body: sanitizedBody,
     config: proposalConfig,
     userId,
-    action,
+    action: actionEntity,
+    channelId,
   });
 
-  return proposal;
+  // Shape to match feed expectations
+  return {
+    id: proposal.id,
+    body: proposal.body,
+    stage: proposal.stage,
+    channelId: proposal.channelId,
+    images: [],
+    action: proposal.action?.actionType,
+    createdAt: proposal.createdAt,
+    user: await userRepository.findOne({
+      where: { id: userId },
+      select: { id: true, name: true },
+    }),
+  } as const;
 };
 
 export const ratifyProposal = async (proposalId: string) => {
