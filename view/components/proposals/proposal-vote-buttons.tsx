@@ -14,6 +14,7 @@ interface Props {
     voteId: string;
     voteType: (typeof VOTE_TYPE)[number];
   }) => void;
+  onUnvoted?: () => void;
 }
 
 export const ProposalVoteButtons = ({
@@ -21,6 +22,7 @@ export const ProposalVoteButtons = ({
   myVoteId,
   myVoteType,
   onVoted,
+  onUnvoted,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
@@ -32,6 +34,9 @@ export const ProposalVoteButtons = ({
       if (!myVoteId) {
         const { vote } = await api.createVote(proposalId, { voteType });
         onVoted?.({ voteId: vote.id, voteType });
+      } else if (myVoteType === voteType) {
+        await api.deleteVote(proposalId, myVoteId);
+        onUnvoted?.();
       } else if (myVoteType !== voteType) {
         await api.updateVote(proposalId, myVoteId, { voteType });
         onVoted?.({ voteId: myVoteId, voteType });
