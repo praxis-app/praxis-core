@@ -21,17 +21,19 @@ const LOAD_MORE_THROTTLE_MS = 1500;
 const IN_VIEW_THRESHOLD = 50;
 
 interface Props {
+  channelId?: string;
   feed: FeedItem[];
   feedBoxRef: RefObject<HTMLDivElement>;
-  onLoadMore: () => void;
   isLastPage: boolean;
+  onLoadMore: () => void;
 }
 
 export const ChannelFeed = ({
+  channelId,
   feed,
   feedBoxRef,
-  onLoadMore,
   isLastPage,
+  onLoadMore,
 }: Props) => {
   const { isAppLoading } = useAppStore((state) => state);
   const { isAnon, isLoggedIn } = useAuthData();
@@ -98,19 +100,24 @@ export const ChannelFeed = ({
         <WelcomeMessage onDismiss={() => setShowWelcomeMessage(false)} />
       )}
 
-      {feed.map((item) => {
-        if (item.type === 'message') {
+      {channelId &&
+        feed.map((item) => {
+          if (item.type === 'message') {
+            return (
+              <Message
+                key={`message-${item.message.id}`}
+                message={item.message}
+              />
+            );
+          }
           return (
-            <Message key={`message-${item.message.id}`} message={item.message} />
+            <InlineProposal
+              key={`proposal-${item.proposal.id}`}
+              proposal={item.proposal}
+              channelId={channelId}
+            />
           );
-        }
-        return (
-          <InlineProposal
-            key={`proposal-${item.proposal.id}`}
-            proposal={item.proposal}
-          />
-        );
-      })}
+        })}
 
       {/* Bottom is top due to `column-reverse` */}
       <div ref={feedTopRef} className="pb-0.5" />

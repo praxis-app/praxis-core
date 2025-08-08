@@ -9,24 +9,23 @@ import { Button } from '../ui/button';
 
 interface Props {
   proposalId: string;
-  // The component will manage its own vote state when not provided.
+  channelId: string;
   myVoteId?: string;
   myVoteType?: (typeof VOTE_TYPE)[number];
 }
 
 export const ProposalVoteButtons = ({
   proposalId,
+  channelId,
   myVoteId: initialMyVoteId,
   myVoteType: initialMyVoteType,
 }: Props) => {
   const { t } = useTranslation();
 
-  const [myVoteId, setMyVoteId] = useState<string | undefined>(
-    initialMyVoteId,
-  );
-  const [myVoteType, setMyVoteType] = useState<(typeof VOTE_TYPE)[number] | undefined>(
-    initialMyVoteType,
-  );
+  const [myVoteId, setMyVoteId] = useState<string | undefined>(initialMyVoteId);
+  const [myVoteType, setMyVoteType] = useState<
+    (typeof VOTE_TYPE)[number] | undefined
+  >(initialMyVoteType);
 
   useEffect(() => {
     setMyVoteId(initialMyVoteId);
@@ -36,14 +35,16 @@ export const ProposalVoteButtons = ({
   const { mutate: castVote, isPending } = useMutation({
     mutationFn: async (voteType: (typeof VOTE_TYPE)[number]) => {
       if (!myVoteId) {
-        const { vote } = await api.createVote(proposalId, { voteType });
+        const { vote } = await api.createVote(channelId, proposalId, {
+          voteType,
+        });
         return { action: 'create' as const, voteId: vote.id, voteType };
       }
       if (myVoteType === voteType) {
-        await api.deleteVote(proposalId, myVoteId);
+        await api.deleteVote(channelId, proposalId, myVoteId);
         return { action: 'delete' as const };
       }
-      await api.updateVote(proposalId, myVoteId, { voteType });
+      await api.updateVote(channelId, proposalId, myVoteId, { voteType });
       return { action: 'update' as const, voteId: myVoteId, voteType };
     },
     onSuccess: (result) => {

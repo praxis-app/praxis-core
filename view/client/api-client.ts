@@ -103,7 +103,10 @@ class ApiClient {
     return this.executeRequest<{ channel: Channel }>('get', path);
   };
 
-  getGeneralChannelFeed = async (offset: number, limit = MESSAGES_PAGE_SIZE) => {
+  getGeneralChannelFeed = async (
+    offset: number,
+    limit = MESSAGES_PAGE_SIZE,
+  ) => {
     const path = '/channels/general/feed';
     return this.executeRequest<{ feed: FeedItem[] }>('get', path, {
       params: { offset, limit },
@@ -181,26 +184,35 @@ class ApiClient {
     });
   };
 
-  createVote = async (proposalId: string, data: CreateVoteReq) => {
-    const path = `/proposals/${proposalId}/votes`;
+  createVote = async (
+    channelId: string,
+    proposalId: string,
+    data: CreateVoteReq,
+  ) => {
+    const path = `/channels/${channelId}/proposals/${proposalId}/votes`;
     return this.executeRequest<{ vote: Vote }>('post', path, {
       data,
     });
   };
 
   updateVote = async (
+    channelId: string,
     proposalId: string,
     voteId: string,
     data: UpdateVoteReq,
   ) => {
-    const path = `/proposals/${proposalId}/votes/${voteId}`;
+    const path = `/channels/${channelId}/proposals/${proposalId}/votes/${voteId}`;
     return this.executeRequest<{ vote: Vote }>('put', path, {
       data,
     });
   };
 
-  deleteVote = async (proposalId: string, voteId: string) => {
-    const path = `/proposals/${proposalId}/votes/${voteId}`;
+  deleteVote = async (
+    channelId: string,
+    proposalId: string,
+    voteId: string,
+  ) => {
+    const path = `/channels/${channelId}/proposals/${proposalId}/votes/${voteId}`;
     return this.executeRequest<void>('delete', path);
   };
 

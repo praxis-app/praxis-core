@@ -11,9 +11,13 @@ import { ProposalVoteButtons } from './proposal-vote-buttons';
 
 interface InlineProposalProps {
   proposal: Proposal;
+  channelId: string;
 }
 
-export const InlineProposal = ({ proposal }: InlineProposalProps) => {
+export const InlineProposal = ({
+  proposal,
+  channelId,
+}: InlineProposalProps) => {
   const { t } = useTranslation();
 
   const { body, user, createdAt, id } = proposal;
@@ -44,7 +48,7 @@ export const InlineProposal = ({ proposal }: InlineProposalProps) => {
           <FormattedText text={body} className="pt-1 pb-2" />
 
           <CardAction className="flex flex-wrap gap-2">
-            <ProposalVoteButtons proposalId={id} />
+            <ProposalVoteButtons proposalId={id} channelId={channelId} />
           </CardAction>
 
           <Separator className="my-1" />
