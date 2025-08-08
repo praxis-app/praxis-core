@@ -1,3 +1,5 @@
+// TODO: Add routes for proposals and votes
+
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { MESSAGES_PAGE_SIZE } from '../constants/message.constants';
 import { LocalStorageKeys } from '../constants/shared.constants';
@@ -16,6 +18,13 @@ import {
   UpdateRolePermissionsReq,
 } from '../types/role.types';
 import { CurrentUser, User } from '../types/user.types';
+import {
+  CreateProposalReq,
+  CreateVoteReq,
+  Proposal,
+  UpdateVoteReq,
+  Vote,
+} from '@/types/proposal.types';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;
@@ -141,6 +150,40 @@ class ApiClient {
     return this.executeRequest<{ image: Image }>('post', path, {
       data: formData,
     });
+  };
+
+  // -------------------------------------------------------------------------
+  // Proposals & Votes
+  // -------------------------------------------------------------------------
+
+  createProposal = async (channelId: string, data: CreateProposalReq) => {
+    const path = `/channels/${channelId}/proposals`;
+    return this.executeRequest<{ proposal: Proposal }>('post', path, {
+      data,
+    });
+  };
+
+  createVote = async (proposalId: string, data: CreateVoteReq) => {
+    const path = `/proposals/${proposalId}/votes`;
+    return this.executeRequest<{ vote: Vote }>('post', path, {
+      data,
+    });
+  };
+
+  updateVote = async (
+    proposalId: string,
+    voteId: string,
+    data: UpdateVoteReq,
+  ) => {
+    const path = `/proposals/${proposalId}/votes/${voteId}`;
+    return this.executeRequest<{ vote: Vote }>('put', path, {
+      data,
+    });
+  };
+
+  deleteVote = async (proposalId: string, voteId: string) => {
+    const path = `/proposals/${proposalId}/votes/${voteId}`;
+    return this.executeRequest<void>('delete', path);
   };
 
   // -------------------------------------------------------------------------
