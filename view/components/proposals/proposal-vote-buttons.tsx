@@ -1,53 +1,68 @@
 import { api } from '@/client/api-client';
 import { VOTE_TYPE } from '@/constants/proposal.constants';
 import { cn } from '@/lib/shared.utils';
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 
 interface Props {
   proposalId: string;
+  // The component will manage its own vote state when not provided.
   myVoteId?: string;
   myVoteType?: (typeof VOTE_TYPE)[number];
-  onVoted?: (params: {
-    voteId: string;
-    voteType: (typeof VOTE_TYPE)[number];
-  }) => void;
-  onUnvoted?: () => void;
 }
 
 export const ProposalVoteButtons = ({
   proposalId,
-  myVoteId,
-  myVoteType,
-  onVoted,
-  onUnvoted,
+  myVoteId: initialMyVoteId,
+  myVoteType: initialMyVoteType,
 }: Props) => {
-  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
 
-  const castVote = async (voteType: (typeof VOTE_TYPE)[number]) => {
-    if (isLoading) return;
-    setIsLoading(true);
-    try {
+  const [myVoteId, setMyVoteId] = useState<string | undefined>(
+    initialMyVoteId,
+  );
+  const [myVoteType, setMyVoteType] = useState<(typeof VOTE_TYPE)[number] | undefined>(
+    initialMyVoteType,
+  );
+
+  useEffect(() => {
+    setMyVoteId(initialMyVoteId);
+    setMyVoteType(initialMyVoteType);
+  }, [initialMyVoteId, initialMyVoteType]);
+
+  const { mutate: castVote, isPending } = useMutation({
+    mutationFn: async (voteType: (typeof VOTE_TYPE)[number]) => {
       if (!myVoteId) {
         const { vote } = await api.createVote(proposalId, { voteType });
-        onVoted?.({ voteId: vote.id, voteType });
-      } else if (myVoteType === voteType) {
-        await api.deleteVote(proposalId, myVoteId);
-        onUnvoted?.();
-      } else if (myVoteType !== voteType) {
-        await api.updateVote(proposalId, myVoteId, { voteType });
-        onVoted?.({ voteId: myVoteId, voteType });
+        return { action: 'create' as const, voteId: vote.id, voteType };
       }
-    } catch (error) {
+      if (myVoteType === voteType) {
+        await api.deleteVote(proposalId, myVoteId);
+        return { action: 'delete' as const };
+      }
+      await api.updateVote(proposalId, myVoteId, { voteType });
+      return { action: 'update' as const, voteId: myVoteId, voteType };
+    },
+    onSuccess: (result) => {
+      if (result.action === 'create') {
+        setMyVoteId(result.voteId);
+        setMyVoteType(result.voteType);
+      } else if (result.action === 'delete') {
+        setMyVoteId(undefined);
+        setMyVoteType(undefined);
+      } else if (result.action === 'update') {
+        setMyVoteId(result.voteId);
+        setMyVoteType(result.voteType);
+      }
+      toast(t('votes.prompts.voteCast'));
+    },
+    onError: () => {
       toast(t('errors.somethingWentWrong'));
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   return (
     <div className="flex w-full flex-wrap gap-2">
@@ -58,9 +73,9 @@ export const ProposalVoteButtons = ({
           size="sm"
           className={cn('flex-1', myVoteType === vote && '!bg-primary/15')}
           onClick={() => castVote(vote)}
-          disabled={isLoading}
+          disabled={isPending}
         >
-          {vote}
+          {t(`proposals.actions.${vote}`)}
         </Button>
       ))}
     </div>
