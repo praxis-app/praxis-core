@@ -18,9 +18,6 @@ import { ChannelTopNav } from './channel-top-nav';
 enum MessageType {
   MESSAGE = 'message',
   IMAGE = 'image',
-}
-
-enum ProposalEventType {
   PROPOSAL = 'proposal',
 }
 
@@ -29,16 +26,16 @@ interface NewMessagePayload {
   message: Message;
 }
 
-interface ImageMessagePayload {
-  type: MessageType.IMAGE;
-  isPlaceholder: false;
-  messageId: string;
-  imageId: string;
+interface NewProposalPayload {
+  type: MessageType.PROPOSAL;
+  proposal: Proposal;
 }
 
-interface NewProposalPayload {
-  type: ProposalEventType.PROPOSAL;
-  proposal: Proposal;
+interface ImageMessagePayload {
+  type: MessageType.IMAGE;
+  isPlaceholder: boolean;
+  messageId: string;
+  imageId: string;
 }
 
 interface Props {
@@ -160,7 +157,7 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
       if (!body) {
         return;
       }
-      if (body.type === ProposalEventType.PROPOSAL) {
+      if (body.type === MessageType.PROPOSAL) {
         const newFeedItem: FeedItem = {
           ...(body.proposal as FeedItem & { type: 'proposal' }),
           type: 'proposal',
