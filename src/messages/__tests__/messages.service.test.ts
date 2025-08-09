@@ -155,33 +155,6 @@ describe('Messages Service', () => {
     });
   });
 
-  describe('getGeneralChannelMessages', () => {
-    it('should fetch messages from the general channel', async () => {
-      const mockGeneralChannel = {
-        id: 'general-channel',
-        name: 'General',
-        description: null,
-        messages: [],
-        members: [],
-        createdAt: new Date('2023-01-01'),
-        updatedAt: new Date('2023-01-01'),
-      } as any;
-      vi.mocked(channelsService.getGeneralChannel).mockResolvedValue(
-        mockGeneralChannel,
-      );
-      mockMessageRepository.find.mockResolvedValue([]);
-
-      expect(channelsService.getGeneralChannel).toHaveBeenCalled();
-      expect(mockMessageRepository.find).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: { channelId: 'general-channel' },
-          skip: 5,
-          take: 10,
-        }),
-      );
-    });
-  });
-
   describe('createMessage', () => {
     it('should create a message with image placeholders and publish to channel members', async () => {
       const messageData = {

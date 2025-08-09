@@ -321,7 +321,11 @@ class ApiClient {
   private async executeRequest<T>(
     method: Method,
     path: string,
-    options?: { data?: any; params?: any; responseType?: any },
+    options?: {
+      data?: unknown;
+      params?: Record<string, unknown>;
+      responseType?: AxiosResponse['config']['responseType'];
+    },
   ): Promise<T> {
     try {
       const token = localStorage.getItem(LocalStorageKeys.AccessToken);
