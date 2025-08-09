@@ -69,15 +69,15 @@ export const getChannelFeed = async (
   ]);
 
   const shapedMessages = messages.map((message) => ({
-    type: 'message' as const,
+    type: 'message',
     message,
     createdAt: message.createdAt,
   }));
 
   const shapedProposals = proposals.map((proposal) => ({
-    type: 'proposal' as const,
+    type: 'proposal',
     proposal,
-    createdAt: proposal.createdAt as unknown as string,
+    createdAt: proposal.createdAt,
   }));
 
   const feed = [...shapedMessages, ...shapedProposals]
