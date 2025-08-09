@@ -104,7 +104,9 @@ export const ChannelFeed = ({
         if (item.type === 'message') {
           return <Message key={`message-${item.id}`} message={item} />;
         }
-        if (!channelId) return null;
+        if (!channelId) {
+          return null;
+        }
         return (
           <InlineProposal
             key={`proposal-${item.id}`}

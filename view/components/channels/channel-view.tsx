@@ -57,7 +57,9 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
     queryFn: async ({ pageParam }) => {
       const result = await api.getChannelFeed(resolvedChannelId!, pageParam);
       const isLast = result.feed.length === 0;
-      if (isLast) setIsLastPage(true);
+      if (isLast) {
+        setIsLastPage(true);
+      }
       return result;
     },
     getNextPageParam: (_lastPage, pages) => {

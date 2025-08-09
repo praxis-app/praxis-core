@@ -59,7 +59,9 @@ export const CreateProposalForm = ({
 
   const { mutate: createProposal, isPending } = useMutation({
     mutationFn: async (values: zod.infer<typeof formSchema>) => {
-      if (!channelId) throw new Error('Channel ID is required');
+      if (!channelId) {
+        throw new Error('Channel ID is required');
+      }
       return api.createProposal(channelId, {
         body: values.body.trim(),
         action: values.action,
@@ -69,7 +71,9 @@ export const CreateProposalForm = ({
     onSuccess: ({ proposal }) => {
       form.reset();
       const resolvedChannelId = isGeneralChannel ? 'general' : channelId;
-      if (!resolvedChannelId) return;
+      if (!resolvedChannelId) {
+        return;
+      }
 
       // Optimistically insert new proposal at top of feed (no refetch)
       queryClient.setQueryData<FeedQuery>(
