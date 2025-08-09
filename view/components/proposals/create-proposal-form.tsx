@@ -76,17 +76,22 @@ export const CreateProposalForm = ({
         ['feed', resolvedChannelId],
         (old) => {
           const newItem: FeedItem = {
+            ...proposal,
             type: 'proposal',
-            proposal,
-            createdAt: proposal.createdAt ?? new Date().toISOString(),
           };
-          if (!old) return { pages: [{ feed: [newItem] }], pageParams: [0] };
+          if (!old) {
+            return { pages: [{ feed: [newItem] }], pageParams: [0] };
+          }
           const pages = old.pages.map((page, idx) => {
-            if (idx !== 0) return page;
+            if (idx !== 0) {
+              return page;
+            }
             const exists = page.feed.some(
-              (it) => it.type === 'proposal' && it.proposal.id === proposal.id,
+              (it) => it.type === 'proposal' && it.id === proposal.id,
             );
-            if (exists) return page;
+            if (exists) {
+              return page;
+            }
             return { feed: [newItem, ...page.feed] };
           });
           return { pages, pageParams: old.pageParams };

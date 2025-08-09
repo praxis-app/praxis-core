@@ -22,7 +22,7 @@ export interface Proposal {
   images: Image[];
   channelId: string;
   user?: { id: string; name: string };
-  createdAt?: string;
+  createdAt: string;
   myVoteId?: string;
   myVoteType?: VoteType;
 }

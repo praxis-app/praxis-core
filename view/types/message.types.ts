@@ -15,8 +15,8 @@ export interface MessagesQuery {
 }
 
 export type FeedItem =
-  | { type: 'message'; message: Message; createdAt: string }
-  | { type: 'proposal'; proposal: Proposal; createdAt: string };
+  | (Message & { type: 'message' })
+  | (Proposal & { type: 'proposal' });
 
 export interface FeedQuery {
   pages: { feed: FeedItem[] }[];

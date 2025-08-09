@@ -105,9 +105,8 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
 
       // Update the feed cache the UI renders
       const newFeedItem: FeedItem = {
+        ...messageWithImages,
         type: 'message',
-        message: messageWithImages,
-        createdAt: messageWithImages.createdAt,
       };
 
       queryClient.setQueryData<FeedQuery>(
@@ -123,9 +122,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
           const pages = oldData.pages.map((page, index) => {
             if (index === 0) {
               const alreadyExists = page.feed.some(
-                (item) =>
-                  item.type === 'message' &&
-                  item.message.id === messageWithImages.id,
+                (item) => item.type === 'message' && item.id === messageWithImages.id,
               );
               if (alreadyExists) {
                 return page;

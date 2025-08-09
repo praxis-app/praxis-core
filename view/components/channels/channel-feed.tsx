@@ -100,24 +100,19 @@ export const ChannelFeed = ({
         <WelcomeMessage onDismiss={() => setShowWelcomeMessage(false)} />
       )}
 
-      {channelId &&
-        feed.map((item) => {
-          if (item.type === 'message') {
-            return (
-              <Message
-                key={`message-${item.message.id}`}
-                message={item.message}
-              />
-            );
-          }
-          return (
-            <InlineProposal
-              key={`proposal-${item.proposal.id}`}
-              proposal={item.proposal}
-              channelId={channelId}
-            />
-          );
-        })}
+      {feed.map((item) => {
+        if (item.type === 'message') {
+          return <Message key={`message-${item.id}`} message={item} />;
+        }
+        if (!channelId) return null;
+        return (
+          <InlineProposal
+            key={`proposal-${item.id}`}
+            proposal={item}
+            channelId={channelId}
+          />
+        );
+      })}
 
       {/* Bottom is top due to `column-reverse` */}
       <div ref={feedTopRef} className="pb-0.5" />

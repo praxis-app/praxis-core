@@ -78,9 +78,8 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
       // Update cache with new message, images are placeholders
       if (body.type === MessageType.MESSAGE) {
         const newFeedItem: FeedItem = {
+          ...body.message,
           type: 'message',
-          message: body.message,
-          createdAt: body.message.createdAt,
         };
         queryClient.setQueryData<FeedQuery>(
           ['feed', resolvedChannelId],
@@ -115,16 +114,18 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
 
             const pages = oldData.pages.map((page) => {
               const feed = page.feed.map((item) => {
-                if (item.type !== 'message') return item;
-                const message = item.message;
-                if (message.id !== body.messageId || !message.images)
+                if (item.type !== 'message') {
                   return item;
-                const images = message.images.map((image) =>
+                }
+                if (item.id !== body.messageId || !item.images) {
+                  return item;
+                }
+                const images = item.images.map((image) =>
                   image.id === body.imageId
                     ? { ...image, isPlaceholder: false }
                     : image,
                 );
-                return { ...item, message: { ...message, images } } as FeedItem;
+                return { ...item, images } as FeedItem;
               });
               return { feed };
             });

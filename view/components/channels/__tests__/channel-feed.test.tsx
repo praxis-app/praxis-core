@@ -54,22 +54,16 @@ describe('ChannelFeed', () => {
   const mockFeed: FeedItem[] = [
     {
       type: 'message',
-      message: {
-        id: '1',
-        body: 'Hello world',
-        user: { id: 'user1', name: 'John Doe' },
-        createdAt: '2023-12-01T12:00:00Z',
-      },
+      id: '1',
+      body: 'Hello world',
+      user: { id: 'user1', name: 'John Doe' },
       createdAt: '2023-12-01T12:00:00Z',
     },
     {
       type: 'message',
-      message: {
-        id: '2',
-        body: 'Another message',
-        user: { id: 'user2', name: 'Jane Smith' },
-        createdAt: '2023-12-01T12:05:00Z',
-      },
+      id: '2',
+      body: 'Another message',
+      user: { id: 'user2', name: 'Jane Smith' },
       createdAt: '2023-12-01T12:05:00Z',
     },
   ];
