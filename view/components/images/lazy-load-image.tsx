@@ -50,6 +50,7 @@ export const LazyLoadImage = ({
 
   const resolvedSrc = src || srcFromImageId;
   const elementType = isPlaceholder || !resolvedSrc || failed ? 'div' : 'img';
+  const showFileMissing = elementType === 'div' && !isPlaceholder;
 
   return (
     <>
@@ -67,7 +68,7 @@ export const LazyLoadImage = ({
         className={imageClassName}
         {...imgProps}
       />
-      {elementType === 'div' && !isPlaceholder && (
+      {showFileMissing && (
         <div className="text-muted-foreground text-sm">
           {t('images.errors.fileMissing')}
         </div>
