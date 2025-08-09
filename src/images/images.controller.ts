@@ -15,7 +15,7 @@ export const getImageFile = async (req: Request, res: Response) => {
     return;
   }
 
-  // If the file has been deleted from disk, return 404 instead of 500
+  // If the file has been deleted from disk, return a 404
   const filePath = `${getUploadsPath()}/${image.filename}`;
   if (!fs.existsSync(filePath)) {
     res.status(404).send('Image file not found');
