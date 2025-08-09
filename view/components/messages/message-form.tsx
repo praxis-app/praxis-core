@@ -103,7 +103,6 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
         ? GENERAL_CHANNEL_NAME
         : channelId;
 
-      // Update the feed cache the UI renders
       const newFeedItem: FeedItem = {
         ...messageWithImages,
         type: 'message',
