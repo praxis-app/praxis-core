@@ -114,17 +114,6 @@ class ApiClient {
     });
   };
 
-  getChannelMessages = async (
-    channelId: string,
-    offset: number,
-    limit = MESSAGES_PAGE_SIZE,
-  ) => {
-    const path = `/channels/${channelId}/messages`;
-    return this.executeRequest<{ messages: Message[] }>('get', path, {
-      params: { offset, limit },
-    });
-  };
-
   getChannelFeed = async (
     channelId: string,
     offset: number,
