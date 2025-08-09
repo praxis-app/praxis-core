@@ -1,4 +1,5 @@
 import { api } from '@/client/api-client';
+import { GENERAL_CHANNEL_NAME } from '@/constants/channel.constants';
 import { PROPOSAL_ACTION_TYPE } from '@/constants/proposal.constants';
 import { t } from '@/lib/shared.utils';
 import { FeedItem, FeedQuery } from '@/types/channel.types';
@@ -70,7 +71,11 @@ export const CreateProposalForm = ({
     },
     onSuccess: ({ proposal }) => {
       form.reset();
-      const resolvedChannelId = isGeneralChannel ? 'general' : channelId;
+
+      const resolvedChannelId = isGeneralChannel
+        ? GENERAL_CHANNEL_NAME
+        : channelId;
+
       if (!resolvedChannelId) {
         return;
       }
