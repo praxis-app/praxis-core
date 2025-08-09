@@ -1,10 +1,10 @@
 import { FindOptionsWhere, In } from 'typeorm';
-import { sanitizeText } from '../common/common.utils';
 import * as channelsService from '../channels/channels.service';
-import * as pubSubService from '../pub-sub/pub-sub.service';
+import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { deleteImageFile } from '../images/images.utils';
 import { Image } from '../images/models/image.entity';
+import * as pubSubService from '../pub-sub/pub-sub.service';
 import { getServerConfig } from '../server-configs/server-configs.service';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
@@ -15,12 +15,11 @@ import {
 import { ProposalAction } from './models/proposal-action.entity';
 import { ProposalConfig } from './models/proposal-config.entity';
 import { Proposal } from './models/proposal.entity';
-import { ProposalActionType } from './proposal.types';
 
 interface CreateProposalReq {
   body: string;
   closingAt?: Date;
-  action: Partial<ProposalAction> | ProposalActionType;
+  action: Partial<ProposalAction>;
   channelId: string;
 }
 
@@ -240,10 +239,10 @@ export const createProposal = async (
     if (member.userId === userId) {
       continue;
     }
-    await pubSubService.publish(
-      getNewProposalKey(channelId, member.userId),
-      { type: 'proposal', proposal: shapedProposal },
-    );
+    await pubSubService.publish(getNewProposalKey(channelId, member.userId), {
+      type: 'proposal',
+      proposal: shapedProposal,
+    });
   }
 
   return shapedProposal;
