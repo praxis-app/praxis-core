@@ -293,7 +293,7 @@ export const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
                 e.preventDefault();
                 handleSendMessage();
               }}
-              className="bg-blurple-1 mx-0.5 size-10 rounded-full"
+              className="bg-blurple-1 hover:bg-blurple-1 mx-0.5 size-10 rounded-full"
               disabled={isDisabled()}
             >
               <BiSolidSend className="ml-0.5 size-5 text-zinc-50" />
