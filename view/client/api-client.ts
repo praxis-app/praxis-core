@@ -1,23 +1,5 @@
 // API client for server endpoints
 
-import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
-import { MESSAGES_PAGE_SIZE } from '../constants/message.constants';
-import { LocalStorageKeys } from '../constants/shared.constants';
-import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
-import {
-  Channel,
-  CreateChannelReq,
-  UpdateChannelReq,
-} from '../types/channel.types';
-import { Image } from '../types/image.types';
-import { CreateInviteReq, Invite } from '../types/invite.types';
-import { FeedItem, Message } from '../types/message.types';
-import {
-  CreateRoleReq,
-  Role,
-  UpdateRolePermissionsReq,
-} from '../types/role.types';
-import { CurrentUser, User } from '../types/user.types';
 import {
   CreateProposalReq,
   CreateVoteReq,
@@ -25,6 +7,25 @@ import {
   UpdateVoteReq,
   Vote,
 } from '@/types/proposal.types';
+import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { MESSAGES_PAGE_SIZE } from '../constants/message.constants';
+import { LocalStorageKeys } from '../constants/shared.constants';
+import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
+import {
+  Channel,
+  CreateChannelReq,
+  FeedItem,
+  UpdateChannelReq,
+} from '../types/channel.types';
+import { Image } from '../types/image.types';
+import { CreateInviteReq, Invite } from '../types/invite.types';
+import { Message } from '../types/message.types';
+import {
+  CreateRoleReq,
+  Role,
+  UpdateRolePermissionsReq,
+} from '../types/role.types';
+import { CurrentUser, User } from '../types/user.types';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;

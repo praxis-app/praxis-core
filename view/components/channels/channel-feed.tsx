@@ -4,7 +4,7 @@ import { useInView } from '@/hooks/use-in-view';
 import { useScrollDirection } from '@/hooks/use-scroll-direction';
 import { debounce, throttle } from '@/lib/shared.utils';
 import { useAppStore } from '@/store/app.store';
-import { FeedItem } from '@/types/message.types';
+import { FeedItem } from '@/types/channel.types';
 import {
   RefObject,
   UIEvent,

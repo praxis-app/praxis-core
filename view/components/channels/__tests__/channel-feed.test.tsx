@@ -1,6 +1,6 @@
 import { useAppStore } from '@/store/app.store';
 import { customRender as render } from '@/test/lib/custom-render';
-import { FeedItem } from '@/types/message.types';
+import { FeedItem } from '@/types/channel.types';
 import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { ChannelFeed } from '../channel-feed';

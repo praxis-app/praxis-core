@@ -1,7 +1,7 @@
 import { api } from '@/client/api-client';
 import { PROPOSAL_ACTION_TYPE } from '@/constants/proposal.constants';
 import { t } from '@/lib/shared.utils';
-import { FeedItem, FeedQuery } from '@/types/message.types';
+import { FeedItem, FeedQuery } from '@/types/channel.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
