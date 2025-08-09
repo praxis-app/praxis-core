@@ -1,5 +1,7 @@
 import { FindOptionsWhere, In } from 'typeorm';
 import { sanitizeText } from '../common/common.utils';
+import * as channelsService from '../channels/channels.service';
+import * as pubSubService from '../pub-sub/pub-sub.service';
 import { dataSource } from '../database/data-source';
 import { deleteImageFile } from '../images/images.utils';
 import { Image } from '../images/models/image.entity';
@@ -218,7 +220,7 @@ export const createProposal = async (
   });
 
   // Shape to match feed expectations
-  return {
+  const shapedProposal = {
     id: proposal.id,
     body: proposal.body,
     stage: proposal.stage,
@@ -231,6 +233,20 @@ export const createProposal = async (
       select: { id: true, name: true },
     }),
   } as const;
+
+  // Publish proposal to all other channel members for realtime feed updates
+  const channelMembers = await channelsService.getChannelMembers(channelId);
+  for (const member of channelMembers) {
+    if (member.userId === userId) {
+      continue;
+    }
+    await pubSubService.publish(
+      getNewProposalKey(channelId, member.userId),
+      { type: 'proposal', proposal: shapedProposal },
+    );
+  }
+
+  return shapedProposal;
 };
 
 export const ratifyProposal = async (proposalId: string) => {
@@ -247,4 +263,8 @@ export const deleteProposal = async (proposalId: string) => {
     }
   }
   return proposalRepository.delete(proposalId);
+};
+
+const getNewProposalKey = (channelId: string, userId: string) => {
+  return `new-proposal-${channelId}-${userId}`;
 };

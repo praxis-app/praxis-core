@@ -6,6 +6,7 @@ import { useSubscription } from '@/hooks/use-subscription';
 import { useAppStore } from '@/store/app.store';
 import { Channel, FeedItem, FeedQuery } from '@/types/channel.types';
 import { Message } from '@/types/message.types';
+import { Proposal } from '@/types/proposal.types';
 import { PubSubMessage } from '@/types/shared.types';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
@@ -19,6 +20,10 @@ enum MessageType {
   IMAGE = 'image',
 }
 
+enum ProposalEventType {
+  PROPOSAL = 'proposal',
+}
+
 interface NewMessagePayload {
   type: MessageType.MESSAGE;
   message: Message;
@@ -29,6 +34,11 @@ interface ImageMessagePayload {
   isPlaceholder: false;
   messageId: string;
   imageId: string;
+}
+
+interface NewProposalPayload {
+  type: ProposalEventType.PROPOSAL;
+  proposal: Proposal;
 }
 
 interface Props {
@@ -137,6 +147,46 @@ export const ChannelView = ({ channel, isGeneralChannel }: Props) => {
         );
       }
 
+      scrollToBottom();
+    },
+    enabled: !!meData && !!channel && !!resolvedChannelId,
+  });
+
+  useSubscription(`new-proposal-${channel?.id}-${meData?.user.id}`, {
+    onMessage: (event) => {
+      const { body }: PubSubMessage<NewProposalPayload> = JSON.parse(
+        event.data,
+      );
+      if (!body) {
+        return;
+      }
+      if (body.type === ProposalEventType.PROPOSAL) {
+        const newFeedItem: FeedItem = {
+          ...(body.proposal as FeedItem & { type: 'proposal' }),
+          type: 'proposal',
+        };
+        queryClient.setQueryData<FeedQuery>(
+          ['feed', resolvedChannelId],
+          (oldData) => {
+            if (!oldData) {
+              return { pages: [{ feed: [newFeedItem] }], pageParams: [0] };
+            }
+            const pages = oldData.pages.map((page, index) => {
+              if (index === 0) {
+                const exists = page.feed.some(
+                  (it) => it.type === 'proposal' && it.id === newFeedItem.id,
+                );
+                if (exists) {
+                  return page;
+                }
+                return { feed: [newFeedItem, ...page.feed] };
+              }
+              return page;
+            });
+            return { pages, pageParams: oldData.pageParams };
+          },
+        );
+      }
       scrollToBottom();
     },
     enabled: !!meData && !!channel && !!resolvedChannelId,
