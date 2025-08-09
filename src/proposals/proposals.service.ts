@@ -207,15 +207,12 @@ export const createProposal = async (
     closingAt: closingAt || configClosingAt,
   };
 
-  const actionEntity: Partial<ProposalAction> =
-    typeof action === 'string' ? { actionType: action } : action;
-
   const proposal = await proposalRepository.save({
     body: sanitizedBody,
     config: proposalConfig,
-    userId,
-    action: actionEntity,
+    action,
     channelId,
+    userId,
   });
 
   // Shape to match feed expectations
@@ -231,7 +228,7 @@ export const createProposal = async (
       where: { id: userId },
       select: { id: true, name: true },
     }),
-  } as const;
+  };
 
   // Publish proposal to all other channel members for realtime feed updates
   const channelMembers = await channelsService.getChannelMembers(channelId);
