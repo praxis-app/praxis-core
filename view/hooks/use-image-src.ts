@@ -20,7 +20,7 @@ export const useImageSrc = ({
 
   const getImageSrc = async () => {
     if (!imageId) {
-      return;
+      return '';
     }
     try {
       const result = await api.getImage(imageId);
@@ -28,9 +28,8 @@ export const useImageSrc = ({
       return url;
     } catch {
       onError?.();
-
       // Gracefully handle missing image
-      return undefined;
+      return '';
     }
   };
 
